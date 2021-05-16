@@ -1,0 +1,18 @@
+{
+  "name": "webu/app",
+  "description": "Webu Application Module",
+  "license": "proprietary",
+
+  "authors": [
+    {
+      "name": "Fabian Holzwarth"
+    }
+  ],
+
+  "autoload": {
+    "psr-4" : {
+      "webuApp\\" : "src/"
+    }
+  }
+
+}
