@@ -106,6 +106,8 @@ class ModuleStorage {
             ->from(WebuModules::TABLENAME)
             ->where(WebuModules::RAW_COL_ID, $this->id)
             ->execute();
+
+        $this->id = null;
     }
 
 

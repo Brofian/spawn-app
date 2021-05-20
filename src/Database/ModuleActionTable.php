@@ -6,6 +6,7 @@ use bin\webu\IO;
 use webu\Database\StructureTables\WebuModules;
 use webu\system\Core\Base\Database\DatabaseColumn;
 use webu\system\Core\Base\Database\DatabaseTable;
+use webu\system\Core\Base\Database\Storage\DatabaseIndex;
 use webu\system\Core\Base\Database\Storage\DatabaseType;
 use webu\system\Core\Base\Helper\DatabaseHelper;
 
@@ -28,6 +29,12 @@ class ModuleActionTable extends DatabaseTable {
 
         $col = new DatabaseColumn("action", DatabaseType::VARCHAR);
         $col->setLength(DatabaseColumn::VARCHAR_MAX);
+        $col->setCanBeNull(false);
+        $this->addColumn($col);
+
+        $col = new DatabaseColumn("identifier", DatabaseType::VARCHAR);
+        $col->setLength(DatabaseColumn::VARCHAR_MAX);
+        $col->setIndex(DatabaseIndex::UNIQUE);
         $col->setCanBeNull(false);
         $this->addColumn($col);
 
