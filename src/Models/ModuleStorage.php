@@ -4,10 +4,14 @@
 namespace webuApp\Models;
 
 
+use webu\Database\StructureTables\WebuModuleActions;
 use webu\Database\StructureTables\WebuModules;
 use webu\system\Core\Base\Database\DatabaseConnection;
 use webu\system\Core\Base\Database\Query\QueryBuilder;
 use webu\system\Core\Base\Database\Query\QueryCondition;
+use webu\system\Core\Base\Database\Storage\DatabaseDefaults;
+use webu\system\Core\Base\Database\Storage\DatabaseType;
+use webu\system\Core\Base\Helper\DatabaseHelper;
 use webu\system\Core\Contents\Modules\Module;
 
 class ModuleStorage {
@@ -96,6 +100,25 @@ class ModuleStorage {
         }
     }
 
+
+    /**
+     * @param DatabaseConnection $connection
+     * @return array
+     */
+    public static function loadAllWithReferences(DatabaseConnection $connection) {
+
+        $qb = new QueryBuilder($connection);
+        $unfetchedActions = $qb->select("*")
+            ->from(WebuModules::TABLENAME)
+            ->join(
+                WebuModuleActions::TABLENAME,
+                WebuModules::COL_ID,
+                WebuModuleActions::COL_MODULE_ID,
+                1)
+            ->execute(true);
+
+        return $unfetchedActions;
+    }
 
 
     public function delete(DatabaseConnection $connection) {
