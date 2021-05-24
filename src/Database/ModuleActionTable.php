@@ -33,7 +33,7 @@ class ModuleActionTable extends DatabaseTable {
         $this->addColumn($col);
 
         $col = new DatabaseColumn("identifier", DatabaseType::VARCHAR);
-        $col->setLength(DatabaseColumn::VARCHAR_MAX);
+        $col->setLength(DatabaseColumn::VARCHAR_MIDDLE);
         $col->setIndex(DatabaseIndex::UNIQUE);
         $col->setCanBeNull(false);
         $this->addColumn($col);
