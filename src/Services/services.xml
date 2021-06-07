@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+
+    <service id="test.service" class="webuApp\Services\TestService">
+        <argument type="value" value="Hello world"/>
+        <tag>service</tag>
+    </service>
+
+
+</services>
+

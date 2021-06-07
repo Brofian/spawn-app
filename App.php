@@ -3,6 +3,7 @@
 namespace CustomWebuApp;
 
 use webu\system\Core\Base\Module\BaseModule;
+use webuApp;
 
 class App extends BaseModule {
 
