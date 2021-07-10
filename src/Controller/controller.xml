@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.fallback.404" class="webuApp\Controller\Fallback404Controller">
+        <tag>base.controller</tag>
+    </service>
+
+    <service id="system.example.controller" class="webuApp\Controller\ExampleController">
+        <tag>base.controller</tag>
+    </service>
+
+
+</services>
+

@@ -16,18 +16,13 @@ use spawn\system\Core\Contents\Modules\Module;
 
 class ModuleStorage {
 
-    /** @var int */
-    protected $id = null;
-    /** @var string */
-    protected $slug = "";
-    /** @var string */
-    protected $path = "";
-    /** @var bool */
-    protected $active = false;
-    /** @var string */
-    protected $informations = "";
-    /** @var string */
-    protected $resourceConfig = "";
+
+    protected ?int $id = null;
+    protected string $slug = "";
+    protected string $path = "";
+    protected bool $active = false;
+    protected string $informations = "";
+    protected string $resourceConfig = "";
 
 
     public function __construct(string $slug, string $path, bool $active = false, string $informations = "", string $resourceConfig = "", int $id = null)
@@ -70,6 +65,11 @@ class ModuleStorage {
     }
 
 
+    /**
+     * @param DatabaseConnection $connection
+     * @param bool $onlyActive
+     * @return ModuleStorage[]
+     */
     public static function findAll(DatabaseConnection $connection, bool $onlyActive = false) {
         $qb = new QueryBuilder($connection);
 
@@ -157,9 +157,10 @@ class ModuleStorage {
     /**
      * @param int $id
      */
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -173,9 +174,10 @@ class ModuleStorage {
     /**
      * @param string $slug
      */
-    public function setSlug(string $slug): void
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+        return $this;
     }
 
     /**
@@ -189,9 +191,10 @@ class ModuleStorage {
     /**
      * @param string $path
      */
-    public function setPath(string $path): void
+    public function setPath(string $path): self
     {
         $this->path = $path;
+        return $this;
     }
 
     /**
@@ -205,9 +208,10 @@ class ModuleStorage {
     /**
      * @param bool $active
      */
-    public function setActive(bool $active): void
+    public function setActive(bool $active): self
     {
         $this->active = $active;
+        return $this;
     }
 
     /**
@@ -221,9 +225,10 @@ class ModuleStorage {
     /**
      * @param string $informations
      */
-    public function setInformations(string $informations): void
+    public function setInformations(string $informations): self
     {
         $this->informations = $informations;
+        return $this;
     }
 
     /**
@@ -237,9 +242,10 @@ class ModuleStorage {
     /**
      * @param string $resourceConfig
      */
-    public function setResourceConfig(string $resourceConfig): void
+    public function setResourceConfig(string $resourceConfig): self
     {
         $this->resourceConfig = $resourceConfig;
+        return $this;
     }
 
 

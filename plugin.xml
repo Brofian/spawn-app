@@ -1,5 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
-<plugin>
+<plugin test="abc">
+
     <resources weight='1' namespace='WebuApp'>/src/Resources</resources>
+
+    <info>
+        <author>Fabian Holzwarth</author>
+        <version>1.0.0</version>
+    </info>
+
+    <services>
+
+        <import file="/src/Controller/controller.xml"/>
+
+        <import file="/src/Services/services.xml"/>
+
+    </services>
+
+
+
 </plugin>
