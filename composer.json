@@ -1,6 +1,6 @@
 {
-  "name": "webu/app",
-  "description": "Webu Application Module",
+  "name": "spawn/app",
+  "description": "S.P.A.W.N. Application Module",
   "license": "proprietary",
 
   "authors": [
@@ -11,7 +11,7 @@
 
   "autoload": {
     "psr-4" : {
-      "webuApp\\" : "src/"
+      "spawnApp\\" : "src/"
     }
   }
 }
