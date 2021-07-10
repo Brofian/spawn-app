@@ -1,10 +1,10 @@
 <?php
 
-namespace webuApp\Database\Migrations;
+namespace spawnApp\Database\Migrations;
 
-use webu\system\Core\Base\Helper\DatabaseHelper;
-use webu\system\core\base\Migration;
-use webu\system\core\database\WebuMigrationTable;
+use spawn\system\Core\Base\Helper\DatabaseHelper;
+use spawn\system\core\base\Migration;
+use spawn\system\core\database\SpawnMigrationTable;
 
 class MigrationTableSetup extends Migration {
 
@@ -17,7 +17,7 @@ class MigrationTableSetup extends Migration {
 
     function run(DatabaseHelper $dbHelper)
     {
-        $webuMigrationTable = new WebuMigrationTable();
-        $webuMigrationTable->create($dbHelper);
+        $spawnMigrationTable = new SpawnMigrationTable();
+        $spawnMigrationTable->create($dbHelper);
     }
 }

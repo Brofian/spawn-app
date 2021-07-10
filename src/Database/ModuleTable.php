@@ -1,11 +1,11 @@
 <?php
 
-namespace webuApp\Database;
+namespace spawnApp\Database;
 
-use webu\system\Core\Base\Database\DatabaseColumn;
-use webu\system\Core\Base\Database\DatabaseTable;
-use webu\system\Core\Base\Database\Storage\DatabaseType;
-use webu\system\Core\Base\Helper\DatabaseHelper;
+use spawn\system\Core\Base\Database\DatabaseColumn;
+use spawn\system\Core\Base\Database\DatabaseTable;
+use spawn\system\Core\Base\Database\Storage\DatabaseType;
+use spawn\system\Core\Base\Helper\DatabaseHelper;
 
 class ModuleTable extends DatabaseTable {
 
@@ -52,7 +52,7 @@ class ModuleTable extends DatabaseTable {
      */
     public function getTableName(): string
     {
-        return "webu_modules";
+        return "spawn_modules";
     }
 
     /**

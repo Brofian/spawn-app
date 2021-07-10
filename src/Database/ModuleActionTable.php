@@ -1,14 +1,14 @@
 <?php
 
-namespace webuApp\Database;
+namespace spawnApp\Database;
 
-use bin\webu\IO;
-use webu\Database\StructureTables\WebuModules;
-use webu\system\Core\Base\Database\DatabaseColumn;
-use webu\system\Core\Base\Database\DatabaseTable;
-use webu\system\Core\Base\Database\Storage\DatabaseIndex;
-use webu\system\Core\Base\Database\Storage\DatabaseType;
-use webu\system\Core\Base\Helper\DatabaseHelper;
+use bin\spawn\IO;
+use spawn\Database\StructureTables\SpawnModules;
+use spawn\system\Core\Base\Database\DatabaseColumn;
+use spawn\system\Core\Base\Database\DatabaseTable;
+use spawn\system\Core\Base\Database\Storage\DatabaseIndex;
+use spawn\system\Core\Base\Database\Storage\DatabaseType;
+use spawn\system\Core\Base\Helper\DatabaseHelper;
 
 class ModuleActionTable extends DatabaseTable {
 
@@ -45,7 +45,7 @@ class ModuleActionTable extends DatabaseTable {
         $col = new DatabaseColumn("module_id", DatabaseType::INT);
         $col->setCanBeNull(false);
         $this->addColumn($col);
-        $this->setOnDeleteCascade("module_id", WebuModules::TABLENAME, WebuModules::RAW_COL_ID);
+        $this->setOnDeleteCascade("module_id", SpawnModules::TABLENAME, SpawnModules::RAW_COL_ID);
 
         return true;
     }
@@ -55,7 +55,7 @@ class ModuleActionTable extends DatabaseTable {
      */
     public function getTableName(): string
     {
-        return "webu_module_actions";
+        return "spawn_module_actions";
     }
 
     /**

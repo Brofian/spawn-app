@@ -1,8 +1,8 @@
 <?php
     
-namespace CustomWebuApp;
+namespace CustomSpawnApp;
 
-use webu\system\Core\Base\Module\BaseModule;
+use spawn\system\Core\Base\Module\BaseModule;
 
 class App extends BaseModule {
 

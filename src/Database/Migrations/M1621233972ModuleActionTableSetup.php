@@ -1,10 +1,10 @@
 <?php
 
-namespace webuApp\Database\Migrations;
+namespace spawnApp\Database\Migrations;
 
-use webu\system\Core\Base\Helper\DatabaseHelper;
-use webu\system\core\base\Migration;
-use webuApp\Database\ModuleActionTable;
+use spawn\system\Core\Base\Helper\DatabaseHelper;
+use spawn\system\core\base\Migration;
+use spawnApp\Database\ModuleActionTable;
 
 class M1621233972ModuleActionTableSetup extends Migration {
     

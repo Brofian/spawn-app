@@ -1,18 +1,18 @@
 <?php
 
 
-namespace webuApp\Models;
+namespace spawnApp\Models;
 
 
-use webu\Database\StructureTables\WebuModuleActions;
-use webu\Database\StructureTables\WebuModules;
-use webu\system\Core\Base\Database\DatabaseConnection;
-use webu\system\Core\Base\Database\Query\QueryBuilder;
-use webu\system\Core\Base\Database\Query\QueryCondition;
-use webu\system\Core\Base\Database\Storage\DatabaseDefaults;
-use webu\system\Core\Base\Database\Storage\DatabaseType;
-use webu\system\Core\Base\Helper\DatabaseHelper;
-use webu\system\Core\Contents\Modules\Module;
+use spawn\Database\StructureTables\SpawnModuleActions;
+use spawn\Database\StructureTables\SpawnModules;
+use spawn\system\Core\Base\Database\DatabaseConnection;
+use spawn\system\Core\Base\Database\Query\QueryBuilder;
+use spawn\system\Core\Base\Database\Query\QueryCondition;
+use spawn\system\Core\Base\Database\Storage\DatabaseDefaults;
+use spawn\system\Core\Base\Database\Storage\DatabaseType;
+use spawn\system\Core\Base\Helper\DatabaseHelper;
+use spawn\system\Core\Contents\Modules\Module;
 
 class ModuleStorage {
 
@@ -43,28 +43,28 @@ class ModuleStorage {
     public function save(DatabaseConnection $connection) {
         $qb = new QueryBuilder($connection);
         if($this->id === null) {
-            $qb->insert()->into(WebuModules::TABLENAME)
-                ->setValue(WebuModules::RAW_COL_SLUG, $this->slug)
-                ->setValue(WebuModules::RAW_COL_PATH, $this->path)
-                ->setValue(WebuModules::RAW_COL_ACTIVE, $this->active)
-                ->setValue(WebuModules::RAW_COL_INFORMATIONS, $this->informations)
-                ->setValue(WebuModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
+            $qb->insert()->into(SpawnModules::TABLENAME)
+                ->setValue(SpawnModules::RAW_COL_SLUG, $this->slug)
+                ->setValue(SpawnModules::RAW_COL_PATH, $this->path)
+                ->setValue(SpawnModules::RAW_COL_ACTIVE, $this->active)
+                ->setValue(SpawnModules::RAW_COL_INFORMATIONS, $this->informations)
+                ->setValue(SpawnModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
                 ->execute();
-            $newId = $qb->select(WebuModules::RAW_COL_ID)
-                ->from(WebuModules::TABLENAME)
-                ->orderby(WebuModules::RAW_COL_ID, true)
+            $newId = $qb->select(SpawnModules::RAW_COL_ID)
+                ->from(SpawnModules::TABLENAME)
+                ->orderby(SpawnModules::RAW_COL_ID, true)
                 ->limit(1)
                 ->execute();
-            $this->id = $newId[0][WebuModules::RAW_COL_ID];
+            $this->id = $newId[0][SpawnModules::RAW_COL_ID];
         }
         else {
-            $qb->update(WebuModules::TABLENAME)
-                ->where(WebuModules::RAW_COL_ID, $this->id)
-                ->set(WebuModules::RAW_COL_SLUG, $this->slug)
-                ->set(WebuModules::RAW_COL_PATH, $this->path)
-                ->set(WebuModules::RAW_COL_ACTIVE, $this->active)
-                ->set(WebuModules::RAW_COL_INFORMATIONS, $this->informations)
-                ->set(WebuModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
+            $qb->update(SpawnModules::TABLENAME)
+                ->where(SpawnModules::RAW_COL_ID, $this->id)
+                ->set(SpawnModules::RAW_COL_SLUG, $this->slug)
+                ->set(SpawnModules::RAW_COL_PATH, $this->path)
+                ->set(SpawnModules::RAW_COL_ACTIVE, $this->active)
+                ->set(SpawnModules::RAW_COL_INFORMATIONS, $this->informations)
+                ->set(SpawnModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
                 ->execute();
         }
     }
@@ -73,9 +73,9 @@ class ModuleStorage {
     public static function findAll(DatabaseConnection $connection, bool $onlyActive = false) {
         $qb = new QueryBuilder($connection);
 
-        $select = $qb->select("*")->from(WebuModules::TABLENAME);
+        $select = $qb->select("*")->from(SpawnModules::TABLENAME);
         if($onlyActive) {
-            $select->where(WebuModules::RAW_COL_ACTIVE, 1);
+            $select->where(SpawnModules::RAW_COL_ACTIVE, 1);
         }
         $erg = $select->execute();
 
@@ -88,12 +88,12 @@ class ModuleStorage {
             $modules = [];
             foreach ($erg as $module) {
                 $modules[] = new self(
-                    $module[WebuModules::RAW_COL_SLUG],
-                    $module[WebuModules::RAW_COL_PATH],
-                    $module[WebuModules::RAW_COL_ACTIVE],
-                    $module[WebuModules::RAW_COL_INFORMATIONS],
-                    $module[WebuModules::RAW_COL_RESSOURCE_CONFIG],
-                    $module[WebuModules::RAW_COL_ID]
+                    $module[SpawnModules::RAW_COL_SLUG],
+                    $module[SpawnModules::RAW_COL_PATH],
+                    $module[SpawnModules::RAW_COL_ACTIVE],
+                    $module[SpawnModules::RAW_COL_INFORMATIONS],
+                    $module[SpawnModules::RAW_COL_RESSOURCE_CONFIG],
+                    $module[SpawnModules::RAW_COL_ID]
                 );
             }
             return $modules;
@@ -109,11 +109,11 @@ class ModuleStorage {
 
         $qb = new QueryBuilder($connection);
         $unfetchedActions = $qb->select("*")
-            ->from(WebuModules::TABLENAME)
+            ->from(SpawnModules::TABLENAME)
             ->join(
-                WebuModuleActions::TABLENAME,
-                WebuModules::COL_ID,
-                WebuModuleActions::COL_MODULE_ID,
+                SpawnModuleActions::TABLENAME,
+                SpawnModules::COL_ID,
+                SpawnModuleActions::COL_MODULE_ID,
                 1)
             ->execute(true);
 
@@ -126,8 +126,8 @@ class ModuleStorage {
 
         $qb = new QueryBuilder($connection);
         $qb->delete()
-            ->from(WebuModules::TABLENAME)
-            ->where(WebuModules::RAW_COL_ID, $this->id)
+            ->from(SpawnModules::TABLENAME)
+            ->where(SpawnModules::RAW_COL_ID, $this->id)
             ->execute();
 
         $this->id = null;

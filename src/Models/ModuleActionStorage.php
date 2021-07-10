@@ -1,13 +1,13 @@
 <?php
 
 
-namespace webuApp\Models;
+namespace spawnApp\Models;
 
 
-use webu\Database\StructureTables\WebuModuleActions;
-use webu\Database\StructureTables\WebuModules;
-use webu\system\Core\Base\Database\DatabaseConnection;
-use webu\system\Core\Base\Database\Query\QueryBuilder;
+use spawn\Database\StructureTables\SpawnModuleActions;
+use spawn\Database\StructureTables\SpawnModules;
+use spawn\system\Core\Base\Database\DatabaseConnection;
+use spawn\system\Core\Base\Database\Query\QueryBuilder;
 
 class ModuleActionStorage {
 
@@ -40,24 +40,24 @@ class ModuleActionStorage {
 
         $qb = new QueryBuilder($connection);
         if($this->id === null) {
-            $qb->insert()->into(WebuModuleActions::TABLENAME)
-                ->setValue(WebuModuleActions::RAW_COL_ACTION, $this->action)
-                ->setValue(WebuModuleActions::RAW_COL_CLASS, $this->class)
-                ->setValue(WebuModuleActions::RAW_COL_CUSTOM_URL, $this->custom_url)
-                ->setValue(WebuModuleActions::RAW_COL_IDENTIFIER, $this->identifier)
-                ->setValue(WebuModuleActions::RAW_COL_MODULE_ID, $this->module_id)
+            $qb->insert()->into(SpawnModuleActions::TABLENAME)
+                ->setValue(SpawnModuleActions::RAW_COL_ACTION, $this->action)
+                ->setValue(SpawnModuleActions::RAW_COL_CLASS, $this->class)
+                ->setValue(SpawnModuleActions::RAW_COL_CUSTOM_URL, $this->custom_url)
+                ->setValue(SpawnModuleActions::RAW_COL_IDENTIFIER, $this->identifier)
+                ->setValue(SpawnModuleActions::RAW_COL_MODULE_ID, $this->module_id)
                 ->execute();
-            $newId = $qb->select("SELECT id FROM ".WebuModuleActions::TABLENAME." order by id desc limit 1");
+            $newId = $qb->select("SELECT id FROM ".SpawnModuleActions::TABLENAME." order by id desc limit 1");
             $this->id = $newId;
         }
         else {
-            $qb->update(WebuModuleActions::TABLENAME)
-                ->where(WebuModuleActions::RAW_COL_ID, $this->id)
-                ->set(WebuModuleActions::RAW_COL_ACTION, $this->action)
-                ->set(WebuModuleActions::RAW_COL_CLASS, $this->class)
-                ->set(WebuModuleActions::RAW_COL_CUSTOM_URL, $this->custom_url)
-                ->set(WebuModuleActions::RAW_COL_IDENTIFIER, $this->identifier)
-                ->set(WebuModuleActions::RAW_COL_MODULE_ID, $this->module_id)
+            $qb->update(SpawnModuleActions::TABLENAME)
+                ->where(SpawnModuleActions::RAW_COL_ID, $this->id)
+                ->set(SpawnModuleActions::RAW_COL_ACTION, $this->action)
+                ->set(SpawnModuleActions::RAW_COL_CLASS, $this->class)
+                ->set(SpawnModuleActions::RAW_COL_CUSTOM_URL, $this->custom_url)
+                ->set(SpawnModuleActions::RAW_COL_IDENTIFIER, $this->identifier)
+                ->set(SpawnModuleActions::RAW_COL_MODULE_ID, $this->module_id)
                 ->execute();
         }
     }
@@ -67,8 +67,8 @@ class ModuleActionStorage {
 
         $qb = new QueryBuilder($connection);
         $qb->delete()
-            ->from(WebuModuleActions::TABLENAME)
-            ->where(WebuModuleActions::RAW_COL_ID, $this->id)
+            ->from(SpawnModuleActions::TABLENAME)
+            ->where(SpawnModuleActions::RAW_COL_ID, $this->id)
             ->execute();
 
         $this->id = null;
@@ -79,9 +79,9 @@ class ModuleActionStorage {
     public static function findAll(DatabaseConnection $connection, int $moduleId = null) {
         $qb = new QueryBuilder($connection);
 
-        $select = $qb->select("*")->from(WebuModuleActions::TABLENAME);
+        $select = $qb->select("*")->from(SpawnModuleActions::TABLENAME);
         if($moduleId !== null) {
-            $select->where(WebuModuleActions::RAW_COL_MODULE_ID, $moduleId);
+            $select->where(SpawnModuleActions::RAW_COL_MODULE_ID, $moduleId);
         }
 
         $erg = $select->execute();
@@ -95,12 +95,12 @@ class ModuleActionStorage {
             $moduleActions = [];
             foreach ($erg as $action) {
                 $moduleActions[] = new self(
-                    $action[WebuModuleActions::RAW_COL_CLASS],
-                    $action[WebuModuleActions::RAW_COL_ACTION],
-                    $action[WebuModuleActions::RAW_COL_CUSTOM_URL],
-                    $action[WebuModuleActions::RAW_COL_IDENTIFIER],
-                    $action[WebuModuleActions::RAW_COL_MODULE_ID],
-                    $action[WebuModuleActions::RAW_COL_ID]
+                    $action[SpawnModuleActions::RAW_COL_CLASS],
+                    $action[SpawnModuleActions::RAW_COL_ACTION],
+                    $action[SpawnModuleActions::RAW_COL_CUSTOM_URL],
+                    $action[SpawnModuleActions::RAW_COL_IDENTIFIER],
+                    $action[SpawnModuleActions::RAW_COL_MODULE_ID],
+                    $action[SpawnModuleActions::RAW_COL_ID]
                 );
             }
             return $moduleActions;
