@@ -2,11 +2,11 @@
 
 <services>
 
-    <service id="system.fallback.404" class="webuApp\Controller\Fallback404Controller">
+    <service id="system.fallback.404" class="spawnApp\Controller\Fallback404Controller">
         <tag>base.controller</tag>
     </service>
 
-    <service id="system.example.controller" class="webuApp\Controller\ExampleController">
+    <service id="system.example.controller" class="spawnApp\Controller\ExampleController">
         <tag>base.controller</tag>
     </service>
 
