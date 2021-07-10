@@ -1,6 +1,6 @@
 <?php
 
-namespace webuApp\Services;
+namespace spawnApp\Services;
 
 class TestService {
 

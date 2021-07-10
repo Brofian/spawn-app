@@ -1,8 +1,8 @@
 <?php
 
-namespace webuApp\Controller;
+namespace spawnApp\Controller;
 
-use webu\system\Core\Base\Controller\ControllerInterface;
+use spawn\system\Core\Base\Controller\ControllerInterface;
 
 class Fallback404Controller implements ControllerInterface  {
 

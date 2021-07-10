@@ -1,9 +1,9 @@
 <?php
 
-namespace webuApp\Controller;
+namespace spawnApp\Controller;
 
-use webu\system\Core\Base\Controller\ControllerInterface;
-use webuApp\Services\TestService;
+use spawn\system\Core\Base\Controller\ControllerInterface;
+use spawnApp\Services\TestService;
 
 class ExampleController implements ControllerInterface  {
 
