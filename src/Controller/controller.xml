@@ -6,10 +6,5 @@
         <tag>base.controller</tag>
     </service>
 
-    <service id="system.example.controller" class="spawnApp\Controller\ExampleController">
-        <tag>base.controller</tag>
-    </service>
-
-
 </services>
 

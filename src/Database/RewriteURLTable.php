@@ -38,6 +38,9 @@ class RewriteURLTable extends DatabaseTable {
 
     public function afterCreation(DatabaseHelper $dbhelper)
     {
-        //TODO: create first index entry
+        $dbhelper->query('INSERT INTO '.$this->getTableName().'
+            (c_url, replacement_url)
+            VALUES ("/", "/?controller=system.fallback.404&action=error404")
+        ');
     }
 }
