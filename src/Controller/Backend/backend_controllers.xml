@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.backend.base" class="spawnApp\Controller\Backend\BaseBackendController">
+        <tag>backend.controller</tag>
+    </service>
+
+    <service id="system.backend.test" class="spawnApp\Controller\Backend\TestBackendController">
+        <tag>backend.controller</tag>
+    </service>
+
+
+</services>
+

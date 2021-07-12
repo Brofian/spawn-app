@@ -6,5 +6,7 @@
         <tag>base.controller</tag>
     </service>
 
+    <import file="Backend/backend_controllers.xml"/>
+
 </services>
 

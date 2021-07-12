@@ -2,17 +2,11 @@
 
 namespace spawnApp\Controller;
 
-use spawn\system\Core\Base\Controller\ControllerInterface;
 
-class Fallback404Controller implements ControllerInterface  {
+use spawn\system\Core\Base\Controller\AbstractController;
 
-    public static function defaultActionPaths(): array
-    {
-        return [
-            'index' => '/error/404'
-        ];
-    }
 
+class Fallback404Controller extends AbstractController  {
 
     public function error404Action() {
         dd("404 default");
