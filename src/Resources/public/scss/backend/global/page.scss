@@ -1,0 +1,9 @@
+.page-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	min-height: 100vh;
+	background: $background-dark;
+	color: $font-color-white;
+}

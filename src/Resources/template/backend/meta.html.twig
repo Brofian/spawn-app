@@ -1,0 +1,33 @@
+
+{% block meta_charset %}
+    <meta charset="UTF-8">
+{% endblock %}
+
+{% block meta_viewport %}
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+{% endblock %}
+
+{% block meta_x_ua_compatible %}
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% endblock %}
+
+{% block meta_title %}
+    <title>S.P.A.W.N. Backend</title>
+{% endblock %}
+
+{% block meta_favicon %}
+    <link rel="icon" type="image/svg+xml" href="/var/cache/public/assets/icons/icon_spawn.svg">
+{% endblock %}
+
+{% block meta_javascript %}
+    <script src="/var/cache/public/js/index.js"></script>
+{% endblock %}
+
+{% block meta_css %}
+    {% if environment == 'dev' %}
+        <link rel="stylesheet" type="text/css" href="var/cache/public/css/all.css">
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="var/cache/public/css/all.min.css">
+    {% endif %}
+
+{% endblock %}

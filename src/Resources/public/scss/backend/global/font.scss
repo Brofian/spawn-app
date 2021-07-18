@@ -1,0 +1,31 @@
+$font-path: $asset-path + '/fonts/hind_siliguri';
+
+@font-face {
+	font-family: 'hind_siliguri';
+	font-weight: 300;
+	src: url("#{$font-path}/HindSiliguri-Light.ttf");
+}
+
+@font-face {
+	font-family: 'hind_siliguri';
+	font-weight: 400;
+	src: url("#{$font-path}/HindSiliguri-Regular.ttf");
+}
+
+@font-face {
+	font-family: 'hind_siliguri';
+	font-weight: 500;
+	src: url("#{$font-path}/HindSiliguri-Medium.ttf");
+}
+
+@font-face {
+	font-family: 'hind_siliguri';
+	font-weight: 600;
+	src: url("#{$font-path}/HindSiliguri-SemiBold.ttf");
+}
+
+@font-face {
+	font-family: 'hind_siliguri';
+	font-weight: 700;
+	src: url("#{$font-path}/HindSiliguri-Bold.ttf");
+}

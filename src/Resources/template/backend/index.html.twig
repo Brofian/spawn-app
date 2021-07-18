@@ -3,20 +3,29 @@
 
 {% block head %}
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        {% include 'backend/meta.html.twig' %}
     </head>
 {% endblock %}
 
 {% block body %}
     <body>
 
-        {% include 'backend/sidebar.html.twig' %}
+        <div class="page-wrap">
 
-        {% include content_file %}
+            {% block sidebar %}
+                <div class="backend_sidebar">
+                    {% include 'backend/sidebar/sidebar.html.twig' %}
+                </div>
+            {% endblock %}
+
+            {% block content %}
+                <div class="backend_content">
+                    {% include content_file %}
+                </div>
+            {% endblock %}
+
+        </div>
+
 
 
     </body>

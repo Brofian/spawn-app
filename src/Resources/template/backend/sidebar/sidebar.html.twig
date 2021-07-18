@@ -1,0 +1,30 @@
+{% block sidebar %}
+
+    <div class="backend_sidebar_container">
+
+        <div class="backend_sidebar_top">
+            {{ 'icon_spawn'|icon('backend_sidebar_top_icon') }}
+        </div>
+
+        {% block sidebar_inner %}
+
+            <ul>
+
+                {% for sidebar_category in sidebar_tree %}
+
+                    {% include 'backend/sidebar/branch.html.twig' %}
+
+                {% endfor %}
+
+            </ul>
+
+
+
+
+
+        {% endblock %}
+
+    </div>
+
+
+{% endblock %}
