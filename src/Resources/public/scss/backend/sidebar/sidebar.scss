@@ -1,6 +1,8 @@
 .backend_sidebar {
 	min-height: 100%;
 	flex: 0 0 20%;
+	min-width: 12rem;
+	max-width: 16rem;
 	background: $black;
 	display: flex;
 	top: 0;
@@ -40,6 +42,10 @@
 					align-items: center;
 					height: 3rem;
 					padding: 0 10px;
+
+					&:hover {
+						background-color: $background-black-highlight;
+					}
 				}
 
 				.sidebar_category_accordion {

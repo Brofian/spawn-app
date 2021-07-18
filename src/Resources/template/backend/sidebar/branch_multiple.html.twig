@@ -11,13 +11,10 @@
 
             {% for sidebar_action in sidebar_category.actions %}
 
-                <a href="TODO">
+                <li class="sidebar_category_accordion_entry js-sidebar-link" data-sidebar-link="">
+                    {{ sidebar_action.title }}
+                </li>
 
-                    <li class="sidebar_category_accordion_entry">
-                        {{ sidebar_action.title }}
-                    </li>
-
-                </a>
             {% endfor %}
 
         </ul>

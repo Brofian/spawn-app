@@ -1,4 +1,5 @@
 import Plugin from "Plugin";
+import DeviceManager from "DeviceManager";
 
 export default class AccordionPlugin extends Plugin {
 
@@ -31,7 +32,7 @@ export default class AccordionPlugin extends Plugin {
 
 
     registerEventListeners() {
-        let event = this._isTouchDevice ? 'touch' : 'click';
+        let event = DeviceManager.isTouchDevice() ? 'touch' : 'click';
 
         this.toggle.addEventListener(event, this.onToggleClick.bind(this));
 
