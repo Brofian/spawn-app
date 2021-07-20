@@ -6,7 +6,7 @@
         <tag>backend.controller</tag>
     </service>
 
-    <service id="system.backend.test" class="spawnApp\Controller\Backend\TestBackendController">
+    <service id="system.backend.seo_url_config" class="spawnApp\Controller\Backend\SeoUrlConfigController">
         <tag>backend.controller</tag>
     </service>
 

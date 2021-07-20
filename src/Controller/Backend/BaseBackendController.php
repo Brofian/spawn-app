@@ -19,17 +19,6 @@ class BaseBackendController extends AbstractBackendController {
                         'title' => 'Home Link' //action title
                     ]
                 ]
-            ],
-            'Test' => [
-                'title' => 'Test',
-                'color' => '#00ff00',
-                'actions' => [
-                    [
-                        'controller' => '%self.key%',
-                        'action' => 'homeAction',
-                        'title' => 'testLink'
-                    ]
-                ]
             ]
         ];
     }
@@ -37,6 +26,6 @@ class BaseBackendController extends AbstractBackendController {
 
     public function homeAction() {
 
-        $this->twig->assign('content_file', 'backend/home/content.html.twig');
+        $this->twig->assign('content_file', 'backend/contents/home/content.html.twig');
     }
 }

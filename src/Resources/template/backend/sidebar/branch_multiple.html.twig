@@ -11,7 +11,8 @@
 
             {% for sidebar_action in sidebar_category.actions %}
 
-                <li class="sidebar_category_accordion_entry js-sidebar-link" data-sidebar-link="">
+                <li class="sidebar_category_accordion_entry"
+                    data-backend-content-link="/backend?controller={{ sidebar_action.controller }}&action={{ sidebar_action.action }}">
                     {{ sidebar_action.title }}
                 </li>
 

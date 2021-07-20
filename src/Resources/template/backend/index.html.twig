@@ -13,13 +13,13 @@
         <div class="page-wrap">
 
             {% block sidebar %}
-                <div class="backend_sidebar">
+                <div id="backend_sidebar">
                     {% include 'backend/sidebar/sidebar.html.twig' %}
                 </div>
             {% endblock %}
 
             {% block content %}
-                <div class="backend_content">
+                <div id="backend_content">
                     {% include content_file %}
                 </div>
             {% endblock %}

@@ -1,6 +1,7 @@
-<div class="sidebar_branch_single js-sidebar-link" data-sidebar-link="/backend">
+{% set sidebar_action = sidebar_category.actions|first %}
 
-    {% set sidebar_action = sidebar_category.actions|first %}
+<div class="sidebar_branch_single"
+     data-backend-content-link="/backend?controller={{ sidebar_action.controller }}&action={{ sidebar_action.action }}">
 
     {{ sidebar_category.title }}
 
