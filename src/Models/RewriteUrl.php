@@ -34,15 +34,15 @@ class RewriteUrl {
         $qb = new QueryBuilder($dbHelper->getConnection());
         $erg = $qb->select('*')
             ->from('spawn_rewrite_urls')
-            ->where('replacement_url', ':replacement')
-            ->bindValue(':replacement', $replacementUrl)
-            ->limit(1);
+            ->where('replacement_url', $replacementUrl)
+            ->limit(1)
+            ->execute();
 
-        if(!$erg) {
+        if(!is_array($erg) || !isset($erg[0])) {
             return null;
         }
 
-        return self::resultToEntity($erg);
+        return self::resultToEntity($erg[0]);
     }
 
     public static function resultToEntity($result) : self {

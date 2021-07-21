@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
 <services>
+    <!--            class="spawnApp\Extension\Twig\SeoUrlRewriteFilter"-->
 
     <service
             id="spawn.app.twig.extension.filter.seo_url_rewrite"
-            class="spawnApp\Extension\Twig\SeoUrlRewriteFilter"
+            class="spawnApp\Controller\SeoUrlRewriteFilter"
             static="true"
     >
         <tag>extension.twig</tag>
