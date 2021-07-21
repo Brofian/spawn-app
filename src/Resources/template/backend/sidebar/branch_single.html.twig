@@ -1,7 +1,7 @@
 {% set sidebar_action = sidebar_category.actions|first %}
 
 <div class="sidebar_branch_single"
-     data-backend-content-link="/backend?controller={{ sidebar_action.controller }}&action={{ sidebar_action.action }}">
+     data-backend-content-link="{{ seo_url(sidebar_action.controller, sidebar_action.action) }}">
 
     {{ sidebar_category.title }}
 

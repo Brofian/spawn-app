@@ -18,19 +18,29 @@ export default class AjaxDataReplace {
             }
         ).done(
             this.replaceContent.bind(null, targetSelector, targetElement)
+        ).fail(
+            this.replaceContentWithError.bind(null, targetElement)
         );
+
+
 
     }
 
-    static replaceContent(targetSelector, targetElement, requestData, resultCode, response) {
+    static replaceContentWithError(targetElement) {
+        let errorElement = document.createElement('div');
+        errorElement.innerText = 'ERROR';
+        targetElement.parentNode.replaceChild(errorElement, targetElement);
+    }
 
+    static replaceContent(targetSelector, targetElement, requestData, resultCode, response) {
 
         let container = document.createElement('template');
         container.innerHTML = requestData.trim();
         let urlContentElement = container.content.querySelector(targetSelector);
 
+
         if(!urlContentElement) {
-            return;
+            urlContentElement = container.content;
         }
 
         targetElement.parentNode.replaceChild(urlContentElement, targetElement);

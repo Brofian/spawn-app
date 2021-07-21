@@ -2,6 +2,7 @@
 
 namespace spawnApp\Models;
 
+use spawn\system\Core\Base\Database\Query\QueryBuilder;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 
 class RewriteUrl {
@@ -29,6 +30,21 @@ class RewriteUrl {
         return $entities;
     }
 
+    public static function findSeoByReplacement(DatabaseHelper $dbHelper, string $replacementUrl): ?self {
+        $qb = new QueryBuilder($dbHelper->getConnection());
+        $erg = $qb->select('*')
+            ->from('spawn_rewrite_urls')
+            ->where('replacement_url', ':replacement')
+            ->bindValue(':replacement', $replacementUrl)
+            ->limit(1);
+
+        if(!$erg) {
+            return null;
+        }
+
+        return self::resultToEntity($erg);
+    }
+
     public static function resultToEntity($result) : self {
 
         $url = new RewriteUrl(
@@ -38,6 +54,8 @@ class RewriteUrl {
 
         return $url;
     }
+
+
 
     public function getCUrl(): ?string
     {

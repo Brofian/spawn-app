@@ -29,14 +29,7 @@ class SeoUrlConfigController extends AbstractBackendController {
 
     public function seoUrlOverviewAction() {
 
-        //load available controller action combinations
-        $controllerServices = $this->container->getServicesByTag(ServiceTags::BASE_CONTROLLER);
-        $actions = [];
-        foreach($controllerServices as $controllerService) {
-            $actions = $this->getActionsFromController($controllerService->getClass());
-        }
-
-        $this->twig->assign('available_controllers', $actions);
+        $this->twig->assign('available_controllers', $this->getAvailableControllerActions());
 
         //load already saved dbHelper
         $dbHelper = $this->container->get('system.database.helper');
@@ -49,13 +42,27 @@ class SeoUrlConfigController extends AbstractBackendController {
     }
 
 
-    protected function getActionsFromController(string $controllerCls) {
+    protected function getAvailableControllerActions(): array {
+        //load available controller action combinations
+        $controllerServices = $this->container->getServicesByTag(ServiceTags::BASE_CONTROLLER);
+        $actions = [];
+        foreach($controllerServices as $controllerService) {
+            try {
+                $class = new \ReflectionClass($controllerService->getClass());
+                $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        $actions = get_class_methods($controllerCls);
+                /** @var \ReflectionMethod $method */
+                foreach($methods as $method) {
+                    if(strpos($method->getName(), '__') !== 0 && preg_match('/^.*Action$/m', $method->getName())) {
+                        $actions[] = [
+                            'method' => $method->getName(),
+                            'controller' => $method->getDeclaringClass()->getName()
+                        ];
+                    }
+                }
 
-        //entferne __construct
-        //nur public methods
-        //füge controller zu array einträgen hinzu
+            } catch (\ReflectionException $e) {}
+        }
 
         return $actions;
     }

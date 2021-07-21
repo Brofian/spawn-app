@@ -9,6 +9,7 @@ export default class BackendContentLinkPlugin extends Plugin {
         this.backendLinkSelector = '[data-backend-content-link]';
         this.backendLinkUrlData = 'backendContentLink';
         this.backendTargetData = 'backendContentTarget';
+        this.backendLinkUrlRewriteData = 'backendContentLinkUriRewrite';
         this.contentTargetSelector ='#backend_content';
 
         this.sidebarLinks = this._element.querySelectorAll(this.backendLinkSelector);
@@ -27,16 +28,20 @@ export default class BackendContentLinkPlugin extends Plugin {
                 targetSelector = sidebarLink.dataset[this.backendTargetData];
             }
 
-            sidebarLink.addEventListener(event, this.onSidebarLinkClick.bind(this, targetSelector));
+            let addEntryToUri = sidebarLink.dataset[this.backendLinkUrlRewriteData] === 'true';
+
+            sidebarLink.addEventListener(event, this.onSidebarLinkClick.bind(this, targetSelector, addEntryToUri));
         }
     }
 
 
-    onSidebarLinkClick(targetSelector, event) {
+    onSidebarLinkClick(targetSelector, addEntryToUri, event) {
 
         let element = event.target;
 
         let url = element.dataset[this.backendLinkUrlData];
+
+        window.history.pushState('', '', url);
 
         AjaxDataReplace.loadAndReplaceContent(url, targetSelector);
     }
