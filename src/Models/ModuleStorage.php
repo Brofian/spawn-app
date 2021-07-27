@@ -13,11 +13,11 @@ use spawn\system\Core\Base\Database\Storage\DatabaseDefaults;
 use spawn\system\Core\Base\Database\Storage\DatabaseType;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 use spawn\system\Core\Contents\Modules\Module;
+use spawn\system\Core\Helper\UUID;
 
 class ModuleStorage {
 
-
-    protected ?int $id = null;
+    protected ?string $id = null;
     protected string $slug = "";
     protected string $path = "";
     protected bool $active = false;
@@ -25,7 +25,7 @@ class ModuleStorage {
     protected string $resourceConfig = "";
 
 
-    public function __construct(string $slug, string $path, bool $active = false, string $informations = "", string $resourceConfig = "", int $id = null)
+    public function __construct(string $slug, string $path, bool $active = false, string $informations = "", string $resourceConfig = "", ?string $id = null)
     {
         $this->id = $id;
         $this->slug = $slug;
@@ -38,12 +38,16 @@ class ModuleStorage {
     public function save(DatabaseConnection $connection) {
         $qb = new QueryBuilder($connection);
         if($this->id === null) {
+            $randomBytes = UUID::randomBytes();
+            $this->setId(UUID::bytesToHex($randomBytes));
+
             $qb->insert()->into(SpawnModules::TABLENAME)
                 ->setValue(SpawnModules::RAW_COL_SLUG, $this->slug)
                 ->setValue(SpawnModules::RAW_COL_PATH, $this->path)
                 ->setValue(SpawnModules::RAW_COL_ACTIVE, $this->active)
                 ->setValue(SpawnModules::RAW_COL_INFORMATIONS, $this->informations)
                 ->setValue(SpawnModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
+                ->setValue(SpawnModules::RAW_COL_ID, $randomBytes)
                 ->execute();
             $newId = $qb->select(SpawnModules::RAW_COL_ID)
                 ->from(SpawnModules::TABLENAME)
@@ -145,103 +149,67 @@ class ModuleStorage {
 
 
 
-
-    /**
-     * @return int
-     */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
+
     public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     */
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @param string $path
-     */
     public function setPath(string $path): self
     {
         $this->path = $path;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return $this->active;
     }
 
-    /**
-     * @param bool $active
-     */
     public function setActive(bool $active): self
     {
         $this->active = $active;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getInformations(): string
     {
         return $this->informations;
     }
 
-    /**
-     * @param string $informations
-     */
     public function setInformations(string $informations): self
     {
         $this->informations = $informations;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getResourceConfig(): string
     {
         return $this->resourceConfig;
     }
 
-    /**
-     * @param string $resourceConfig
-     */
     public function setResourceConfig(string $resourceConfig): self
     {
         $this->resourceConfig = $resourceConfig;

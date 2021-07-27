@@ -7,13 +7,15 @@ use spawn\system\Core\Base\Helper\DatabaseHelper;
 
 class RewriteUrl {
 
+    protected ?string $id = null;
     protected string $c_url;
     protected string $rewrite_url;
 
-    public function __construct(string $c_url, string $rewrite_url)
+    public function __construct(string $c_url, string $rewrite_url, ?string $id = null)
     {
         $this->c_url = $c_url;
         $this->rewrite_url = $rewrite_url;
+        $this->id = $id;
     }
 
 
@@ -49,7 +51,8 @@ class RewriteUrl {
 
         $url = new RewriteUrl(
             $result['c_url'],
-            $result['replacement_url']
+            $result['replacement_url'],
+            $result['id']
         );
 
         return $url;
