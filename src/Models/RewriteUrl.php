@@ -2,6 +2,7 @@
 
 namespace spawnApp\Models;
 
+use Doctrine\DBAL\FetchMode;
 use spawn\system\Core\Base\Database\Query\QueryBuilder;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 
@@ -23,6 +24,11 @@ class RewriteUrl {
         $result = $dbHelper->query("
             SELECT * FROM spawn_rewrite_urls
         ");
+
+
+        if(!$result) {
+            return [];
+        }
 
         $entities = [];
         foreach($result as $row) {

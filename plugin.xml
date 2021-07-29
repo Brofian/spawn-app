@@ -17,6 +17,8 @@
 
         <import file="/src/Extensions/extensions.xml"/>
 
+        <import file="/src/Database/database.xml"/>
+
     </services>
 
 

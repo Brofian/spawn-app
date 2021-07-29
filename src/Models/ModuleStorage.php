@@ -49,12 +49,14 @@ class ModuleStorage {
                 ->setValue(SpawnModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
                 ->setValue(SpawnModules::RAW_COL_ID, $randomBytes)
                 ->execute();
+            /*
             $newId = $qb->select(SpawnModules::RAW_COL_ID)
                 ->from(SpawnModules::TABLENAME)
                 ->orderby(SpawnModules::RAW_COL_ID, true)
                 ->limit(1)
                 ->execute();
             $this->id = $newId[0][SpawnModules::RAW_COL_ID];
+            */
         }
         else {
             $qb->update(SpawnModules::TABLENAME)
