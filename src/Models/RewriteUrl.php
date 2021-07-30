@@ -2,7 +2,6 @@
 
 namespace spawnApp\Models;
 
-use Doctrine\DBAL\FetchMode;
 use spawn\system\Core\Base\Database\Query\QueryBuilder;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 

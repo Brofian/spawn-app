@@ -8,12 +8,8 @@ use spawn\Database\StructureTables\SpawnModuleActions;
 use spawn\Database\StructureTables\SpawnModules;
 use spawn\system\Core\Base\Database\DatabaseConnection;
 use spawn\system\Core\Base\Database\Query\QueryBuilder;
-use spawn\system\Core\Base\Database\Query\QueryCondition;
-use spawn\system\Core\Base\Database\Storage\DatabaseDefaults;
-use spawn\system\Core\Base\Database\Storage\DatabaseType;
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\Contents\Modules\Module;
 use spawn\system\Core\Helper\UUID;
+use spawnApp\Database\ModuleTable\ModuleTable;
 
 class ModuleStorage {
 
@@ -36,36 +32,34 @@ class ModuleStorage {
     }
 
     public function save(DatabaseConnection $connection) {
-        $qb = new QueryBuilder($connection);
+        $qb = new QueryBuilder($connection::getConnection());
+        $selStmt = $qb->select('id, count(*) as count')->from(ModuleTable::TABLE_NAME)->where('slug', $this->slug)->execute();
+
+        if($selStmt[0]['count'] > 0) {
+            $this->id = $selStmt[0]['id'];
+        }
+
         if($this->id === null) {
             $randomBytes = UUID::randomBytes();
             $this->setId(UUID::bytesToHex($randomBytes));
 
-            $qb->insert()->into(SpawnModules::TABLENAME)
-                ->setValue(SpawnModules::RAW_COL_SLUG, $this->slug)
-                ->setValue(SpawnModules::RAW_COL_PATH, $this->path)
-                ->setValue(SpawnModules::RAW_COL_ACTIVE, $this->active)
-                ->setValue(SpawnModules::RAW_COL_INFORMATIONS, $this->informations)
-                ->setValue(SpawnModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
-                ->setValue(SpawnModules::RAW_COL_ID, $randomBytes)
+            $qb->insert()->into(ModuleTable::TABLE_NAME)
+                ->setValue('slug', $this->slug)
+                ->setValue('path', $this->path)
+                ->setValue('active', $this->active)
+                ->setValue('information', $this->informations)
+                ->setValue('resourceConfig', $this->resourceConfig)
+                ->setValue('id', $randomBytes)
                 ->execute();
-            /*
-            $newId = $qb->select(SpawnModules::RAW_COL_ID)
-                ->from(SpawnModules::TABLENAME)
-                ->orderby(SpawnModules::RAW_COL_ID, true)
-                ->limit(1)
-                ->execute();
-            $this->id = $newId[0][SpawnModules::RAW_COL_ID];
-            */
         }
         else {
-            $qb->update(SpawnModules::TABLENAME)
-                ->where(SpawnModules::RAW_COL_ID, $this->id)
-                ->set(SpawnModules::RAW_COL_SLUG, $this->slug)
-                ->set(SpawnModules::RAW_COL_PATH, $this->path)
-                ->set(SpawnModules::RAW_COL_ACTIVE, $this->active)
-                ->set(SpawnModules::RAW_COL_INFORMATIONS, $this->informations)
-                ->set(SpawnModules::RAW_COL_RESSOURCE_CONFIG, $this->resourceConfig)
+            $qb->update(ModuleTable::TABLE_NAME)
+                ->where('id', UUID::hexToBytes($this->id))
+                ->set('slug', $this->slug)
+                ->set('path', $this->path)
+                ->set('active', $this->active)
+                ->set('information', $this->informations)
+                ->set('resourceConfig', $this->resourceConfig)
                 ->execute();
         }
     }
@@ -77,7 +71,7 @@ class ModuleStorage {
      * @return ModuleStorage[]
      */
     public static function findAll(DatabaseConnection $connection, bool $onlyActive = false) {
-        $qb = new QueryBuilder($connection);
+        $qb = new QueryBuilder($connection::getConnection());
 
         $select = $qb->select("*")->from(SpawnModules::TABLENAME);
         if($onlyActive) {
@@ -94,12 +88,12 @@ class ModuleStorage {
             $modules = [];
             foreach ($erg as $module) {
                 $modules[] = new self(
-                    $module[SpawnModules::RAW_COL_SLUG],
-                    $module[SpawnModules::RAW_COL_PATH],
-                    $module[SpawnModules::RAW_COL_ACTIVE],
-                    $module[SpawnModules::RAW_COL_INFORMATIONS],
-                    $module[SpawnModules::RAW_COL_RESSOURCE_CONFIG],
-                    $module[SpawnModules::RAW_COL_ID]
+                    $module['slug'],
+                    $module['path'],
+                    $module['active'],
+                    $module['information'],
+                    $module['resourceConfig'],
+                    UUID::bytesToHex($module['id'])
                 );
             }
             return $modules;
@@ -130,7 +124,7 @@ class ModuleStorage {
     public function delete(DatabaseConnection $connection) {
         if($this->id === null) return;
 
-        $qb = new QueryBuilder($connection);
+        $qb = new QueryBuilder($connection::getConnection());
         $qb->delete()
             ->from(SpawnModules::TABLENAME)
             ->where(SpawnModules::RAW_COL_ID, $this->id)

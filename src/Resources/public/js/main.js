@@ -1,4 +1,3 @@
-
 import PluginManager from "PluginManager";
 
 import AccordionPlugin from "./components/accordion.plugin";
