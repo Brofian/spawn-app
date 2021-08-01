@@ -1,11 +1,11 @@
 <?php
 
-namespace Spawnapp\Database\Migrations;
+namespace spawnApp\Database\Migrations;
 
 use spawn\system\Core\Base\Database\DatabaseConnection;
-use spawn\system\Core\Base\Database\Query\QueryBuilder;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 use spawn\system\Core\base\Migration;
+use spawn\system\Core\Helper\UUID;
 use spawnApp\Database\SeoUrlTable\SeoUrlTable;
 
 class M1627641221AddDefaultSeoUrls extends Migration {
@@ -18,33 +18,31 @@ class M1627641221AddDefaultSeoUrls extends Migration {
 
     function run(DatabaseHelper $dbHelper)
     {
-        $qb = new QueryBuilder(DatabaseConnection::getConnection());
+        $conn = DatabaseConnection::getConnection();
 
-        $currentTimestamp = time();
+        $currentTimestamp = new \DateTime();
 
-        $stmt = $qb->insert();
-        $stmt->into(SeoUrlTable::TABLE_NAME)
-            ->setValue('cUrl', '/')
-            ->setValue('rewriteUrl', '/?controller=system.fallback.404&action=error404Action')
-            ->setValue('createdAt', $currentTimestamp)
-            ->setValue('updatedAt', $currentTimestamp)
-            ->execute();
+        $seoUrlInsertFunction = function(string $cUrl, string $rewriteUrl) use ($conn,$currentTimestamp) {
+            $conn->insert(SeoUrlTable::TABLE_NAME, [
+                    'id' => UUID::randomBytes(),
+                    'cUrl' => $cUrl,
+                    'rewriteUrl' => $rewriteUrl,
+                    'createdAt' => $currentTimestamp,
+                    'updatedAt' => $currentTimestamp
+                ],
+                [
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    'datetime',
+                    'datetime'
+                ]);
+        };
 
-        $stmt = $qb->insert();
-        $stmt->into(SeoUrlTable::TABLE_NAME)
-            ->setValue('cUrl', '/backend/')
-            ->setValue('rewriteUrl', '/?controller=system.backend.base&action=homeAction')
-            ->setValue('createdAt', $currentTimestamp)
-            ->setValue('updatedAt', $currentTimestamp)
-            ->execute();
+        $seoUrlInsertFunction('/', '/?controller=system.fallback.404&action=error404Action');
+        $seoUrlInsertFunction('/backend', '/?controller=system.backend.base&action=homeAction');
+        $seoUrlInsertFunction('/backend/seo_config/overview', '/?controller=system.backend.seo_url_config&action=seoUrlOverviewAction');
 
-        $stmt = $qb->insert();
-        $stmt->into(SeoUrlTable::TABLE_NAME)
-            ->setValue('cUrl', '/backend/seo_config/overview')
-            ->setValue('rewriteUrl', '/?controller=system.backend.seo_url_config&action=seoUrlOverviewAction')
-            ->setValue('createdAt', $currentTimestamp)
-            ->setValue('updatedAt', $currentTimestamp)
-            ->execute();
     }
 
 }

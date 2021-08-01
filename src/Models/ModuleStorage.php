@@ -4,10 +4,11 @@
 namespace spawnApp\Models;
 
 
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Result;
 use spawn\Database\StructureTables\SpawnModuleActions;
 use spawn\Database\StructureTables\SpawnModules;
 use spawn\system\Core\Base\Database\DatabaseConnection;
-use spawn\system\Core\Base\Database\Query\QueryBuilder;
 use spawn\system\Core\Helper\UUID;
 use spawnApp\Database\ModuleTable\ModuleTable;
 
@@ -32,35 +33,72 @@ class ModuleStorage {
     }
 
     public function save(DatabaseConnection $connection) {
-        $qb = new QueryBuilder($connection::getConnection());
-        $selStmt = $qb->select('id, count(*) as count')->from(ModuleTable::TABLE_NAME)->where('slug', $this->slug)->execute();
+        $conn = $connection::getConnection();
 
-        if($selStmt[0]['count'] > 0) {
-            $this->id = $selStmt[0]['id'];
+        try {
+            $tableName = ModuleTable::TABLE_NAME;
+            $selStmt = $conn->prepare("SELECT id AS count FROM $tableName WHERE slug = ?");
+            $selStmt->bindValue(1, $this->slug);
+            /** @var Result $result */
+            $result = $selStmt->executeQuery();
+
+            if($result->rowCount() > 0) {
+                $this->id = UUID::bytesToHex($result->fetchOne());
+            }
+        }catch (Exception $e) {
+        } catch (\Doctrine\DBAL\Exception $e) {
         }
+
+        $currentTimestamp = new \DateTime();
 
         if($this->id === null) {
             $randomBytes = UUID::randomBytes();
             $this->setId(UUID::bytesToHex($randomBytes));
 
-            $qb->insert()->into(ModuleTable::TABLE_NAME)
-                ->setValue('slug', $this->slug)
-                ->setValue('path', $this->path)
-                ->setValue('active', $this->active)
-                ->setValue('information', $this->informations)
-                ->setValue('resourceConfig', $this->resourceConfig)
-                ->setValue('id', $randomBytes)
-                ->execute();
+            $conn->insert(ModuleTable::TABLE_NAME,
+                [
+                    'slug' => $this->slug,
+                    'path' => $this->path,
+                    'active' => $this->active,
+                    'information' => $this->informations,
+                    'resourceConfig' => $this->resourceConfig,
+                    'id' => $randomBytes,
+                    'createdAt' => $currentTimestamp,
+                    'updatedAt' => $currentTimestamp
+                ],
+                [
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_BOOL,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    'datetime',
+                    'datetime'
+                ]);
         }
         else {
-            $qb->update(ModuleTable::TABLE_NAME)
-                ->where('id', UUID::hexToBytes($this->id))
-                ->set('slug', $this->slug)
-                ->set('path', $this->path)
-                ->set('active', $this->active)
-                ->set('information', $this->informations)
-                ->set('resourceConfig', $this->resourceConfig)
-                ->execute();
+            $conn->update(ModuleTable::TABLE_NAME,
+                [
+                    'slug' => $this->slug,
+                    'path' => $this->path,
+                    'active' => $this->active,
+                    'information' => $this->informations,
+                    'resourceConfig' => $this->resourceConfig,
+                    'updatedAt' => $currentTimestamp
+                ],
+                [
+                    'id' => UUID::hexToBytes($this->id)
+                ],
+                [
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_BOOL,
+                    \PDO::PARAM_STR,
+                    \PDO::PARAM_STR,
+                    'datetime',
+                    \PDO::PARAM_STR,
+                ]);
         }
     }
 
@@ -69,15 +107,16 @@ class ModuleStorage {
      * @param DatabaseConnection $connection
      * @param bool $onlyActive
      * @return ModuleStorage[]
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function findAll(DatabaseConnection $connection, bool $onlyActive = false) {
-        $qb = new QueryBuilder($connection::getConnection());
+        $qb = $connection::getConnection()->createQueryBuilder();
 
         $select = $qb->select("*")->from(SpawnModules::TABLENAME);
         if($onlyActive) {
             $select->where(SpawnModules::RAW_COL_ACTIVE, 1);
         }
-        $erg = $select->execute();
+        $erg = $select->executeQuery();
 
 
         if(!$erg) {
