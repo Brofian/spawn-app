@@ -1,10 +1,10 @@
 <?php
 
-namespace spawnApp\Controller;
+namespace spawnApp\Extensions\Twig;
 
 use spawn\system\Core\Base\Extensions\Twig\FunctionExtension;
+use spawn\system\Core\Helper\RoutingHelper;
 use spawn\system\Core\Services\ServiceContainerProvider;
-use spawnApp\Models\RewriteUrl;
 
 class SeoUrlRewriteFilter extends FunctionExtension {
 
@@ -18,22 +18,16 @@ class SeoUrlRewriteFilter extends FunctionExtension {
 
     protected function getFunctionFunction(): callable
     {
-        return function ($controller, $action) {
+        return function ($controller = null, $action = null) {
 
             if(!preg_match('/^.*Action$/m', $action)) {
                 $action .= 'Action';
             }
 
-            $technical_url = "/?controller=$controller&action=$action";
-            $dbHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.database.helper');
+            /** @var RoutingHelper $routingHelper */
+            $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
-            $seo_url = RewriteUrl::findSeoByReplacement($dbHelper, $technical_url);
-
-            if($seo_url instanceof RewriteUrl) {
-                return $seo_url->getCUrl();
-            }
-
-            return (MODE=='dev') ? $technical_url : '';
+            return $routingHelper->getSeoLinkByParameters($controller, $action);
         };
     }
 

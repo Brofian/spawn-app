@@ -22,15 +22,17 @@ class M1627641221AddDefaultSeoUrls extends Migration {
 
         $currentTimestamp = new \DateTime();
 
-        $seoUrlInsertFunction = function(string $cUrl, string $rewriteUrl) use ($conn,$currentTimestamp) {
+        $seoUrlInsertFunction = function(string $cUrl, string $controller, string $action) use ($conn,$currentTimestamp) {
             $conn->insert(SeoUrlTable::TABLE_NAME, [
                     'id' => UUID::randomBytes(),
                     'cUrl' => $cUrl,
-                    'rewriteUrl' => $rewriteUrl,
+                    'controller' => $controller,
+                    'action' => $action,
                     'createdAt' => $currentTimestamp,
                     'updatedAt' => $currentTimestamp
                 ],
                 [
+                    \PDO::PARAM_STR,
                     \PDO::PARAM_STR,
                     \PDO::PARAM_STR,
                     \PDO::PARAM_STR,
@@ -39,9 +41,9 @@ class M1627641221AddDefaultSeoUrls extends Migration {
                 ]);
         };
 
-        $seoUrlInsertFunction('/', '/?controller=system.fallback.404&action=error404Action');
-        $seoUrlInsertFunction('/backend', '/?controller=system.backend.base&action=homeAction');
-        $seoUrlInsertFunction('/backend/seo_config/overview', '/?controller=system.backend.seo_url_config&action=seoUrlOverviewAction');
+        $seoUrlInsertFunction('/', 'system.fallback.404', 'error404Action');
+        $seoUrlInsertFunction('/backend', 'system.backend.base','homeAction');
+        $seoUrlInsertFunction('/backend/seo_config/overview', 'system.backend.seo_url_config','seoUrlOverviewAction');
 
     }
 

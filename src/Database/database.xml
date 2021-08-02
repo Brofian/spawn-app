@@ -6,13 +6,33 @@
         <tag>database.table</tag>
     </service>
 
+    <service id="system.repository.migrations" class="spawnApp\Database\MigrationTable\MigrationRepository" static="true">
+        <argument type="service" value="system.database.table.migrations" />
+        <tag>base.service.static</tag>
+    </service>
+
+
+
+
     <service id="system.database.table.modules" class="spawnApp\Database\ModuleTable\ModuleTable" static="true">
         <tag>database.table</tag>
     </service>
+
+    <service id="system.repository.modules" class="spawnApp\Database\ModuleTable\ModuleRepository" static="true">
+        <argument type="service" value="system.database.table.modules" />
+        <tag>base.service.static</tag>
+    </service>
+
+
+
 
     <service id="system.database.table.seo_urls" class="spawnApp\Database\SeoUrlTable\SeoUrlTable" static="true">
         <tag>database.table</tag>
     </service>
 
+    <service id="system.repository.seo_urls" class="spawnApp\Database\SeoUrlTable\SeoUrlRepository" static="true">
+        <argument type="service" value="system.database.table.seo_urls" />
+        <tag>base.service.static</tag>
+    </service>
 
 </services>

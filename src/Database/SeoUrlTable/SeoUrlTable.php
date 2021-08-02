@@ -17,7 +17,8 @@ class SeoUrlTable extends AbstractTable {
         return [
             new UuidColumn('id', null),
             new StringColumn('cUrl', false),
-            new StringColumn('rewriteUrl', false, '/?controller=system.fallback.404&action=error404Action'),
+            new StringColumn('controller', false, 'system.fallback.404'),
+            new StringColumn('action', false, 'error404Action'),
             new CreatedAtColumn(),
             new UpdatedAtColumn()
         ];
