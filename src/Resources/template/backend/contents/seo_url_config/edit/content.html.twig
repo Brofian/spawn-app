@@ -1,0 +1,15 @@
+{% block content_inner %}
+
+<h1>SEO URL - Edit</h1>
+<h3><span data-backend-content-link="{{ seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction') }}">&lt;- Übersicht</span></h3>
+
+
+    <label>
+        <span>Prev-Text</span>
+        <input type="text" value="Hello world" />
+        <span>Next-Text</span>
+    </label>
+
+    {{ dump(seo_url) }}
+
+{% endblock %}

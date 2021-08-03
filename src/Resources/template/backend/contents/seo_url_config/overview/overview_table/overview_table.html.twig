@@ -1,27 +1,27 @@
-{{ dump(seo_urls) }}
-
 <table class="js-resizable-columns">
 
     <thead>
+
         <tr>
+
             <th></th>
             <th>Controller</th>
             <th>Method</th>
             <th>cUrl</th>
             <th>actions</th>
+
         </tr>
+
     </thead>
 
     <tbody>
 
         {% for seo_url in seo_urls %}
 
-            {% include 'backend/contents/seo_url_config/overview_table/overview_table_row.html.twig' %}
+            {% include 'backend/contents/seo_url_config/overview/overview_table/overview_table_row.html.twig' %}
 
         {% endfor %}
 
     </tbody>
-
-
 
 </table>

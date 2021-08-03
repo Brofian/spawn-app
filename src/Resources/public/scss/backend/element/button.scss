@@ -1,0 +1,65 @@
+
+@mixin default_button($color, $shadowColor, $filled: false, $disableGray: $gray) {
+	border-radius: 10px;
+	padding: 10px;
+	box-shadow: 1px 1px 5px 0 $shadowColor;
+	//text-shadow: 1px 1px 20px $shadowColor;
+	border: solid #{lighten($color, 1%)} 1px;
+	text-decoration: none;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	text-align: center;
+	user-select: none;
+	transition: all 0.2s ease-in-out;
+
+	@if $filled {
+		background: linear-gradient(to top, #{$color}, #{darken($color, 7.5%)});
+	}
+
+	&:hover {
+		@if $filled {
+			background: linear-gradient(to top, #{darken($color, 7.5%), #{$color}});
+		}
+	}
+
+	&:active {
+		box-shadow: inset 1px 1px 5px 0 $shadowColor;
+	}
+
+	&.disabled,
+	&:disabled {
+		border-color: $disableGray !important;
+		box-shadow: none !important;
+		@if $filled {
+			background: $gray !important;
+		}
+
+	}
+
+}
+
+
+.btn {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 2px 5px;
+	margin: 2px;
+
+	&.btn-square {
+		@include default_button(#3D94F6, #000000);
+
+		&-red {
+			@include default_button($red, #000000);
+		}
+		&-green {
+			@include default_button($green, #000000);
+		}
+		&-yellow {
+			@include default_button($yellow, #000000);
+		}
+	}
+
+}
+

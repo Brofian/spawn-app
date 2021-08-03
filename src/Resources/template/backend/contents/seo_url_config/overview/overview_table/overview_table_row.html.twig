@@ -1,0 +1,47 @@
+<tr>
+
+    <td class="text-align-center" style="width: 1em">
+
+        {% if not seo_url.seo_url %}
+            <span class="signal red" title="Nicht Definiert"></span>
+        {% elseif seo_url.seo_url.locked %}
+            <span class="signal gray" title="Gesperrt"></span>
+        {% elseif not seo_url.seo_url.active %}
+            <span class="signal yellow" title="Inaktiv"></span>
+        {% else %}
+            <span class="signal green" title="Definiert"></span>
+        {% endif %}
+
+    </td>
+
+    <td>
+        {{ seo_url.controller }}
+    </td>
+
+    <td>
+        {{ seo_url.method }}
+    </td>
+
+    <td>
+        {% if seo_url.seo_url %}
+            {{ seo_url.seo_url.cUrl }}
+        {% else %}
+            -
+        {% endif %}
+    </td>
+
+    <td>
+        {% set editLink = seo_url('system.backend.seo_url_config', 'seoUrlEditAction', [seo_url.controller, seo_url.method]) %}
+
+
+        <span
+            class="btn btn-square-red {% if seo_url.seo_url.locked %}disabled{% endif %}"
+            {% if not seo_url.seo_url.locked %}data-backend-content-link="{{ editLink }}"{% endif %}
+        >
+            {{ 'edit'|icon('') }}
+        </span>
+
+
+    </td>
+
+</tr>

@@ -3,6 +3,7 @@
 namespace spawnApp\Extensions\Twig;
 
 use spawn\system\Core\Base\Extensions\Twig\FunctionExtension;
+use spawn\system\Core\Helper\FrameworkHelper\CUriConverter;
 use spawn\system\Core\Helper\RoutingHelper;
 use spawn\system\Core\Services\ServiceContainerProvider;
 
@@ -18,7 +19,7 @@ class SeoUrlRewriteFilter extends FunctionExtension {
 
     protected function getFunctionFunction(): callable
     {
-        return function ($controller = null, $action = null) {
+        return function ($controller = null, $action = null, array $parameters = []) {
 
             if(!preg_match('/^.*Action$/m', $action)) {
                 $action .= 'Action';
@@ -27,7 +28,9 @@ class SeoUrlRewriteFilter extends FunctionExtension {
             /** @var RoutingHelper $routingHelper */
             $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
-            return $routingHelper->getSeoLinkByParameters($controller, $action);
+            $seoLink = $routingHelper->getSeoLinkByParameters($controller, $action, $parameters);
+
+            return $seoLink;
         };
     }
 

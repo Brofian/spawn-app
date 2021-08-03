@@ -6,44 +6,39 @@ export default class BackendContentLinkPlugin extends Plugin {
 
 
     init() {
-        this.backendLinkSelector = '[data-backend-content-link]';
         this.backendLinkUrlData = 'backendContentLink';
         this.backendTargetData = 'backendContentTarget';
         this.backendLinkUrlRewriteData = 'backendContentLinkUriRewrite';
         this.contentTargetSelector ='#backend_content';
 
-        this.sidebarLinks = this._element.querySelectorAll(this.backendLinkSelector);
-
-        this.registerEvents();
+        this.registerEvent();
     }
 
 
-    registerEvents() {
+    registerEvent() {
         let event = DeviceManager.isTouchDevice() ? 'touch' : 'click';
 
-        for(let sidebarLink of this.sidebarLinks) {
-
-            let targetSelector = this.contentTargetSelector;
-            if(sidebarLink.dataset[this.backendTargetData]) {
-                targetSelector = sidebarLink.dataset[this.backendTargetData];
-            }
-
-            let addEntryToUri = sidebarLink.dataset[this.backendLinkUrlRewriteData] === 'true';
-
-            sidebarLink.addEventListener(event, this.onSidebarLinkClick.bind(this, targetSelector, addEntryToUri));
+        let targetSelector = this.contentTargetSelector;
+        if(this._element.dataset[this.backendTargetData]) {
+            targetSelector = this._element.dataset[this.backendTargetData];
         }
+
+        let addEntryToUri = this._element.dataset[this.backendLinkUrlRewriteData] === 'true';
+
+        this._element.addEventListener(event, this.onSidebarLinkClick.bind(this, targetSelector, addEntryToUri));
     }
 
 
     onSidebarLinkClick(targetSelector, addEntryToUri, event) {
 
-        let element = event.target;
-
-        let url = element.dataset[this.backendLinkUrlData];
+        let url = this._element.dataset[this.backendLinkUrlData];
 
         window.history.pushState('', '', url);
 
-        AjaxDataReplace.loadAndReplaceContent(url, targetSelector);
+        if(targetSelector && url) {
+            AjaxDataReplace.loadAndReplaceContent(url, targetSelector);
+        }
+
     }
 
 
