@@ -4,8 +4,10 @@
 namespace spawnApp\Controller\Backend;
 
 use spawn\system\Core\Base\Controller\AbstractBackendController;
+use spawn\system\Core\Base\Database\Definition\EntityCollection;
 use spawn\system\Core\Services\ServiceTags;
-use spawnApp\Models\RewriteUrl;
+use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
+use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 
 class SeoUrlConfigController extends AbstractBackendController {
 
@@ -29,22 +31,25 @@ class SeoUrlConfigController extends AbstractBackendController {
 
     public function seoUrlOverviewAction() {
 
-        $this->twig->assign('available_controllers', $this->getAvailableControllerActions());
+        /** @var SeoUrlRepository $seoUrlRepository */
+        $seoUrlRepository = $this->container->get('system.repository.seo_urls');
+        $seoUrls = $seoUrlRepository->search();
 
-        //load already saved dbHelper
-        $dbHelper = $this->container->get('system.database.helper');
-        $rewriteUrls = RewriteUrl::loadAll($dbHelper);
-        $this->twig->assign('rewrite_urls', $rewriteUrls);
-
-
+        $this->twig->assign('seo_urls', $this->getAvailableControllerActions($seoUrls));
 
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/content.html.twig');
     }
 
 
-    protected function getAvailableControllerActions(): array {
+    protected function getAvailableControllerActions(EntityCollection $registeredSeoUrls): array {
         //load available controller action combinations
-        $controllerServices = $this->container->getServicesByTag(ServiceTags::BASE_CONTROLLER);
+        $controllerServices = $this->container->getServicesByTags(
+            [
+                ServiceTags::BASE_CONTROLLER,
+                ServiceTags::BACKEND_CONTROLLER,
+            ]
+        );
+
         $actions = [];
         foreach($controllerServices as $controllerService) {
             try {
@@ -54,9 +59,23 @@ class SeoUrlConfigController extends AbstractBackendController {
                 /** @var \ReflectionMethod $method */
                 foreach($methods as $method) {
                     if(strpos($method->getName(), '__') !== 0 && preg_match('/^.*Action$/m', $method->getName())) {
+
+                        $action = $method->getName();
+                        $controller = $controllerService->getId();
+                        $seo_url = null;
+
+                        /** @var SeoUrlEntity $registeredSeoUrl */
+                        foreach($registeredSeoUrls as $registeredSeoUrl) {
+                            if($registeredSeoUrl->getController() == $controller && $registeredSeoUrl->getAction() == $action) {
+                                $seo_url = $registeredSeoUrl;
+                                break;
+                            }
+                        }
+
                         $actions[] = [
-                            'method' => $method->getName(),
-                            'controller' => $method->getDeclaringClass()->getName()
+                            'method' => $action,
+                            'controller' => $controller,
+                            'seo_url' => $seo_url
                         ];
                     }
                 }

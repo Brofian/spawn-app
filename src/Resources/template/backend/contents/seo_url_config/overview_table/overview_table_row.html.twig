@@ -1,0 +1,29 @@
+<tr>
+
+    <td class="text-align-center" style="width: 1em">
+        {% if seo_url.seo_url %}
+            <span class="signal green"></span>
+        {% else %}
+            <span class="signal red"></span>
+        {% endif %}
+    </td>
+
+    <td>
+        {{ seo_url.controller }}
+    </td>
+
+    <td>
+        {{ seo_url.method }}
+    </td>
+
+    <td>
+        {% if seo_url.seo_url %}
+            {{ seo_url.seo_url.cUrl }}
+        {% else %}
+            -
+        {% endif %}
+    </td>
+
+    <td>[]</td>
+
+</tr>

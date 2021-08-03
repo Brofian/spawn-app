@@ -6,8 +6,7 @@
 @import "global/font";
 @import "global/index";
 @import "global/page";
-
-
+@import "global/styles";
 
 /* Backend - Sidebar */
 @import "sidebar/sidebar";
@@ -19,7 +18,10 @@
 /* Backend - Components */
 @import "component/accordion";
 @import "component/icon";
+@import "component/signal";
+@import "component/resizeable-columns";
 @import "component/loading-animation";
 
 /* Backend - Elements */
 @import "element/link";
+@import "element/table";

@@ -1,0 +1,21 @@
+table.js-resizable-columns {
+
+	tr {
+		th {
+			position: relative;
+
+			.js-resizable-columns-grabber {
+				position: absolute;
+				width: 5px;
+				right: 0;
+				top: 0;
+				height: 100%;
+				background-color: red;
+				cursor: col-resize;
+			}
+		}
+	}
+
+
+
+}
