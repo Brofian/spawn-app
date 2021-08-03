@@ -4,7 +4,6 @@ namespace spawnApp\Controller\Backend;
 
 use spawn\system\Core\Base\Controller\AbstractBackendController;
 use spawn\system\Core\Base\Database\Definition\TableDefinition\ColumnDefinition;
-use spawnApp\Database\MigrationTable\MigrationEntity;
 use spawnApp\Database\MigrationTable\MigrationRepository;
 
 class BaseBackendController extends AbstractBackendController {

@@ -2,11 +2,11 @@
 
 namespace spawnApp\Database\Migrations;
 
-use spawn\system\Core\Base\Database\DatabaseConnection;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 use spawn\system\Core\base\Migration;
-use spawn\system\Core\Helper\UUID;
-use spawnApp\Database\SeoUrlTable\SeoUrlTable;
+use spawn\system\Core\Services\ServiceContainerProvider;
+use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
+use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 
 class M1627641221AddDefaultSeoUrls extends Migration {
     
@@ -18,33 +18,18 @@ class M1627641221AddDefaultSeoUrls extends Migration {
 
     function run(DatabaseHelper $dbHelper)
     {
-        $conn = DatabaseConnection::getConnection();
+        /** @var SeoUrlRepository $seoUrlRepository */
+        $seoUrlRepository = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.repository.seo_urls');
 
-        $currentTimestamp = new \DateTime();
 
-        $seoUrlInsertFunction = function(string $cUrl, string $controller, string $action) use ($conn,$currentTimestamp) {
-            $conn->insert(SeoUrlTable::TABLE_NAME, [
-                    'id' => UUID::randomBytes(),
-                    'cUrl' => $cUrl,
-                    'controller' => $controller,
-                    'action' => $action,
-                    'createdAt' => $currentTimestamp,
-                    'updatedAt' => $currentTimestamp
-                ],
-                [
-                    \PDO::PARAM_STR,
-                    \PDO::PARAM_STR,
-                    \PDO::PARAM_STR,
-                    \PDO::PARAM_STR,
-                    'datetime',
-                    'datetime'
-                ]);
-        };
+        $entity = new SeoUrlEntity('/', 'system.fallback.404', 'error404Action', false, true);
+        $seoUrlRepository->upsert($entity);
 
-        $seoUrlInsertFunction('/', 'system.fallback.404', 'error404Action');
-        $seoUrlInsertFunction('/backend', 'system.backend.base','homeAction');
-        $seoUrlInsertFunction('/backend/seo_config/overview', 'system.backend.seo_url_config','seoUrlOverviewAction');
+        $entity = new SeoUrlEntity('/backend', 'system.backend.base', 'homeAction', true, true);
+        $seoUrlRepository->upsert($entity);
 
+        $entity = new SeoUrlEntity('/backend/seo_config/overview', 'system.backend.seo_url_config', 'seoUrlOverviewAction', true);
+        $seoUrlRepository->upsert($entity);
     }
 
 }

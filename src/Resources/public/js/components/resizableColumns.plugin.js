@@ -2,12 +2,14 @@ import Plugin from "Plugin";
 
 export default class ResizeableColumnsPlugin extends Plugin {
 
-
     init() {
-        this.headColSelector = 'thead tr th:not(:last-of-type)';
+        this.headColSelector = 'thead tr th:not(:last-of-type):not(:first-of-type)';
         this.bodyRowSelector = 'tbody tr';
-        this.bodyRowColSelector = 'td:not(:last-of-type)';
+        this.bodyRowColSelector = 'td:not(:last-of-type):not(:first-of-type)';
         this.cols = [];
+        this.currentDrag = -1;
+        this.startWidth = -1;
+        this.startMouseX = -1;
 
         this.prepareHeaderColumns();
         this.gatherBodyColumns();
@@ -23,7 +25,10 @@ export default class ResizeableColumnsPlugin extends Plugin {
         for(let headerCol of headerCols) {
             let columnGrabber = document.createElement('span');
             columnGrabber.classList.add('js-resizable-columns-grabber');
-            columnGrabber.addEventListener('drag', this.onColumnDragged.bind(this, id));
+            columnGrabber.addEventListener('mousedown', this.onColumnMouseDown.bind(this, id));
+            headerCol.addEventListener('mousemove', this.onColumnMouseMove.bind(this, id));
+            headerCol.addEventListener('mouseup', this.onColumnMouseUp.bind(this, id));
+            headerCol.addEventListener('mouseleave', this.onColumnMouseUp.bind(this, id));
 
             headerCol.appendChild(columnGrabber);
             cols.push(headerCol);
@@ -46,9 +51,29 @@ export default class ResizeableColumnsPlugin extends Plugin {
     }
 
 
-    onColumnDragged(columnId) {
-        //TODO:: resize all columns when dragged (including header column)
-        console.log(columnId);
+    onColumnMouseDown(columnId, event) {
+        this.currentDrag = columnId;
+        this.startWidth = this.cols[0][columnId].getBoundingClientRect().width;
+        this.startMouseX = event.clientX;
     }
+
+    onColumnMouseMove(columnId, event) {
+        if(columnId === this.currentDrag) {
+            let currentMouseX = event.clientX;
+            let mouseXDiff = this.startMouseX - currentMouseX;
+            let newWidth = this.startWidth - mouseXDiff;
+
+            console.log(newWidth + " / " + this.startWidth);
+
+            for(let row of this.cols) {
+                row[columnId].style.maxWidth = newWidth + "px";
+            }
+        }
+    }
+
+    onColumnMouseUp(columnId) {
+        this.currentDrag = -1;
+    }
+
 
 }

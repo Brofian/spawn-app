@@ -9,6 +9,8 @@ class SeoUrlEntityDefinition extends Entity {
     protected string $cUrl;
     protected string $controller;
     protected string $action;
+    protected bool $locked;
+    protected bool $active;
     protected ?\DateTime $createdAt;
     protected ?\DateTime $updatedAt;
 
@@ -16,6 +18,8 @@ class SeoUrlEntityDefinition extends Entity {
         string $cUrl,
         string $controller,
         string $action,
+        bool $locked = false,
+        bool $active = true,
         ?string $id = null,
         ?\DateTime $createdAt = null,
         ?\DateTime $updatedAt = null)
@@ -23,6 +27,8 @@ class SeoUrlEntityDefinition extends Entity {
         $this->cUrl = $cUrl;
         $this->controller = $controller;
         $this->action = $action;
+        $this->locked = $locked;
+        $this->active = $active;
         $this->id = $id;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
@@ -47,6 +53,8 @@ class SeoUrlEntityDefinition extends Entity {
             $values['cUrl'],
             $values['controller'],
             $values['action'],
+            $values['locked'],
+            $values['active'],
             $values['id'],
             $updatedAt,
             $createdAt
@@ -60,6 +68,8 @@ class SeoUrlEntityDefinition extends Entity {
             'cUrl' => $this->getCUrl(),
             'controller' => $this->getController(),
             'action' => $this->getAction(),
+            'locked' => $this->isLocked(),
+            'active' => $this->isActive(),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
         ];
@@ -117,6 +127,28 @@ class SeoUrlEntityDefinition extends Entity {
     public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function isLocked(): bool
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(bool $locked): self
+    {
+        $this->locked = $locked;
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
         return $this;
     }
 
