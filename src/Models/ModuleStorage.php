@@ -5,9 +5,8 @@ namespace spawnApp\Models;
 
 
 use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
-use spawn\Database\StructureTables\SpawnModuleActions;
-use spawn\Database\StructureTables\SpawnModules;
 use spawn\system\Core\Base\Database\DatabaseConnection;
 use spawn\system\Core\Helper\UUID;
 use spawnApp\Database\ModuleTable\ModuleTable;
@@ -112,9 +111,9 @@ class ModuleStorage {
     public static function findAll(DatabaseConnection $connection, bool $onlyActive = false) {
         $qb = $connection::getConnection()->createQueryBuilder();
 
-        $select = $qb->select("*")->from(SpawnModules::TABLENAME);
+        $select = $qb->select("*")->from(ModuleTable::TABLE_NAME);
         if($onlyActive) {
-            $select->where(SpawnModules::RAW_COL_ACTIVE, 1);
+            $select->where('active', 1);
         }
         $erg = $select->executeQuery();
 
@@ -140,24 +139,6 @@ class ModuleStorage {
     }
 
 
-    /**
-     * @param DatabaseConnection $connection
-     * @return array
-     */
-    public static function loadAllWithReferences(DatabaseConnection $connection) {
-
-        $qb = new QueryBuilder($connection);
-        $unfetchedActions = $qb->select("*")
-            ->from(SpawnModules::TABLENAME)
-            ->join(
-                SpawnModuleActions::TABLENAME,
-                SpawnModules::COL_ID,
-                SpawnModuleActions::COL_MODULE_ID,
-                1)
-            ->execute(true);
-
-        return $unfetchedActions;
-    }
 
 
     public function delete(DatabaseConnection $connection) {
@@ -165,8 +146,8 @@ class ModuleStorage {
 
         $qb = new QueryBuilder($connection::getConnection());
         $qb->delete()
-            ->from(SpawnModules::TABLENAME)
-            ->where(SpawnModules::RAW_COL_ID, $this->id)
+            ->from(ModuleTable::TABLE_NAME)
+            ->where('id', $this->id)
             ->execute();
 
         $this->id = null;
