@@ -1,4 +1,4 @@
-import EventManager from "../../../../../../../../src/npm/plugin-system/EventManager";
+import EventManager from "EventManager";
 
 export default class AjaxDataReplace {
 
