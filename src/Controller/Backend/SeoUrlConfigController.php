@@ -6,6 +6,7 @@ namespace spawnApp\Controller\Backend;
 use spawn\system\Core\Base\Controller\AbstractBackendController;
 use spawn\system\Core\Base\Database\Definition\Entity;
 use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawn\system\Core\Contents\Response\TwigResponse;
 use spawn\system\Core\Services\Service;
 use spawn\system\Core\Services\ServiceTags;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
@@ -38,8 +39,9 @@ class SeoUrlConfigController extends AbstractBackendController {
         $seoUrls = $seoUrlRepository->search();
 
         $this->twig->assign('seo_urls', $this->getAvailableControllerActions($seoUrls));
-
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/overview/content.html.twig');
+
+        return new TwigResponse('backend/index.html.twig');
     }
 
 
@@ -65,8 +67,9 @@ class SeoUrlConfigController extends AbstractBackendController {
         }
 
         $this->twig->assign('seo_url', $seoUrlData);
-
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/edit/content.html.twig');
+
+        return new TwigResponse('backend/index.html.twig');
     }
 
 

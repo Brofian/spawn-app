@@ -11,7 +11,7 @@
     </label>
 
     <input type="checkbox" id="test-checkbox" name="cb">
-    <label for="test-checkbox"></label>
+    <label for="test-checkbox">Hello world</label>
 
 
 {% endblock %}
