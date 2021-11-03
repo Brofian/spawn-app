@@ -1,8 +1,8 @@
 {% block content_inner %}
 
-    {% include 'backend/contents/misc/headline.html.twig' with {
+    {% include 'backend/contents/misc/headline.html.twig' with only {
         title: 'URL Konfiguration'
-    } only %}
+    } %}
 
 
     <div class="container">

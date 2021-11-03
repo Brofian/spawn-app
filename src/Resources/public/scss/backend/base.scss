@@ -1,6 +1,7 @@
 /* Abstract (should be first) */
 @import "abstract/variables";
 @import "abstract/colors";
+@import "abstract/mixins";
 
 /* Global */
 @import "global/font";
@@ -14,6 +15,8 @@
 
 /* Backend - Content */
 @import "content/content";
+@import "content/headline";
+@import "content/structure";
 
 /* Backend - Components */
 @import "component/accordion";
@@ -30,3 +33,5 @@
 @import "element/button";
 @import "element/input";
 @import "element/checkbox";
+@import "element/form";
+@import "element/spacer";

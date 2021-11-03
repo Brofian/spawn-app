@@ -30,6 +30,11 @@ class SeoUrlConfigController extends AbstractBackendController {
                         'controller' => '%self.key%',
                         'action' => 'seoUrlOverviewAction',
                         'title' => 'SEO URLs'
+                    ],
+                    [
+                        'controller' => '%self.key%',
+                        'action' => 'seoUrlOverviewAction',
+                        'title' => 'SEO URLs'
                     ]
                 ]
             ]
@@ -79,12 +84,12 @@ class SeoUrlConfigController extends AbstractBackendController {
 
 
     public function seoUrlEditSubmitAction(string $ctrl = null, string $method = null): AbstractResponse {
+        $errors = [];
+
         /** @var Request $request */
         $request = $this->container->get('system.kernel.request');
 
-        $errors = [
-            'This is an error'
-        ];
+
 
         return new JsonResponse([
             'success' => empty($errors),

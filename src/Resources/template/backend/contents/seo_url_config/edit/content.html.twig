@@ -1,35 +1,61 @@
 {% block content_inner %}
 
-{% set currentConfig = seo_url.seo_url %}
-
-<h1>SEO URL - Edit</h1>
-<h3><span data-backend-content-link="{{ seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction') }}">&lt;- Übersicht</span></h3>
-
-    <form
-        method="post"
-        action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.method]) }}"
-        data-ajax-form
-    >
-
-        <div class="h3">URL Schema</div>
-        <input type="text" name="cUrl" value="{{ currentConfig.cUrl }}" required/>
-
-        <br/>
-        <br/>
-
-        <div class="h3">Aktiv</div>
-        <input type="checkbox" id="cb-active" name="active" {% if currentConfig.active %}checked="checked"{% endif %}>
-        <label for="cb-active"></label>
+    {% include 'backend/contents/misc/headline.html.twig' with {
+        title: 'URL Konfiguration',
+        previous: seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction')
+    } only %}
 
 
-        <button type="submit">Speichern</button>
+    {% set currentConfig = seo_url.seo_url %}
 
-    </form>
+    <div class="container">
+
+        <form
+            method="post"
+            action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.method]) }}"
+            data-ajax-form
+        >
+            {% block base_configuration %}
+                <div class="section">
+
+                    <div class="col-1">SEO URL</div>
+
+                    <div class="col-10-7">
+                        <input type="text" name="cUrl" value="{{ currentConfig.cUrl }}" required/>
+                    </div>
 
 
-    {{ dump(currentConfig) }}
+                    <div class="col-10"></div>
 
 
+                    {% block base_configuration_active_switch %}
+                        <div class="col-10-2">
 
+                            <span class="col-3 align-self-center">Aktiv</span>
+
+                            <span class="col-3-2 align-self-center">
+                                <input type="checkbox" id="cb-active" name="active" {% if currentConfig.active %}checked="checked"{% endif %}>
+                                <label for="cb-active"></label>
+                            </span>
+                        </div>
+                    {% endblock %}
+
+                </div>
+            {% endblock %}
+
+
+            {% block form_submit_button %}
+
+                <div class="spacer-m"></div>
+
+                <div class="col-1">
+                    <button type="submit">Speichern</button>
+                </div>
+            {% endblock %}
+
+
+        </form>
+
+    </div>
 
 {% endblock %}

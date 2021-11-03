@@ -33,9 +33,4 @@
 		@extend .icon;
 	}
 
-	&-success {
-		background-image: url("#{$icon-path}/warning.svg");
-		@extend .icon;
-	}
-
 }

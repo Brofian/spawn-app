@@ -1,0 +1,28 @@
+{% block headline %}
+    <div class="headline">
+
+        {% block headline_previous %}
+            <div class="headline-previous">
+                {% if previous %}
+                    <span data-backend-content-link="{{ previous }}">
+                        <<<
+                    </span>
+                {% endif %}
+            </div>
+        {% endblock %}
+
+        {% block headline_title %}
+            <div class="headline-title">
+                {{ title }}
+            </div>
+        {% endblock %}
+
+
+        {% block headline_buttons %}
+            <div class="headline-buttons">
+
+            </div>
+        {% endblock %}
+
+    </div>
+{% endblock %}

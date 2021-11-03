@@ -3,11 +3,12 @@ input {
 	&[type="text"],
 	&[type="password"],
 	&[type="email"] {
-
-		background: $background-dark;
+		background: $background-dark-highlight;
 		border: none;
-		padding: 5px 1em;
-		margin: 0 5px;
+		padding: 0.5rem 1em;
+		width: 100%;
+		color: $font-color-white;
+		font-size: 1rem;
 
 		&:focus {
 			background: $background-dark-highlight;
@@ -15,7 +16,6 @@ input {
 
 		span + & {
 			//prev text
-
 		}
 
 		& + span {

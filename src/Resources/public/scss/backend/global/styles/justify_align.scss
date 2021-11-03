@@ -1,0 +1,44 @@
+@mixin generate-justify-align($prefix) {
+
+	$properties: (
+		'content',
+		'self',
+		'items'
+	);
+
+	$possibilities: (
+		'flex-start',
+		'flex-end',
+		'center',
+		'space-evenly',
+		'space-between',
+		'space-around',
+		'start',
+		'end',
+		'stretch'
+	);
+
+
+	@each $p in $properties {
+		@each $i in $possibilities {
+			.#{$prefix}-#{$p}-#{$i} {
+				#{$prefix}-#{$p}: #{$i};
+			}
+		}
+	}
+
+	@each $breakpoint, $size in $breakpointList {
+		@include breakpoint-up($size) {
+			@each $p in $properties {
+				@each $i in $possibilities {
+					.#{$prefix}-#{$p}-#{$breakpoint}-#{$i} {
+						#{$prefix}-#{$p}: #{$i};
+					}
+				}
+			}
+		}
+	}
+}
+
+@include generate-justify-align('justify');
+@include generate-justify-align('align');
