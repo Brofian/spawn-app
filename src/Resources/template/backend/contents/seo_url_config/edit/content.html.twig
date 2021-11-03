@@ -1,17 +1,35 @@
 {% block content_inner %}
 
+{% set currentConfig = seo_url.seo_url %}
+
 <h1>SEO URL - Edit</h1>
 <h3><span data-backend-content-link="{{ seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction') }}">&lt;- Übersicht</span></h3>
 
+    <form
+        method="post"
+        action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.method]) }}"
+        data-ajax-form
+    >
 
-    <label>
-        <span>Prev-Text</span>
-        <input type="text" value="Hello world" />
-        <span>Next-Text</span>
-    </label>
+        <div class="h3">URL Schema</div>
+        <input type="text" name="cUrl" value="{{ currentConfig.cUrl }}" required/>
 
-    <input type="checkbox" id="test-checkbox" name="cb">
-    <label for="test-checkbox"></label>
+        <br/>
+        <br/>
+
+        <div class="h3">Aktiv</div>
+        <input type="checkbox" id="cb-active" name="active" {% if currentConfig.active %}checked="checked"{% endif %}>
+        <label for="cb-active"></label>
+
+
+        <button type="submit">Speichern</button>
+
+    </form>
+
+
+    {{ dump(currentConfig) }}
+
+
 
 
 {% endblock %}

@@ -6,7 +6,12 @@ namespace spawnApp\Controller\Backend;
 use spawn\system\Core\Base\Controller\AbstractBackendController;
 use spawn\system\Core\Base\Database\Definition\Entity;
 use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawn\system\Core\Contents\Response\AbstractResponse;
+use spawn\system\Core\Contents\Response\JsonResponse;
+use spawn\system\Core\Contents\Response\RedirectResponse;
+use spawn\system\Core\Contents\Response\SimpleResponse;
 use spawn\system\Core\Contents\Response\TwigResponse;
+use spawn\system\Core\Request;
 use spawn\system\Core\Services\Service;
 use spawn\system\Core\Services\ServiceTags;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
@@ -70,6 +75,21 @@ class SeoUrlConfigController extends AbstractBackendController {
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/edit/content.html.twig');
 
         return new TwigResponse('backend/index.html.twig');
+    }
+
+
+    public function seoUrlEditSubmitAction(string $ctrl = null, string $method = null): AbstractResponse {
+        /** @var Request $request */
+        $request = $this->container->get('system.kernel.request');
+
+        $errors = [
+            'This is an error'
+        ];
+
+        return new JsonResponse([
+            'success' => empty($errors),
+            'errors' => $errors
+        ]);
     }
 
 

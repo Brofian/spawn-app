@@ -1,0 +1,29 @@
+#flash-hint-container {
+	position: fixed;
+	top: 0;
+	right: 0;
+
+	.flash-hint {
+		margin: 2rem;
+		padding: 0.5rem 1rem;
+		background: red;
+
+		&:before {
+
+		}
+
+		&:after {
+
+		}
+
+
+
+		&.error-flash {
+			//TODO
+		}
+
+	}
+
+
+
+}

@@ -33,6 +33,9 @@ class M1627641221AddDefaultSeoUrls extends Migration {
 
         $entity = new SeoUrlEntity('/backend/seo_config/edit/{ctrl}/{action}', 'system.backend.seo_url_config', 'seoUrlEditAction', true, true);
         $seoUrlRepository->upsert($entity);
+
+        $entity = new SeoUrlEntity('/backend/seo_config/edit/submit/{ctrl}/{action}', 'system.backend.seo_url_config', 'seoUrlEditSubmitAction', true, true);
+        $seoUrlRepository->upsert($entity);
     }
 
 }

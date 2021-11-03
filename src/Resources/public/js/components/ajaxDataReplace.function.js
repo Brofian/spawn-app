@@ -1,7 +1,7 @@
 import EventManager from "EventManager";
+import LoadingSpinner from "./loadingSpinner.function";
 
 export default class AjaxDataReplace {
-
 
     static loadAndReplaceContent(contentUrl, targetSelector) {
 
@@ -9,7 +9,7 @@ export default class AjaxDataReplace {
         if(!targetElement) {
             return;
         }
-        this.createLoadingSpinner(targetElement);
+        LoadingSpinner.createLoadingSpinner(targetElement);
 
         //load url content
         $.ajax(
@@ -22,16 +22,26 @@ export default class AjaxDataReplace {
             this.replaceContentWithError.bind(null, targetElement)
         );
 
-
-
     }
 
+    /**
+     * Replace the given elements content with a simple error message
+     * @param targetElement
+     */
     static replaceContentWithError(targetElement) {
         let errorElement = document.createElement('div');
         errorElement.innerText = 'ERROR';
         targetElement.parentNode.replaceChild(errorElement, targetElement);
     }
 
+    /**
+     * Replace the current content of the new content and initialize JS Plugins for this scope
+     * @param targetSelector
+     * @param targetElement
+     * @param requestData
+     * @param resultCode
+     * @param response
+     */
     static replaceContent(targetSelector, targetElement, requestData, resultCode, response) {
 
         let container = document.createElement('template');
@@ -47,20 +57,5 @@ export default class AjaxDataReplace {
 
         EventManager.publish('pluginmanager.startInitializeScope', [urlContentElement]);
     }
-
-    static createLoadingSpinner(targetElement) {
-
-        let backdrop = document.createElement('div');
-        backdrop.classList.add('loading-backdrop');
-
-        let spinner = document.createElement('div');
-        spinner.classList.add('loading-spinner');
-        backdrop.appendChild(spinner);
-
-        targetElement.appendChild(backdrop);
-    }
-
-
-
 
 }
