@@ -85,15 +85,28 @@ class SeoUrlConfigController extends AbstractBackendController {
 
     public function seoUrlEditSubmitAction(string $ctrl = null, string $method = null): AbstractResponse {
         $errors = [];
+        $errorFields = [];
 
         /** @var Request $request */
         $request = $this->container->get('system.kernel.request');
+        $data = $request->getPost();
 
+        if(!isset($data['cUrl'])) {
+            $errors[0] = 'Missing fields in request';
+            $errorFields[] = 'cUrl';
+        }
+        if(!isset($data['active'])) {
+            $errors[0] = 'Missing fields in request';
+            $errorFields[] = 'active';
+        }
+
+        //TODO
 
 
         return new JsonResponse([
             'success' => empty($errors),
-            'errors' => $errors
+            'errors' => $errors,
+            'errorFields' => $errorFields
         ]);
     }
 

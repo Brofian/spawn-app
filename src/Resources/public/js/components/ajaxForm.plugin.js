@@ -20,7 +20,7 @@ export default class AjaxFormPlugin extends Plugin {
         let inputs = this._element.querySelectorAll('[name]');
         let values = {};
         for(let input of inputs) {
-            if(input.value === null) {
+            if(input.value !== null) {
                 values[input.name] = input.value;
             }
         }
