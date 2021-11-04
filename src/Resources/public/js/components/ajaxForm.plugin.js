@@ -20,8 +20,19 @@ export default class AjaxFormPlugin extends Plugin {
         let inputs = this._element.querySelectorAll('[name]');
         let values = {};
         for(let input of inputs) {
-            if(input.value !== null) {
-                values[input.name] = input.value;
+
+            let value = null;
+            switch(input.type) {
+                case 'checkbox':
+                    value = input.checked;
+                    break;
+                default:
+                    value = input.value;
+                    break;
+            }
+
+            if(value !== null) {
+                values[input.name] = value;
             }
         }
         return values;

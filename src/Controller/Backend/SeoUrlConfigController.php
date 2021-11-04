@@ -19,6 +19,21 @@ use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 
 class SeoUrlConfigController extends AbstractBackendController {
 
+    protected SeoUrlRepository $seoUrlRepository;
+    protected Request $request;
+
+    public function __construct(
+        Request $request,
+        SeoUrlRepository $seoUrlRepository
+    )
+    {
+        parent::__construct();
+        $this->request = $request;
+        $this->seoUrlRepository = $seoUrlRepository;
+    }
+
+
+
     public static function getSidebarMethods(): array
     {
         return [
@@ -42,11 +57,14 @@ class SeoUrlConfigController extends AbstractBackendController {
     }
 
 
-    public function seoUrlOverviewAction() {
+    public function abcTestAction(): AbstractResponse {
 
-        /** @var SeoUrlRepository $seoUrlRepository */
-        $seoUrlRepository = $this->container->get('system.repository.seo_urls');
-        $seoUrls = $seoUrlRepository->search();
+        return new SimpleResponse('Test ABC');
+    }
+
+    public function seoUrlOverviewAction(): AbstractResponse {
+
+        $seoUrls = $this->seoUrlRepository->search();
 
         $this->twig->assign('seo_urls', $this->getAvailableControllerActions($seoUrls));
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/overview/content.html.twig');
@@ -55,10 +73,9 @@ class SeoUrlConfigController extends AbstractBackendController {
     }
 
 
-    public function seoUrlEditAction(string $ctrl = null, string $method = null) {
+    public function seoUrlEditAction(string $ctrl = null, string $method = null): AbstractResponse {
 
-        $seoUrlRepository = $this->container->get('system.repository.seo_urls');
-        $seoUrls = $seoUrlRepository->search([
+        $seoUrls = $this->seoUrlRepository->search([
             'controller' => $ctrl,
             'action' => $method
         ]);
@@ -84,29 +101,44 @@ class SeoUrlConfigController extends AbstractBackendController {
 
 
     public function seoUrlEditSubmitAction(string $ctrl = null, string $method = null): AbstractResponse {
-        $errors = [];
-        $errorFields = [];
-
         /** @var Request $request */
-        $request = $this->container->get('system.kernel.request');
-        $data = $request->getPost();
+        $data = $this->request->getPost()->getArray();
 
-        if(!isset($data['cUrl'])) {
-            $errors[0] = 'Missing fields in request';
-            $errorFields[] = 'cUrl';
-        }
-        if(!isset($data['active'])) {
-            $errors[0] = 'Missing fields in request';
-            $errorFields[] = 'active';
+        $this->validateArrayFields($data, ['cUrl', 'active'], $missingFields , false);
+
+        //return if any field is missing
+        if(!empty($missingFields)) {
+            return new JsonResponse([
+                'success' => false,
+                'errors' => ['Missing fields in request'],
+                'errorFields' => $missingFields
+            ]);
         }
 
-        //TODO
+        $errors = [];
+
+        try {
+            //load and update any existing seoUrlEntity or create a new one
+            /** @var SeoUrlEntity $existingSeoUrl */
+            $existingSeoUrl = $this->seoUrlRepository->search(['controller' => $ctrl, 'action' => $method])->first();
+            if($existingSeoUrl instanceof Entity) {
+                $existingSeoUrl->setCUrl($data['cUrl']);
+                $existingSeoUrl->setActive($data['active']==='true');
+            }
+            else {
+                $existingSeoUrl = new SeoUrlEntity($data['cUrl'], $ctrl, $method, false, $data['active']==='true');
+            }
+
+            $this->seoUrlRepository->upsert($existingSeoUrl);
+        }
+        catch(\Exception $e) {
+            $errors[] = $e->getMessage();
+        }
 
 
         return new JsonResponse([
             'success' => empty($errors),
-            'errors' => $errors,
-            'errorFields' => $errorFields
+            'errors' => $errors
         ]);
     }
 
@@ -123,15 +155,11 @@ class SeoUrlConfigController extends AbstractBackendController {
 
         $actions = [];
         foreach($controllerServices as $controllerService) {
-
             $action = $this->getControllerActionsForService($controllerService, $registeredSeoUrls);
-
             if(!empty($action)) {
                 $actions = array_merge($actions, $action);
             }
-
         }
-
 
         return $actions;
     }
@@ -175,5 +203,24 @@ class SeoUrlConfigController extends AbstractBackendController {
 
         return $actions;
     }
+
+    protected function validateArrayFields(array $array, array $requiredFields, &$missingFields, bool $allowFalseValues = false): bool {
+        $missingFields = [];
+        $arrayKeys = array_keys($array);
+
+        foreach($requiredFields as $requiredField) {
+            if(!in_array($requiredField, $arrayKeys)) {
+                //if required field does not exist in array
+                $missingFields[] = $requiredField;
+            }
+            elseif(!$allowFalseValues && !$array[$requiredField]) {
+                //if falsy values are not allowed, but the field has a value, that can be evaluated to false
+                $missingFields[] = $requiredField;
+            }
+        }
+
+        return empty($missingFields);
+    }
+
 
 }

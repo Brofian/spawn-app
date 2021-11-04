@@ -7,6 +7,8 @@
     </service>
 
     <service id="system.backend.seo_url_config" class="spawnApp\Controller\Backend\SeoUrlConfigController">
+        <argument type='service' value="system.kernel.request"/>
+        <argument type='service' value="system.repository.seo_urls"/>
         <tag>backend.controller</tag>
     </service>
 

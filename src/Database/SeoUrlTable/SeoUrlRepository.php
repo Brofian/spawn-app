@@ -46,6 +46,7 @@ class SeoUrlRepository extends TableRepository {
     protected function prepareValuesForUpdate(array $updateValues): array
     {
         $updateValues['updatedAt'] = new \DateTime();
+        $updateValues['id'] = UUID::hexToBytes($updateValues['id']);
 
         return $updateValues;
     }
