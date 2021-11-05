@@ -35,6 +35,7 @@ export default class AjaxFormPlugin extends Plugin {
                 values[input.name] = value;
             }
         }
+
         return values;
     }
 
@@ -46,6 +47,7 @@ export default class AjaxFormPlugin extends Plugin {
         LoadingSpinner.createLoadingSpinner(this._element);
 
         let data = this.getFormValues();
+        console.log(data);
 
         //load url content
         $.ajax(

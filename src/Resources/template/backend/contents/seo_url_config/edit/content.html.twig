@@ -5,14 +5,11 @@
         previous: seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction')
     } only %}
 
-
-    {% set currentConfig = seo_url.seo_url %}
-
     <div class="container">
 
         <form
             method="post"
-            action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.method]) }}"
+            action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.action]) }}"
             data-ajax-form
         >
             {% block base_configuration %}
@@ -21,7 +18,7 @@
                     <div class="col-1">SEO URL</div>
 
                     <div class="col-10-7">
-                        <input type="text" name="cUrl" value="{{ currentConfig.cUrl }}" required/>
+                        <input type="text" name="cUrl" value="{{ seo_url.cUrl }}" required/>
                     </div>
 
 
@@ -34,7 +31,7 @@
                             <span class="col-3 align-self-center">Aktiv</span>
 
                             <span class="col-3-2 align-self-center">
-                                <input type="checkbox" id="cb-active" name="active" {% if currentConfig.active %}checked="checked"{% endif %}>
+                                <input type="checkbox" id="cb-active" name="active" {% if seo_url.active %}checked="checked"{% endif %}>
                                 <label for="cb-active"></label>
                             </span>
                         </div>

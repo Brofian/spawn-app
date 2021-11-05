@@ -3,8 +3,8 @@
 <services>
 
 
-    <service id="test.service" class="webuApp\Services\TestService">
-        <argument type="value" value="Hello world"/>
+    <service id="system.service.seo_url_manager" class="spawnApp\Services\SeoUrlManager">
+        <argument type='service' value="system.repository.seo_urls"/>
         <tag>service</tag>
     </service>
 

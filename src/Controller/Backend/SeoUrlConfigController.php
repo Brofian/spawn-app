@@ -16,20 +16,21 @@ use spawn\system\Core\Services\Service;
 use spawn\system\Core\Services\ServiceTags;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
+use spawnApp\Services\SeoUrlManager;
 
 class SeoUrlConfigController extends AbstractBackendController {
 
-    protected SeoUrlRepository $seoUrlRepository;
+    protected SeoUrlManager $seoUrlManager;
     protected Request $request;
 
     public function __construct(
         Request $request,
-        SeoUrlRepository $seoUrlRepository
+        SeoUrlManager $seoUrlManager
     )
     {
         parent::__construct();
         $this->request = $request;
-        $this->seoUrlRepository = $seoUrlRepository;
+        $this->seoUrlManager = $seoUrlManager;
     }
 
 
@@ -56,15 +57,8 @@ class SeoUrlConfigController extends AbstractBackendController {
         ];
     }
 
-
-    public function abcTestAction(): AbstractResponse {
-
-        return new SimpleResponse('Test ABC');
-    }
-
     public function seoUrlOverviewAction(): AbstractResponse {
-
-        $seoUrls = $this->seoUrlRepository->search();
+        $seoUrls = $this->seoUrlManager->getSeoUrls();
 
         $this->twig->assign('seo_urls', $this->getAvailableControllerActions($seoUrls));
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/overview/content.html.twig');
@@ -72,34 +66,20 @@ class SeoUrlConfigController extends AbstractBackendController {
         return new TwigResponse('backend/index.html.twig');
     }
 
-
     public function seoUrlEditAction(string $ctrl = null, string $method = null): AbstractResponse {
+        $seoUrl = $this->seoUrlManager->getSeoUrl($ctrl, $method);
 
-        $seoUrls = $this->seoUrlRepository->search([
-            'controller' => $ctrl,
-            'action' => $method
-        ]);
-
-        $controllerService = $this->container->getService($ctrl);
-
-        $seoUrlData = null;
-        if($controllerService instanceof Service) {
-            $seoUrlArrays = $this->getControllerActionsForService($controllerService, $seoUrls);
-
-            foreach($seoUrlArrays as $seoUrlArray) {
-                if($seoUrlArray['method'] == $method) {
-                    $seoUrlData = $seoUrlArray;
-                }
-            }
-        }
-
-        $this->twig->assign('seo_url', $seoUrlData);
+        $this->twig->assign('seo_url', $seoUrl);
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/edit/content.html.twig');
 
         return new TwigResponse('backend/index.html.twig');
     }
 
-
+    /**
+     * @param string|null $ctrl
+     * @param $method
+     * @return AbstractResponse
+     */
     public function seoUrlEditSubmitAction(string $ctrl = null, string $method = null): AbstractResponse {
         /** @var Request $request */
         $data = $this->request->getPost()->getArray();
@@ -119,17 +99,18 @@ class SeoUrlConfigController extends AbstractBackendController {
 
         try {
             //load and update any existing seoUrlEntity or create a new one
-            /** @var SeoUrlEntity $existingSeoUrl */
-            $existingSeoUrl = $this->seoUrlRepository->search(['controller' => $ctrl, 'action' => $method])->first();
-            if($existingSeoUrl instanceof Entity) {
-                $existingSeoUrl->setCUrl($data['cUrl']);
-                $existingSeoUrl->setActive($data['active']==='true');
+            /** @var SeoUrlEntity|null $existingSeoUrl */
+            $seoUrlEntity = $this->seoUrlManager->getSeoUrl($ctrl, $method);
+
+            if($seoUrlEntity instanceof SeoUrlEntity) {
+                $seoUrlEntity->setCUrl($data['cUrl']);
+                $seoUrlEntity->setActive($data['active']==='true');
             }
             else {
-                $existingSeoUrl = new SeoUrlEntity($data['cUrl'], $ctrl, $method, false, $data['active']==='true');
+                $seoUrlEntity = new SeoUrlEntity($data['cUrl'], $ctrl, $method, false, $data['active']==='true');
             }
 
-            $this->seoUrlRepository->upsert($existingSeoUrl);
+            $this->seoUrlManager->saveSeoUrlEntity($seoUrlEntity);
         }
         catch(\Exception $e) {
             $errors[] = $e->getMessage();
