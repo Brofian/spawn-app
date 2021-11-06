@@ -22,19 +22,19 @@ class M1627641221AddDefaultSeoUrls extends Migration {
         $seoUrlRepository = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.repository.seo_urls');
 
 
-        $entity = new SeoUrlEntity('/', 'system.fallback.404', 'error404Action', false, true);
+        $entity = new SeoUrlEntity('/', 'system.fallback.404', 'error404Action', [], false, true);
         $seoUrlRepository->upsert($entity);
 
-        $entity = new SeoUrlEntity('/backend', 'system.backend.base', 'homeAction', true, true);
+        $entity = new SeoUrlEntity('/backend', 'system.backend.base', 'homeAction', [],  true, true);
         $seoUrlRepository->upsert($entity);
 
-        $entity = new SeoUrlEntity('/backend/seo_config/overview', 'system.backend.seo_url_config', 'seoUrlOverviewAction', true, true);
+        $entity = new SeoUrlEntity('/backend/seo_config/overview', 'system.backend.seo_url_config', 'seoUrlOverviewAction', [], true, true);
         $seoUrlRepository->upsert($entity);
 
-        $entity = new SeoUrlEntity('/backend/seo_config/edit/{ctrl}/{action}', 'system.backend.seo_url_config', 'seoUrlEditAction', true, true);
+        $entity = new SeoUrlEntity('/backend/seo_config/edit/{ctrl}/{action}', 'system.backend.seo_url_config', 'seoUrlEditAction', [], true, true);
         $seoUrlRepository->upsert($entity);
 
-        $entity = new SeoUrlEntity('/backend/seo_config/edit/submit/{ctrl}/{action}', 'system.backend.seo_url_config', 'seoUrlEditSubmitAction', true, true);
+        $entity = new SeoUrlEntity('/backend/seo_config/edit/submit/{ctrl}/{action}', 'system.backend.seo_url_config', 'seoUrlEditSubmitAction',  [], true, true);
         $seoUrlRepository->upsert($entity);
     }
 

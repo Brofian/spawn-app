@@ -28,7 +28,11 @@ class BaseBackendController extends AbstractBackendController {
         ];
     }
 
-
+    /**
+     * @route /backend
+     * @locked
+     * @return AbstractResponse
+     */
     public function homeAction(): AbstractResponse {
 
         /** @var MigrationRepository $migrationRepository */

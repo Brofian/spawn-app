@@ -4,6 +4,7 @@ namespace spawnApp\Database\SeoUrlTable;
 
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\BooleanColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\CreatedAtColumn;
+use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\JsonColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
@@ -20,6 +21,7 @@ class SeoUrlTable extends AbstractTable {
             new StringColumn('cUrl', false, null, true),
             new StringColumn('controller', false, 'system.fallback.404'),
             new StringColumn('action', false, 'error404Action'),
+            new JsonColumn('parameters', true),
             new BooleanColumn('locked', false),
             new BooleanColumn('active', true),
             new CreatedAtColumn(),

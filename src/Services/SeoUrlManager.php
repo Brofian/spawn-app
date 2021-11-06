@@ -4,6 +4,9 @@ namespace spawnApp\Services;
 
 use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawn\system\Core\Custom\ClassInspector;
+use spawn\system\Core\Custom\MethodInspector;
+use spawn\system\Core\Helper\UUID;
 use spawn\system\Core\Services\Service;
 use spawn\system\Core\Services\ServiceContainer;
 use spawn\system\Core\Services\ServiceContainerProvider;
@@ -51,29 +54,104 @@ class SeoUrlManager {
     /**
      *  This part is used for "bin/console modules:refresh-actions"
      * @param bool $removeStaleEntries
+     * @return array
+     * @throws Exception
+     * @throws \spawn\system\Throwables\WrongEntityForRepositoryException
      */
     public function refreshSeoUrlEntries(bool $removeStaleEntries = true) {
+        /** @var EntityCollection $registeredSeoUrls */
         $registeredSeoUrls = $this->getSeoUrls();
-        $availableControllerActions = $this->getEveryControllerAction();
-        dd($availableControllerActions);
-        //TODO add new actions from $availableControllerActions
+        /** @var ClassInspector[string] $availableControllers */
+        $availableControllers = $this->getEveryController();
 
-        if($removeStaleEntries) {
-            //TODO remove the old actions from $registeredSeoUrls
+        $result = [
+            'added' => 0
+        ];
+        // Add controller actions, that have no entry in the database yet
+        foreach($availableControllers as $controllerServiceId => $inspectedController) {
+            foreach($inspectedController->getLoadedMethods() as $inspectedMethod) {
+                $isNew = true;
+
+                /** @var SeoUrlEntity $registeredSeoUrl */
+                foreach($registeredSeoUrls->getArray() as $registeredSeoUrl) {
+                    if( $registeredSeoUrl->getController() == $controllerServiceId &&
+                        $registeredSeoUrl->getAction() == $inspectedMethod->getMethodName())
+                    {
+                        $isNew = false;
+                        break;
+                    }
+                }
+
+                if($isNew) {
+                    $this->seoUrlRepository->upsert(
+                        new SeoUrlEntity(
+                            $inspectedMethod->getTag('route', ''),
+                            $controllerServiceId,
+                            $inspectedMethod->getMethodName(),
+                            $inspectedMethod->getParameters(),
+                            $inspectedMethod->getTag('locked', false),
+                            true,
+                        )
+                    );
+                    $result['added']++;
+                }
+
+            }
         }
 
+
+
+        if($removeStaleEntries) {
+            //remove the old actions from $registeredSeoUrls
+            $result['removed'] = 0;
+
+            /** @var SeoUrlEntity $registeredSeoUrl */
+            foreach($registeredSeoUrls->getArray() as $registeredSeoUrl) {
+                $isInUse = false;
+
+                /**
+                 * @var string $controllerServiceId
+                 * @var ClassInspector $inspectedController
+                 */
+                foreach($availableControllers as $controllerServiceId => $inspectedController) {
+                    foreach($inspectedController->getLoadedMethods() as $inspectedMethod) {
+                        if( $registeredSeoUrl->getController() == $controllerServiceId &&
+                            $registeredSeoUrl->getAction() == $inspectedMethod->getMethodName())
+                        {
+                            $isInUse = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!$isInUse) {
+                    $this->seoUrlRepository->delete([
+                        'id' => UUID::hexToBytes($registeredSeoUrl->getId())
+                    ]);
+                    $result['removed']++;
+                }
+            }
+
+        }
+
+        return $result;
     }
 
-    protected function getEveryControllerAction(): array {
+    protected function getEveryController(): array {
         /** @var Service[] $controllerServices */
         $controllerServices = $this->getEveryControllerService();
-
         $list = [];
 
+        foreach($controllerServices as $serviceId => $controllerService) {
+            $controller = new ClassInspector($controllerService->getClass(), function(MethodInspector $element) {
+                $isMagicMethod = str_starts_with($element->getMethodName(), '__');
+                $isControllerActionMethod = str_ends_with($element->getMethodName(), 'Action');
+                $isPublic = $element->isPublic();
+                return (!$isMagicMethod && $isControllerActionMethod && $isPublic);
+            });
+            $controller->set('serviceId', $serviceId);
 
-        foreach($controllerServices as $controllerService) {
-            $methods = $this->getPublicMethodsFromClass($controllerService->getClass());
-            $list[$controllerService->getId()] = $methods;
+            $list[$serviceId] = $controller;
         }
 
         return $list;
@@ -86,66 +164,6 @@ class SeoUrlManager {
                 ServiceTags::BACKEND_CONTROLLER,
             ]
         );
-    }
-
-
-    protected function getPublicMethodsFromClass(string $class): array {
-        try {
-            $class = new \ReflectionClass($class);
-            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
-            $list = [];
-
-            /** @var \ReflectionMethod $method */
-            foreach ($methods as $method) {
-                //  Prevent magic methods like __construct from beeing detected
-                //  and also allow only methods, that end with the suffix "Action"
-                if (strpos($method->getName(), '__') !== 0 && preg_match('/^.*Action$/m', $method->getName())) {
-                    $list[$method->getName()] = [
-                        'parameters' => $method->getParameters(),
-                        'doc' => $this->getFormattedPhpDoc($method->getDocComment())
-                    ];
-                }
-            }
-
-            return $list;
-        }
-        catch (\Exception $e) {
-            return [];
-        }
-    }
-
-    protected function getFormattedPhpDoc(string $phpDoc): array {
-        if($phpDoc == '') {
-            return [];
-        }
-
-        $phpDocArray = [];
-
-        //splice every valid line into three parameters, the first beginning with an @
-        preg_match_all('/@([^ ]*) ([^\n]*)/m', $phpDoc, $phpDocData, PREG_SET_ORDER);
-        dd($phpDocData);
-
-        foreach($phpDocData as $data) {
-            $type = $data[1];
-            $value = $data[2];
-
-            switch ($type) {
-                case 'param':
-                    $values = explode(' ', $value);
-                    if(count($values) == 1)     $phpDocArray['param'][$values[0]] = 'mixed';
-                    elseif(count($values) > 1)  $phpDocArray['param'][$values[1]] = $values[0];
-                    break;
-                case 'return':
-                    $phpDocArray['return'] = $value;
-                    break;
-                default:
-                    // TODO
-                    break;
-            }
-        }
-
-
-        return $phpDocArray;
     }
 
 

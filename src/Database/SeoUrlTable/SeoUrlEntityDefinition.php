@@ -2,6 +2,7 @@
 
 namespace spawnApp\Database\SeoUrlTable;
 
+use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\Database\Definition\Entity;
 
 class SeoUrlEntityDefinition extends Entity {
@@ -9,6 +10,7 @@ class SeoUrlEntityDefinition extends Entity {
     protected string $cUrl;
     protected string $controller;
     protected string $action;
+    protected array $parameters;
     protected bool $locked;
     protected bool $active;
     protected ?\DateTime $createdAt;
@@ -18,6 +20,7 @@ class SeoUrlEntityDefinition extends Entity {
         string $cUrl,
         string $controller,
         string $action,
+        array $parameters,
         bool $locked = false,
         bool $active = true,
         ?string $id = null,
@@ -27,6 +30,7 @@ class SeoUrlEntityDefinition extends Entity {
         $this->cUrl = $cUrl;
         $this->controller = $controller;
         $this->action = $action;
+        $this->parameters = $parameters;
         $this->locked = $locked;
         $this->active = $active;
         $this->id = $id;
@@ -41,23 +45,49 @@ class SeoUrlEntityDefinition extends Entity {
 
     public static function getEntityFromArray(array $values): Entity
     {
-        $createdAt = null;
-        $updatedAt = null;
-        try {
-            $createdAt = new \DateTime($values['updatedAt']);
-            $updatedAt = new \DateTime($values['updatedAt']);
+        if(!$values['updatedAt'] instanceof \DateTime) {
+            try {
+                $values['updatedAt'] = new \DateTime($values['updatedAt']);
+            }
+            catch (\Exception $e) {
+                $values['updatedAt'] = new \DateTime();
+            }
         }
-        catch (\Exception $e) {}
+
+        if(!$values['createdAt'] instanceof \DateTime) {
+            try {
+                $values['createdAt'] = new \DateTime($values['createdAt']);
+            }
+            catch (\Exception $e) {
+                $values['createdAt'] = new \DateTime();
+            }
+        }
+
+        if(!isset($values['parameters'])) {
+            $values['parameters'] = [];
+        }
+        elseif(!is_array($values['parameters']))
+        {
+            try {
+                $values['parameters'] = json_decode($values['parameters']);
+            }
+            catch (\Exception $e) {
+                $values['parameters'] = [];
+            }
+        }
+
+
 
         return new static(
             $values['cUrl'],
             $values['controller'],
             $values['action'],
+            $values['parameters'],
             $values['locked'],
             $values['active'],
             $values['id'],
-            $updatedAt,
-            $createdAt
+            $values['updatedAt'],
+            $values['createdAt']
         );
     }
 
@@ -68,6 +98,7 @@ class SeoUrlEntityDefinition extends Entity {
             'cUrl' => $this->getCUrl(),
             'controller' => $this->getController(),
             'action' => $this->getAction(),
+            'parameters' => $this->getParameters(),
             'locked' => $this->isLocked(),
             'active' => $this->isActive(),
             'createdAt' => $this->getCreatedAt(),
@@ -150,6 +181,16 @@ class SeoUrlEntityDefinition extends Entity {
     {
         $this->active = $active;
         return $this;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    public function setParameters(array $parameters): void
+    {
+        $this->parameters = $parameters;
     }
 
 
