@@ -9,6 +9,9 @@ use spawn\system\Core\Contents\Response\SimpleResponse;
 
 class Fallback404Controller extends AbstractController  {
 
+
+
+
     /**
      * @route /404
      * @return AbstractResponse

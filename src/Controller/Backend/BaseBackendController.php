@@ -34,8 +34,7 @@ class BaseBackendController extends AbstractBackendController {
      * @return AbstractResponse
      */
     public function homeAction(): AbstractResponse {
-
-        /** @var MigrationRepository $migrationRepository */
+       /** @var MigrationRepository $migrationRepository */
         $migrationRepository = $this->container->getServiceInstance('system.repository.migrations');
         $migrationCollection = $migrationRepository->search();
 

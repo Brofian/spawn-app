@@ -9,5 +9,12 @@
     </service>
 
 
+    <service id="system.service.admin_login_manager" class="spawnApp\Services\AdminLoginManager" static="true">
+        <argument type='service' value="system.repository.administrator"/>
+        <tag>service</tag>
+        <tag>event.subscriber</tag>
+    </service>
+
+
 </services>
 
