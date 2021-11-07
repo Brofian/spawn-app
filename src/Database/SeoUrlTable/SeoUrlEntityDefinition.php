@@ -2,7 +2,6 @@
 
 namespace spawnApp\Database\SeoUrlTable;
 
-use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\Database\Definition\Entity;
 
 class SeoUrlEntityDefinition extends Entity {
@@ -78,7 +77,7 @@ class SeoUrlEntityDefinition extends Entity {
 
 
 
-        return new static(
+        return new SeoUrlEntity(
             $values['cUrl'],
             $values['controller'],
             $values['action'],
