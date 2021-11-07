@@ -188,6 +188,11 @@ class SeoUrlEntityDefinition extends Entity {
         return $this->parameters;
     }
 
+    public function getJsonParameters(): string
+    {
+        return json_encode($this->parameters);
+    }
+
     public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;

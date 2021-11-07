@@ -12,13 +12,18 @@
             action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.action]) }}"
             data-ajax-form
         >
+
             {% block base_configuration %}
-                <div class="section">
+                <div class="section" data-seo-url-editor="{{ seo_url.jsonParameters }}">
 
                     <div class="col-1">SEO URL</div>
 
                     <div class="col-10-7">
-                        <input type="text" name="cUrl" value="{{ seo_url.cUrl }}" required/>
+
+                        <div class="col-1">
+                            <input type="text" name="cUrl" value="{{ seo_url.cUrl }}" data-seo-url-editor-input required/>
+                        </div>
+
                     </div>
 
 
@@ -36,6 +41,10 @@
                             </span>
                         </div>
                     {% endblock %}
+
+                    <div class="col-1"><span class="spacer-s"></span></div>
+                    <div class="col-1" data-seo-url-editor-preview></div>
+                    <div class="col-1" data-seo-url-editor-collection></div>
 
                 </div>
             {% endblock %}

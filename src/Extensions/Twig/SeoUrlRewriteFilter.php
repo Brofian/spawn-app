@@ -27,6 +27,7 @@ class SeoUrlRewriteFilter extends FunctionExtension {
             /** @var RoutingHelper $routingHelper */
             $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
+
             $seoLink = $routingHelper->getSeoLinkByParameters($controller, $action, $parameters);
 
             return $seoLink;

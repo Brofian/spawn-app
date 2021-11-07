@@ -80,6 +80,7 @@ class SeoUrlConfigController extends AbstractBackendController {
      * @return AbstractResponse
      */
     public function seoUrlEditAction(string $ctrl, string $method): AbstractResponse {
+
         $seoUrl = $this->seoUrlManager->getSeoUrl($ctrl, $method);
 
         $this->twig->assign('seo_url', $seoUrl);

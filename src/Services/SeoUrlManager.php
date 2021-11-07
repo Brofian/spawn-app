@@ -11,6 +11,7 @@ use spawn\system\Core\Services\Service;
 use spawn\system\Core\Services\ServiceContainer;
 use spawn\system\Core\Services\ServiceContainerProvider;
 use spawn\system\Core\Services\ServiceTags;
+use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 
@@ -56,7 +57,7 @@ class SeoUrlManager {
      * @param bool $removeStaleEntries
      * @return array
      * @throws Exception
-     * @throws \spawn\system\Throwables\WrongEntityForRepositoryException
+     * @throws WrongEntityForRepositoryException
      */
     public function refreshSeoUrlEntries(bool $removeStaleEntries = true) {
         /** @var EntityCollection $registeredSeoUrls */
@@ -83,6 +84,7 @@ class SeoUrlManager {
                 }
 
                 if($isNew) {
+
                     $this->seoUrlRepository->upsert(
                         new SeoUrlEntity(
                             $inspectedMethod->getTag('route', ''),

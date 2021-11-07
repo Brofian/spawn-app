@@ -63,8 +63,6 @@ export default class ResizeableColumnsPlugin extends Plugin {
             let mouseXDiff = this.startMouseX - currentMouseX;
             let newWidth = this.startWidth - mouseXDiff;
 
-            console.log(newWidth + " / " + this.startWidth);
-
             for(let row of this.cols) {
                 row[columnId].style.maxWidth = newWidth + "px";
             }
