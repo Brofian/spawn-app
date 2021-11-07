@@ -47,11 +47,6 @@ class SeoUrlConfigController extends AbstractBackendController {
                         'controller' => '%self.key%',
                         'action' => 'seoUrlOverviewAction',
                         'title' => 'SEO URLs'
-                    ],
-                    [
-                        'controller' => '%self.key%',
-                        'action' => 'seoUrlOverviewAction',
-                        'title' => 'SEO URLs'
                     ]
                 ]
             ]

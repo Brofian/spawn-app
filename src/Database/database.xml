@@ -44,7 +44,7 @@
     </service>
 
     <service id="system.repository.administrator" class="spawnApp\Database\AdministratorTable\AdministratorRepository" static="true">
-        <argument type="service" value="system.database.table.seo_urls" />
+        <argument type="service" value="system.database.table.administrator" />
         <tag>base.service.static</tag>
     </service>
 

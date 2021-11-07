@@ -12,6 +12,9 @@
         <tag>backend.controller</tag>
     </service>
 
+    <service id="system.backend.administrator" class="spawnApp\Controller\Backend\AdminLoginController">
+        <tag>backend.controller</tag>
+    </service>
 
 </services>
 

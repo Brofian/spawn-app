@@ -18,10 +18,10 @@ class AdministratorEntityDefinition extends Entity
         string $username,
         string $password,
         string $email,
-        bool $active,
-        ?string $id,
-        ?\DateTime $createdAt,
-        ?\DateTime $updatedAt
+        bool $active = true,
+        ?string $id = null,
+        ?\DateTime $createdAt = null,
+        ?\DateTime $updatedAt = null
     )
     {
         $this->username = $username;
