@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.command.debug" class="spawnApp\Services\Commands\DebugCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.cache_clear" class="spawnApp\Services\Commands\CacheClearCommand">
+        <tag>console.command</tag>
+    </service>
+
+</services>
+

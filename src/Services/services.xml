@@ -2,6 +2,8 @@
 
 <services>
 
+    <import file="/Commands/commands.xml"/>
+
 
     <service id="system.service.seo_url_manager" class="spawnApp\Services\SeoUrlManager">
         <argument type='service' value="system.repository.seo_urls"/>
