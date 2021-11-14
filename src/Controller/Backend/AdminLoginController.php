@@ -6,12 +6,9 @@ use spawn\system\Core\Base\Controller\AbstractBackendController;
 use spawn\system\Core\Base\Database\Definition\TableDefinition\ColumnDefinition;
 use spawn\system\Core\Contents\Response\AbstractResponse;
 use spawn\system\Core\Contents\Response\JsonResponse;
-use spawn\system\Core\Contents\Response\SimpleResponse;
 use spawn\system\Core\Contents\Response\TwigResponse;
 use spawn\system\Core\Request;
-use spawn\system\Core\Response;
 use spawn\system\Core\Services\ServiceContainerProvider;
-use spawnApp\Database\MigrationTable\MigrationRepository;
 use spawnApp\Services\AdminLoginManager;
 
 class AdminLoginController extends AbstractBackendController {

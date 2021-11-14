@@ -2,7 +2,6 @@
 
 namespace spawnApp\Services;
 
-use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\EventSystem\Events\RequestRoutedEvent;
 use spawn\system\Core\Base\EventSystem\EventSubscriberInterface;
 use spawn\system\Core\Helper\SessionHelper;

@@ -4,19 +4,11 @@
 namespace spawnApp\Controller\Backend;
 
 use spawn\system\Core\Base\Controller\AbstractBackendController;
-use spawn\system\Core\Base\Database\Definition\Entity;
-use spawn\system\Core\Base\Database\Definition\EntityCollection;
 use spawn\system\Core\Contents\Response\AbstractResponse;
 use spawn\system\Core\Contents\Response\JsonResponse;
-use spawn\system\Core\Contents\Response\RedirectResponse;
-use spawn\system\Core\Contents\Response\SimpleResponse;
 use spawn\system\Core\Contents\Response\TwigResponse;
-use spawn\system\Core\Custom\ClassInspector;
 use spawn\system\Core\Request;
-use spawn\system\Core\Services\Service;
-use spawn\system\Core\Services\ServiceTags;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
-use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 use spawnApp\Services\SeoUrlManager;
 
 class SeoUrlConfigController extends AbstractBackendController {

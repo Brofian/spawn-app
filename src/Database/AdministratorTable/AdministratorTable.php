@@ -5,7 +5,6 @@ namespace spawnApp\Database\AdministratorTable;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\BooleanColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\CreatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\DateTimeColumn;
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\JsonColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
