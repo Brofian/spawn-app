@@ -13,7 +13,8 @@
     </service>
 
     <service id="system.backend.administrator" class="spawnApp\Controller\Backend\AdminLoginController">
-        <tag>backend.controller</tag>
+        <argument type='service' value="system.service.admin_login_manager"/>
+        <tag>base.controller</tag>
     </service>
 
 </services>

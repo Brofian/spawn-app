@@ -1,0 +1,37 @@
+{% extends "backend/index.html.twig" %}
+
+
+{% block body %}
+
+    <body id="login">
+
+        <div class="login-frame">
+
+            <form action="{{ seo_url('system.backend.administrator', 'loginSubmitAction') }}" method="get" data-ajax-form>
+
+                <div class="h2 inset"></div>
+
+                <div class="spacer-m"></div>
+
+                <label>
+                    <input type="text" name="username" placeholder="Username"/>
+                </label>
+
+                <div class="spacer-m"></div>
+
+                <label>
+                    <input type="password" name="password" placeholder="Password"/>
+                </label>
+
+                <div class="spacer-m"></div>
+
+                <input type="submit" class="d-none"/>
+
+            </form>
+
+        </div>
+
+
+    </body>
+
+{% endblock %}

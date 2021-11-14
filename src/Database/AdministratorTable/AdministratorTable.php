@@ -4,6 +4,7 @@ namespace spawnApp\Database\AdministratorTable;
 
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\BooleanColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\CreatedAtColumn;
+use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\DateTimeColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\JsonColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
@@ -22,6 +23,8 @@ class AdministratorTable extends AbstractTable {
             new StringColumn('password', false, '', false, 1024),
             new StringColumn('email', false, '', true, 1024),
             new BooleanColumn('active', true),
+            new StringColumn('loginHash', true, null, false, '1024'),
+            new DateTimeColumn('loginExpiration'),
             new UpdatedAtColumn(),
             new CreatedAtColumn()
         ];

@@ -32,6 +32,7 @@ class ModuleStorage {
     }
 
     public function save(DatabaseConnection $connection) {
+
         $conn = $connection::getConnection();
 
         try {

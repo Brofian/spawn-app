@@ -3,10 +3,17 @@
 namespace spawnApp\Database\AdministratorTable;
 
 use spawn\system\Core\Base\Database\Definition\Entity;
+use spawn\system\Core\Base\Database\Definition\TableDefinition\AbstractTable;
 use spawn\system\Core\Base\Database\Definition\TableRepository;
 use spawn\system\Core\Helper\UUID;
 
 class AdministratorRepository extends TableRepository {
+
+    public function __construct(AbstractTable $tableDefinition)
+    {
+        parent::__construct($tableDefinition);
+    }
+
 
     public static function getEntityClass(): string
     {

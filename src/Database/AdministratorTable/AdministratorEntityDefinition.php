@@ -11,6 +11,8 @@ class AdministratorEntityDefinition extends Entity
     protected string $password;
     protected string $email;
     protected bool $active;
+    protected ?string $loginHash;
+    protected ?\DateTime $loginExpiration;
     protected ?\DateTime $createdAt;
     protected ?\DateTime $updatedAt;
 
@@ -19,6 +21,8 @@ class AdministratorEntityDefinition extends Entity
         string $password,
         string $email,
         bool $active = true,
+        ?string $loginHash = null,
+        ?\DateTime $loginExpiration = null,
         ?string $id = null,
         ?\DateTime $createdAt = null,
         ?\DateTime $updatedAt = null
@@ -28,6 +32,8 @@ class AdministratorEntityDefinition extends Entity
         $this->password = $password;
         $this->email = $email;
         $this->active = $active;
+        $this->loginHash = $loginHash;
+        $this->loginExpiration = $loginExpiration;
         $this->id = $id;
         $this->updatedAt = $updatedAt;
         $this->createdAt = $createdAt;
@@ -48,7 +54,9 @@ class AdministratorEntityDefinition extends Entity
             'email' => $this->getEmail(),
             'active' => $this->isActive(),
             'updatedAt' => $this->getUpdatedAt(),
-            'createdAt' => $this->getCreatedAt()
+            'createdAt' => $this->getCreatedAt(),
+            'loginHash' => $this->getLoginHash(),
+            'loginExpiration' => $this->getLoginExpiration(),
         ];
     }
 
@@ -64,12 +72,18 @@ class AdministratorEntityDefinition extends Entity
             catch (\Exception $e) { $values['createdAt'] = new \DateTime(); }
         }
 
+        if(!$values['loginExpiration'] instanceof \DateTime && $values['loginExpiration'] !== null) {
+            try {   $values['loginExpiration'] = new \DateTime($values['loginExpiration']); }
+            catch (\Exception $e) { $values['loginExpiration'] = null; }
+        }
 
         return new AdministratorEntity(
             $values['username'],
             $values['password'],
             $values['email'],
             $values['active'],
+            $values['loginHash'] ?? null,
+            $values['loginExpiration'] ?? null,
             $values['id'] ?? null,
             $values['createdAt'] ?? null,
             $values['updatedAt'] ?? null
@@ -134,6 +148,26 @@ class AdministratorEntityDefinition extends Entity
     public function setUpdatedAt(?\DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getLoginHash(): ?string
+    {
+        return $this->loginHash;
+    }
+
+    public function setLoginHash(?string $loginHash): void
+    {
+        $this->loginHash = $loginHash;
+    }
+
+    public function getLoginExpiration(): ?\DateTime
+    {
+        return $this->loginExpiration;
+    }
+
+    public function setLoginExpiration(?\DateTime $loginExpiration): void
+    {
+        $this->loginExpiration = $loginExpiration;
     }
 
 

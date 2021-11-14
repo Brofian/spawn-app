@@ -7,7 +7,6 @@ html, body {
 	padding: 0;
 	font-family: $default-font-family;
 	font-size: $default-font-size;
-	font-weight: $default-font-weight;
 	color: $font-color-white;
 }
 

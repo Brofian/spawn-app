@@ -67,7 +67,15 @@ export default class AjaxFormPlugin extends Plugin {
         catch(e) {  data = {success: false};    }
 
         if(data.success) {
-            FlashHint.createFlashHint('Success!!', 'success');
+            if(data.redirect) {
+                window.location.href = data.redirect;
+            }
+            else if(data.reload) {
+                location.reload();
+            }
+            else {
+                FlashHint.createFlashHint('Success!!', 'success');
+            }
         }
         else if(data.errors && data.errors.length) {
             for(let error of data.errors) {

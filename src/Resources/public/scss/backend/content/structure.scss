@@ -18,6 +18,11 @@
 	width: 100%;
 }
 
+.inset {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
 @mixin structure-cols {
 	@for $i from 1 through 12 {
 		//create a shortcut for a column, that spans 1/i of the row
