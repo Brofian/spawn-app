@@ -10,5 +10,13 @@
         <tag>console.command</tag>
     </service>
 
+    <service id="system.command.spawn_build" class="spawnApp\Services\Commands\SpawnBuildCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.npm_install_dependencies" class="spawnApp\Services\Commands\NpmInstallCommand">
+        <tag>console.command</tag>
+    </service>
+
 </services>
 

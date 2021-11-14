@@ -47,6 +47,7 @@ class CacheClearCommand extends AbstractCommand  {
         $endingTime = microtime(true) * 1000;
         $duration = ($endingTime-$startingTime);
         IO::printWarning('Cleared caches in '.round($duration, 3).'ms!');
+        IO::reset();
 
         return 0;
     }
@@ -54,21 +55,25 @@ class CacheClearCommand extends AbstractCommand  {
 
 
     protected function clearCompiledCache(): void {
+        IO::printWarning(' > Clearing compiled files');
         $cacheDir = ROOT.CACHE_DIR.'/public';
         rrmdir($cacheDir);
     }
 
     protected function clearGeneratedCache(): void {
+        IO::printWarning(' > Clearing auto generated files');
         $cacheDir = ROOT.CACHE_DIR.'/private/generated';
         rrmdir($cacheDir);
     }
 
     protected function clearResourceCache(): void {
+        IO::printWarning(' > Clearing module resources');
         $cacheDir = ROOT.CACHE_DIR.'/resources';
         rrmdir($cacheDir);
     }
 
     protected function clearTwigCache(): void {
+        IO::printWarning(' > Clearing twig cache');
         $cacheDir = ROOT.CACHE_DIR.'/private/twig';
         rrmdir($cacheDir);
     }
