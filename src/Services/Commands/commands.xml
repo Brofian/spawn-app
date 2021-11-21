@@ -18,5 +18,21 @@
         <tag>console.command</tag>
     </service>
 
+    <service id="system.command.spawn_print_title" class="spawnApp\Services\Commands\PrintSpawnCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.list_modules" class="spawnApp\Services\Commands\ListModulesCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.migration_create" class="spawnApp\Services\Commands\MigrationCreateCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.module_create" class="spawnApp\Services\Commands\ModuleCreateCommand">
+        <tag>console.command</tag>
+    </service>
+
 </services>
 
