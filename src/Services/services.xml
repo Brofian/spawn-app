@@ -2,7 +2,7 @@
 
 <services>
 
-    <import file="/Commands/commands.xml"/>
+    <import file="/Commands/_commands.xml"/>
 
 
     <service id="system.service.seo_url_manager" class="spawnApp\Services\SeoUrlManager">

@@ -55,6 +55,7 @@ class ModuleEntity extends Entity {
             $values['active'],
             $values['information'],
             $values['resourceConfig'],
+            $values['id'],
             $updatedAt,
             $createdAt
         );

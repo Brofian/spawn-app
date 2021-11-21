@@ -6,7 +6,6 @@ use bin\spawn\IO;
 use spawn\system\Core\Base\Custom\FileEditor;
 use spawn\system\Core\Contents\Modules\Module;
 use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Helper\URIHelper;
 
 class MigrationCreateCommand extends AbstractCommand {
 

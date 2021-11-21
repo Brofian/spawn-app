@@ -17,7 +17,6 @@ class CacheClearCommand extends AbstractCommand  {
 
     protected static function getParameters(): array   {
         return [
-            'all' => ['all', 'a'],
             'resources' => 'r',
             'compiled' => 'c',
             'generated' => 'g',
@@ -26,7 +25,9 @@ class CacheClearCommand extends AbstractCommand  {
     }
 
     public function execute(array $parameters): int  {
-        $clearAll = !!$parameters['all'];
+        //clear all, if no parameter is given
+        $clearAll = !($parameters['resources'] || $parameters['compiled'] || $parameters['generated'] || $parameters['twig']);
+
 
         IO::printWarning('Start clearing caches...');
         $startingTime = microtime(true) * 1000;

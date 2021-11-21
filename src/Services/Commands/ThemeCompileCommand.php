@@ -8,7 +8,6 @@ use spawn\system\Core\Contents\Modules\ModuleCollection;
 use spawn\system\Core\Custom\AbstractCommand;
 use spawn\system\Core\Helper\FrameworkHelper\ResourceCollector;
 use spawn\system\Core\Helper\ScssHelper;
-use spawn\system\Core\Helper\URIHelper;
 
 class ThemeCompileCommand extends AbstractCommand {
 
