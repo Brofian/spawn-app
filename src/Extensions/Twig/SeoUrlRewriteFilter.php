@@ -2,7 +2,7 @@
 
 namespace spawnApp\Extensions\Twig;
 
-use spawn\system\Core\Base\Extensions\Twig\FunctionExtension;
+use spawn\system\Core\Extensions\Twig\Abstracts\FunctionExtension;
 use spawn\system\Core\Helper\RoutingHelper;
 use spawn\system\Core\Services\ServiceContainerProvider;
 

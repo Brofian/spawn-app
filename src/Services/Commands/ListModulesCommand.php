@@ -3,11 +3,11 @@
 namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
+use spawn\system\Core\Base\Database\Definition\EntityCollection;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\Contents\Modules\Module;
-use spawn\system\Core\Contents\Modules\ModuleCollection;
 use spawn\system\Core\Contents\Modules\ModuleLoader;
 use spawn\system\Core\Custom\AbstractCommand;
+use spawnApp\Database\ModuleTable\ModuleEntity;
 
 class ListModulesCommand extends AbstractCommand {
 
@@ -34,19 +34,19 @@ class ListModulesCommand extends AbstractCommand {
     public function execute(array $parameters): int
     {
         $refresh = !!$parameters['refresh'];
-        $moduleList = self::getModuleList($refresh);
+        $moduleList = self::getModuleList();
         $this->outputModuleCollectionAsTable($moduleList);
 
         return 0;
     }
 
-    public static function getModuleList(bool $refresh = false): ModuleCollection {
+    public static function getModuleList(): EntityCollection {
         $dbHelper = new DatabaseHelper();
         $moduleLoader = new ModuleLoader();
-        return $moduleLoader->readModules($dbHelper->getConnection(), $refresh);
+        return $moduleLoader->loadModules();
     }
 
-    protected function outputModuleCollectionAsTable(ModuleCollection $collection): void {
+    protected function outputModuleCollectionAsTable(EntityCollection $collection): void {
         $moduleList = [];
         $moduleList[] = [
             "ID",
@@ -56,8 +56,8 @@ class ListModulesCommand extends AbstractCommand {
             "Author"
         ];
 
-        /** @var Module $module */
-        foreach($collection->getModuleList() as $module) {
+        /** @var ModuleEntity $module */
+        foreach($collection->getArray() as $module) {
             $moduleList[] = [
                 $module->getId(),
                 $module->getSlug(),

@@ -4,8 +4,8 @@ namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
 use spawn\system\Core\Base\Custom\FileEditor;
-use spawn\system\Core\Contents\Modules\Module;
 use spawn\system\Core\Custom\AbstractCommand;
+use spawnApp\Database\ModuleTable\ModuleEntity;
 
 class MigrationCreateCommand extends AbstractCommand {
 
@@ -39,9 +39,9 @@ class MigrationCreateCommand extends AbstractCommand {
             $moduleSelector = $parameters['module'];
 
             $selectedModule = null;
-            /** @var Module $module */
-            foreach($moduleCollection->getModuleList() as $module) {
-                if($module->getName() == $moduleSelector || $module->getSlug() == $moduleSelector || $module->getId() == $moduleSelector) {
+            /** @var ModuleEntity $module */
+            foreach($moduleCollection->getArray() as $module) {
+                if($module->getSlug() == $moduleSelector || $module->getId() == $moduleSelector) {
                     $selectedModule = $module;
                     break;
                 }
@@ -60,9 +60,9 @@ class MigrationCreateCommand extends AbstractCommand {
             $counter = 0;
             $modules = [];
 
-            /** @var Module $module */
-            foreach($moduleCollection->getModuleList() as $module) {
-                IO::printLine("[".$counter."] " . $module->getName());
+            /** @var ModuleEntity $module */
+            foreach($moduleCollection->getArray() as $module) {
+                IO::printLine("[".$counter."] " . $module->getSlug());
                 $modules[$counter] = $module;
                 $counter++;
             }
@@ -75,7 +75,7 @@ class MigrationCreateCommand extends AbstractCommand {
                 return 1;
             }
 
-            /** @var Module $module */
+            /** @var ModuleEntity $module */
             $module = $modules[$moduleId];
         }
 
@@ -101,10 +101,10 @@ class MigrationCreateCommand extends AbstractCommand {
         }
 
 
-        $path = $module->getBasePath() . '/src/Database/Migrations';
+        $path = $module->getPath() . '/src/Database/Migrations';
         $timeStamp = time();
         $className = "Migration".$timeStamp.$name;
-        $filePath = ROOT.$path.'/'.$className.'.php';
+        $filePath = ROOT.$path."/$className.php";
         $slug = $module->getSlug();
         FileEditor::createFile($filePath, $this->getMigrationFileContents($slug, $className, $timeStamp));
 
@@ -118,9 +118,9 @@ class MigrationCreateCommand extends AbstractCommand {
 namespace ".$slug."\\Database\\Migrations;
 
 use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\base\Migration;
+use spawn\system\Core\base\AbstractMigration;
 
-class ".$className." extends Migration {
+class ".$className." extends AbstractMigration {
     
     public static function getUnixTimestamp(): int
     {

@@ -3,12 +3,12 @@
 namespace spawnApp\Database\Migrations;
 
 use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\base\Migration;
+use spawn\system\Core\base\AbstractMigration;
 use spawn\system\Core\Services\ServiceContainerProvider;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 
-class M1627641221AddDefaultSeoUrls extends Migration {
+class M1627641221AddDefaultSeoUrls extends AbstractMigration {
     
     public static function getUnixTimestamp(): int
     {

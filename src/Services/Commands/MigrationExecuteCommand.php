@@ -5,14 +5,15 @@ namespace spawnApp\Services\Commands;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\Custom\FileEditor;
+use spawn\system\Core\Base\Database\Definition\EntityCollection;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\base\Migration;
-use spawn\system\Core\Contents\Modules\ModuleCollection;
+use spawn\system\Core\base\AbstractMigration;
 use spawn\system\Core\Custom\AbstractCommand;
 use spawn\system\Core\Services\Service;
 use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Database\MigrationTable\MigrationEntity;
 use spawnApp\Database\MigrationTable\MigrationRepository;
+use spawnApp\Database\ModuleTable\ModuleEntity;
 
 class MigrationExecuteCommand extends AbstractCommand {
 
@@ -67,12 +68,13 @@ class MigrationExecuteCommand extends AbstractCommand {
         return 0;
     }
 
-    protected function gatherMigrations(ModuleCollection $moduleCollection): array
+    protected function gatherMigrations(EntityCollection $moduleCollection): array
     {
         $migrations = [];
-        foreach($moduleCollection->getModuleList() as $module) {
+        /** @var ModuleEntity $module */
+        foreach($moduleCollection->getArray() as $module) {
 
-            $migrationsFolder = ROOT.$module->getBasePath().'/src/Database/Migrations';
+            $migrationsFolder = ROOT.$module->getPath().'/src/Database/Migrations';
             if(!file_exists($migrationsFolder) || !is_dir($migrationsFolder)) {
                 continue;
             }
@@ -86,7 +88,7 @@ class MigrationExecuteCommand extends AbstractCommand {
 
                 //read classname
                 $matches = [];
-                $isMigration = preg_match_all('/class ([^{]*) extends Migration/', $fileContent, $matches);
+                $isMigration = preg_match_all('/class ([^{]*) extends AbstractMigration/', $fileContent, $matches);
                 if(!$isMigration || count($matches) < 2) continue;
                 $className = $matches[1][0];
 
@@ -96,7 +98,7 @@ class MigrationExecuteCommand extends AbstractCommand {
                 if(!$hasNamespace || count($matches) < 2) continue;
                 $namespace = $matches[1][0];
 
-                /** @var Migration $fullClassName */
+                /** @var AbstractMigration $fullClassName */
                 $fullClassName = $namespace . "\\" . $className;
 
                 $migrations[] = [$fullClassName::getUnixTimestamp(),$fullClassName];
@@ -119,7 +121,7 @@ class MigrationExecuteCommand extends AbstractCommand {
         $executedMigrations = [];
         /** @var Service $migrationEntity */
         foreach($executedMigrationEntities as $migrationEntity) {
-            /** @var Migration $class */
+            /** @var AbstractMigration $class */
             $class = $migrationEntity->getClass();
             $executedMigrations[] = $class . "-" . $class::getUnixTimestamp();
         }
@@ -156,7 +158,7 @@ class MigrationExecuteCommand extends AbstractCommand {
 
             $count = 0;
             try {
-                /** @var Migration $m */
+                /** @var AbstractMigration $m */
                 $m = new $migrationClass();
                 $m->run($this->databaseHelper);
 

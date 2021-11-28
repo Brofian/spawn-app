@@ -5,7 +5,6 @@ namespace spawnApp\Services\Commands;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\Contents\Modules\Module;
 use spawn\system\Core\Custom\AbstractCommand;
 use spawn\system\Core\Helper\UUID;
 use spawn\system\Core\Services\ServiceContainer;
@@ -13,7 +12,6 @@ use spawn\system\Core\Services\ServiceContainerProvider;
 use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnApp\Database\ModuleTable\ModuleRepository;
-use spawnApp\Models\ModuleStorage;
 use spawnApp\Services\SeoUrlManager;
 
 class ModulesRefreshCommand extends AbstractCommand {
@@ -78,7 +76,7 @@ class ModulesRefreshCommand extends AbstractCommand {
     protected function refreshModules(bool $deleteMissing = false): void {
         IO::printWarning('> Refreshing Modules');
 
-        $moduleCollection = ListModulesCommand::getModuleList(false);
+        $moduleCollection = ListModulesCommand::getModuleList();
         $existingModules = $this->moduleRepository->search();
 
         $registeredPaths = [];
@@ -88,39 +86,22 @@ class ModulesRefreshCommand extends AbstractCommand {
         }
 
         $newModules = [];
-        /** @var Module $availableModule */
-        foreach($moduleCollection->getModuleList() as $availableModule) {
-            if(!in_array($availableModule->getBasePath(), $registeredPaths)) {
+        /** @var ModuleEntity $availableModule */
+        foreach($moduleCollection->getArray() as $availableModule) {
+            if(!in_array($availableModule->getPath(), $registeredPaths)) {
                 $newModules = $availableModule;
             }
         }
 
-        /** @var Module $module */
+        /** @var ModuleEntity $module */
         foreach($newModules as $module) {
-            $resourceConfig = json_encode([
-                "namespace" => $module->getResourceNamespace(),
-                "namespace_raw" => $module->getResourceNamespaceRaw(),
-                "using" => $module->getUsingNamespaces(),
-                "path" => $module->getResourcePath(),
-                "weight" => $module->getResourceWeight()
-            ]);
-            $informations = json_encode($module->getInformation());
-
-            $moduleEntity = new ModuleEntity(
-                $module->getSlug(),
-                $module->getBasePath(),
-                false,
-                $informations,
-                $resourceConfig
-            );
-
-            $this->moduleRepository->upsert($moduleEntity);
-            IO::printWarning('Added new module: ' .$moduleEntity->getSlug());
+            $this->moduleRepository->upsert($module);
+            IO::printWarning('Added new module: ' .$module->getSlug());
         }
 
         if($deleteMissing) {
             //delete missing modules
-            /** @var ModuleStorage $module */
+            /** @var ModuleEntity $module */
             foreach($existingModules as $module) {
                 if(!$module->isActive() && !file_exists(ROOT.$module->getPath())) {
                     $this->moduleRepository->delete(['id' => UUID::hexToBytes($module->getId())]);

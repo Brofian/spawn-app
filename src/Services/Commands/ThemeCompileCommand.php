@@ -3,11 +3,12 @@
 namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
-use spawn\system\Core\Contents\Modules\Module;
-use spawn\system\Core\Contents\Modules\ModuleCollection;
+use Exception;
+use spawn\system\Core\Base\Database\Definition\EntityCollection;
 use spawn\system\Core\Custom\AbstractCommand;
 use spawn\system\Core\Helper\FrameworkHelper\ResourceCollector;
 use spawn\system\Core\Helper\ScssHelper;
+use spawnApp\Database\ModuleTable\ModuleEntity;
 
 class ThemeCompileCommand extends AbstractCommand {
 
@@ -31,7 +32,7 @@ class ThemeCompileCommand extends AbstractCommand {
 
     /**
      * @inheritDoc
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(array $parameters): int
     {
@@ -67,8 +68,7 @@ class ThemeCompileCommand extends AbstractCommand {
     }
 
     /**
-     * @param ModuleCollection $moduleCollection
-     * @throws \Exception
+     * @throws Exception
      */
     protected function compileJavascript(): void {
         //javascript kompilieren
@@ -81,21 +81,20 @@ class ThemeCompileCommand extends AbstractCommand {
 
         if($code != 0) {
             IO::printError(implode(PHP_EOL, $result));
-            throw new \Exception('Could not compile javascript with webpack');
+            throw new Exception('Could not compile javascript with webpack');
         }
 
         IO::printLine(IO::TAB . '- ' . $output);
         IO::printSuccess("> - successfully compiled JavaScript");
     }
 
-    protected function gatherFiles(ModuleCollection $moduleCollection): void {
+    protected function gatherFiles(EntityCollection $moduleCollection): void {
         IO::printWarning("> gathering files from modules...");
 
-        /** @var Module $module */
-        foreach($moduleCollection->getModuleList() as $module) {
-            IO::printLine(IO::TAB . "- " . $module->getName());
+        /** @var ModuleEntity $module */
+        foreach($moduleCollection->getArray() as $module) {
+            IO::printLine(IO::TAB . "- " . $module->getSlug());
         }
-
         $resourceCollector = new ResourceCollector();
         $resourceCollector->gatherModuleData($moduleCollection);
 

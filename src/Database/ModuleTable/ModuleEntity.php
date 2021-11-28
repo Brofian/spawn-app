@@ -11,6 +11,7 @@ class ModuleEntity extends Entity {
     protected bool $active;
     protected string $information;
     protected string $resourceConfig;
+    protected array $decodedConfig = [];
     protected ?\DateTime $createdAt;
     protected ?\DateTime $updatedAt;
 
@@ -22,13 +23,17 @@ class ModuleEntity extends Entity {
         string $resourceConfig,
         ?string $id = null,
         ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null)
+        ?\DateTime $updatedAt = null
+    )
     {
         $this->slug = $slug;
         $this->path = $path;
         $this->active = $active;
         $this->information = $information;
         $this->resourceConfig = $resourceConfig;
+        if($resourceConfig) {
+            $this->decodedConfig = json_decode($resourceConfig, true);
+        }
         $this->id = $id;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
@@ -39,7 +44,7 @@ class ModuleEntity extends Entity {
         return ModuleRepository::class;
     }
 
-    public static function getEntityFromArray(array $values): Entity
+    public static function getEntityFromArray(array $values): ModuleEntity
     {
         $createdAt = null;
         $updatedAt = null;
@@ -118,8 +123,16 @@ class ModuleEntity extends Entity {
         return $this;
     }
 
-    public function getResourceConfig(): string
+    /**
+     * @param bool $asArray
+     * @return string|array
+     */
+    public function getResourceConfig(bool $asArray = false)
     {
+        if($asArray) {
+            return $this->decodedConfig;
+        }
+
         return $this->resourceConfig;
     }
 
@@ -129,7 +142,34 @@ class ModuleEntity extends Entity {
         return $this;
     }
 
+    /**
+     * @return mixed;
+     */
+    public function getResourceConfigValue(string $key, $default = null) {
+        if(isset($this->decodedConfig[$key])) {
+            return $this->decodedConfig[$key];
+        }
+        return $default;
+    }
 
+    /**
+     * @param ModuleEntity[] $moduleEntities
+     * @return array
+     */
+    public static function sortModuleEntityArrayByWeight(array $moduleEntities): array {
+        usort($moduleEntities, function($a, $b) {
+            /** @var $a ModuleEntity */
+            /** @var $b ModuleEntity */
+            $aWeight = $a->getResourceConfigValue('weight', 0);
+            $bWeight = $b->getResourceConfigValue('weight', 0);
+
+            if($aWeight < $bWeight) return -1;
+            else if($aWeight > $bWeight) return 1;
+            else return 0;
+        });
+
+        return $moduleEntities;
+    }
 
 
 
