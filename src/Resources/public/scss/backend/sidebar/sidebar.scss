@@ -10,6 +10,8 @@
 
 	.backend_sidebar_container {
 		width: 100%;
+		padding-bottom: 2rem;
+		position: relative;
 
 		.backend_sidebar_top {
 			padding: 10px;
@@ -82,6 +84,33 @@
 			}
 
 		}
+
+		.backend_sidebar_profile {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			border-top: 2px solid $dark-gray;
+			cursor: pointer;
+			padding: 2rem 0 0 0;
+
+			.backend_sidebar_profile_icon {
+				filter: invert(1);
+				position: absolute;
+				top: 0;
+				right: 0.5rem;
+				height: 2rem;
+				width: 1.4rem;
+			}
+
+
+			.backend_sidebar_profile_box {
+				overflow: hidden;
+				max-height: 0;
+				padding-left: 10px;
+			}
+		}
+
 
 	}
 

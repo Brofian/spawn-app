@@ -2,6 +2,7 @@
 
 namespace spawnApp\Controller\Backend;
 
+use http\Exception\InvalidArgumentException;
 use spawn\system\Core\Base\Controller\AbstractBackendController;
 use spawn\system\Core\Base\Database\Definition\TableDefinition\ColumnDefinition;
 use spawn\system\Core\Contents\Response\AbstractResponse;
@@ -71,5 +72,30 @@ class AdminLoginController extends AbstractBackendController {
         ]);
     }
 
+
+    /**
+     * @route /backend/logout
+     * @locked
+     * @return AbstractResponse
+     */
+    public function logoutAction(): AbstractResponse {
+        $errors = [];
+
+        if($this->adminLoginManager->isAdminLoggedIn()) {
+            try {
+                $this->adminLoginManager->logoutAdmin();
+            }
+            catch (\Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        $wasSuccess = empty($errors);
+        return new JsonResponse([
+            'success' => $wasSuccess,
+            'reload' => $wasSuccess,
+            'errors' => $errors
+        ]);
+    }
 
 }

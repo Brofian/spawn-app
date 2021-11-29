@@ -8,7 +8,3 @@ a:active,
 a:hover {
 	color: darken($primary, 10%);
 }
-
-.clickable {
-	cursor: pointer;
-}

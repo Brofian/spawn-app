@@ -2,4 +2,6 @@
 	flex: 1 1 80%;
 	display: inline-block;
 	position: relative;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }

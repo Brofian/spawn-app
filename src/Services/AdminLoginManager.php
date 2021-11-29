@@ -2,6 +2,7 @@
 
 namespace spawnApp\Services;
 
+use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\EventSystem\Events\RequestRoutedEvent;
 use spawn\system\Core\Base\EventSystem\EventSubscriberInterface;
 use spawn\system\Core\Helper\SessionHelper;
@@ -9,6 +10,7 @@ use spawn\system\Core\Helper\UUID;
 use spawn\system\Core\Request;
 use spawn\system\Core\Services\ServiceContainerProvider;
 use spawn\system\Core\Services\ServiceTags;
+use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Controller\Backend\Exceptions\AdminUserNotFoundException;
 use spawnApp\Database\AdministratorTable\AdministratorEntity;
 use spawnApp\Database\AdministratorTable\AdministratorRepository;
@@ -114,8 +116,13 @@ class AdminLoginManager implements EventSubscriberInterface {
         $request->set('admin-user', $admin);
     }
 
-    public static function getAdminUserFromRequest(Request $request): ?AdministratorEntity {
-        $adminUser =  $request->get('admin-user');
+    public static function getAdminUserFromRequest(Request $request = null): ?AdministratorEntity {
+        if($request === null) {
+            /** @var Request $request */
+            $request = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.kernel.request');
+        }
+
+        $adminUser = $request->get('admin-user');
         if($adminUser instanceof AdministratorEntity) {
             return $adminUser;
         }
@@ -148,6 +155,20 @@ class AdminLoginManager implements EventSubscriberInterface {
         }
 
         return null;
+    }
+
+    /**
+     * @throws Exception
+     * @throws WrongEntityForRepositoryException
+     */
+    public function logoutAdmin(): void {
+        $adminEntity = self::getAdminUserFromRequest();
+
+        $this->sessionHelper->destroySession();
+        $adminEntity->setLoginExpiration(null);
+        $adminEntity->setLoginHash(null);
+
+        $this->administratorRepository->upsert($adminEntity);
     }
 
 }
