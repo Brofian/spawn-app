@@ -49,8 +49,8 @@ class ModuleEntity extends Entity {
         $createdAt = null;
         $updatedAt = null;
         try {
-            $createdAt = new \DateTime($values['updatedAt']);
-            $updatedAt = new \DateTime($values['updatedAt']);
+            if(isset($values['createdAt'])) $createdAt = new \DateTime($values['createdAt']);
+            if(isset($values['updatedAt'])) $updatedAt = new \DateTime($values['updatedAt']);
         }
         catch (\Exception $e) {}
 

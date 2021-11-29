@@ -4,6 +4,7 @@ namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
 use spawn\system\Core\Custom\AbstractCommand;
+use spawn\system\Core\Custom\Stopwatch;
 
 class CacheClearCommand extends AbstractCommand  {
 
@@ -29,8 +30,8 @@ class CacheClearCommand extends AbstractCommand  {
         $clearAll = !($parameters['resources'] || $parameters['compiled'] || $parameters['generated'] || $parameters['twig']);
 
 
-        IO::printWarning('Start clearing caches...');
-        $startingTime = microtime(true) * 1000;
+        IO::printWarning('   :: Start clearing caches...');
+        Stopwatch::start();
 
         if($clearAll || $parameters['resources']) {
             $this->clearResourceCache();
@@ -45,9 +46,7 @@ class CacheClearCommand extends AbstractCommand  {
             $this->clearTwigCache();
         }
 
-        $endingTime = microtime(true) * 1000;
-        $duration = ($endingTime-$startingTime);
-        IO::printWarning('Cleared caches in '.round($duration, 3).'ms!');
+        IO::printSuccess('   :: Cleared caches in '.Stopwatch::end(3).'!');
         IO::reset();
 
         return 0;
@@ -56,25 +55,25 @@ class CacheClearCommand extends AbstractCommand  {
 
 
     protected function clearCompiledCache(): void {
-        IO::printWarning(' > Clearing compiled files');
+        IO::printWarning('      :: Clearing compiled files', 1);
         $cacheDir = ROOT.CACHE_DIR.'/public';
         rrmdir($cacheDir);
     }
 
     protected function clearGeneratedCache(): void {
-        IO::printWarning(' > Clearing auto generated files');
+        IO::printWarning('      :: Clearing auto generated files', 1);
         $cacheDir = ROOT.CACHE_DIR.'/private/generated';
         rrmdir($cacheDir);
     }
 
     protected function clearResourceCache(): void {
-        IO::printWarning(' > Clearing module resources');
+        IO::printWarning('      :: Clearing module resources', 1);
         $cacheDir = ROOT.CACHE_DIR.'/resources';
         rrmdir($cacheDir);
     }
 
     protected function clearTwigCache(): void {
-        IO::printWarning(' > Clearing twig cache');
+        IO::printWarning('      :: Clearing twig cache', 1);
         $cacheDir = ROOT.CACHE_DIR.'/private/twig';
         rrmdir($cacheDir);
     }

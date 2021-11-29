@@ -89,14 +89,14 @@ class ModulesRefreshCommand extends AbstractCommand {
         /** @var ModuleEntity $availableModule */
         foreach($moduleCollection->getArray() as $availableModule) {
             if(!in_array($availableModule->getPath(), $registeredPaths)) {
-                $newModules = $availableModule;
+                $newModules[] = $availableModule;
             }
         }
 
         /** @var ModuleEntity $module */
         foreach($newModules as $module) {
             $this->moduleRepository->upsert($module);
-            IO::printWarning('Added new module: ' .$module->getSlug());
+            IO::printWarning('   :: Added new module: ' .$module->getSlug());
         }
 
         if($deleteMissing) {
@@ -112,7 +112,7 @@ class ModulesRefreshCommand extends AbstractCommand {
         }
 
 
-        IO::printSuccess('> successfully refreshed modules');
+        IO::printSuccess('> Successfully refreshed modules');
     }
 
     /**

@@ -163,14 +163,14 @@ class MigrationExecuteCommand extends AbstractCommand {
                 $m->run($this->databaseHelper);
 
                 $newMigrations[] = $migration;
-                IO::printSuccess("> executed Migration \"$migrationClass\"", 1);
+                IO::printSuccess("   :: executed Migration \"$migrationClass\"", 1);
                 $count++;
             } catch (\Exception $e) {
                 IO::printError('Error on running migration "'.$migrationClass.'"');
                 throw $e;
             }
 
-            IO::printSuccess('> Successfully executed '.IO::BLUE_TEXT.$count.IO::GREEN_TEXT.' Migratins!');
+            IO::printSuccess('> Successfully executed '.IO::BLUE_TEXT.$count.IO::GREEN_TEXT.' Migrations!');
         }
 
     }

@@ -39,7 +39,6 @@ class SpawnSetupCommand extends AbstractCommand {
     {
         (new PrintSpawnCommand())->execute([]);
 
-
         $confirmation = IO::readLine(IO::LIGHT_RED_TEXT.'This action depends on having an empty database. Do you want to continue? (yes/no/y/n)'.IO::DEFAULT_TEXT, function ($answer) {
             return in_array($answer, ['yes','no','y','n']);
         });
@@ -62,7 +61,6 @@ class SpawnSetupCommand extends AbstractCommand {
             return 1;
         }
 
-
         $container = ServiceContainerProvider::getServiceContainer();
 
 
@@ -72,20 +70,20 @@ class SpawnSetupCommand extends AbstractCommand {
         //refresh modules
         /** @var ModulesRefreshCommand $modulesRefreshCommand */
         $modulesRefreshCommand = $container->get('system.command.module_refresh');
-        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray(['m']));
+        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray(['m'=>true]));
 
         //update database
         (new DatabaseUpdateCommand())->execute(DatabaseUpdateCommand::createParameterArray([]));
 
-        //refresh actions
-        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray(['a']));
-
         //execute migrations
-        /** @var ModulesRefreshCommand $modulesRefreshCommand */
+        /** @var MigrationExecuteCommand $modulesRefreshCommand */
         $migrationExecuteCommand = $container->get('system.command.migration_execute');
-        $migrationExecuteCommand->execute(ModulesRefreshCommand::createParameterArray([]));
+        $migrationExecuteCommand->execute(MigrationExecuteCommand::createParameterArray([]));
 
-        //execute migrations
+        //refresh actions
+        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray(['a'=>true]));
+
+        //clear cache
         (new CacheClearCommand())->execute(CacheClearCommand::createParameterArray([]));
 
         return 0;
