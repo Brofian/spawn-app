@@ -18,7 +18,7 @@ class DatabaseUpdateCommand extends AbstractCommand {
         return 'Updates the database by the definitions inside of modules';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [];
     }

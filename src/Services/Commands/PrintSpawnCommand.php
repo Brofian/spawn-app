@@ -17,7 +17,7 @@ class PrintSpawnCommand extends AbstractCommand {
         return 'Prints out the Title of the S.P.A.W.N. Project';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [];
     }

@@ -22,7 +22,7 @@ class ThemeCompileCommand extends AbstractCommand {
         return '';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [
             'js' => ['j', 'javascript'],

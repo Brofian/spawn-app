@@ -14,7 +14,7 @@ class SpawnBuildCommand extends AbstractCommand  {
         return 'Builds everything';
     }
 
-    protected static function getParameters(): array   {
+    public static function getParameters(): array   {
         return [];
     }
 

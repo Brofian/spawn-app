@@ -17,7 +17,7 @@ class ModuleCreateCommand extends AbstractCommand {
         return 'A shortcut for creating a new module with default files';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [];
     }

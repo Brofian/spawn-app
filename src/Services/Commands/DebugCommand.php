@@ -15,7 +15,7 @@ class DebugCommand extends AbstractCommand  {
         return 'Gives some Debug output';
     }
 
-    protected static function getParameters(): array   {
+    public static function getParameters(): array   {
         return [
             'debug' => ['debug', 'd'],
             'test' => 't',

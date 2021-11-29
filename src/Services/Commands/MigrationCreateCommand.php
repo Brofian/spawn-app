@@ -20,7 +20,7 @@ class MigrationCreateCommand extends AbstractCommand {
         return 'Creates a default Migration for developers to fill with commands';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [
             'name' => ['n', 'name'],

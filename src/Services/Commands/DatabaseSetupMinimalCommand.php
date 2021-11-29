@@ -18,7 +18,7 @@ class DatabaseSetupMinimalCommand extends AbstractCommand {
         return 'Sets up the database with the minimal requirements';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [];
     }

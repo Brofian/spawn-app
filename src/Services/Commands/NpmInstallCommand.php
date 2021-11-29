@@ -15,7 +15,7 @@ class NpmInstallCommand extends AbstractCommand  {
         return 'Installs or updates the dependencies for all npm actions';
     }
 
-    protected static function getParameters(): array   {
+    public static function getParameters(): array   {
         return [];
     }
 

@@ -39,7 +39,7 @@ class MigrationExecuteCommand extends AbstractCommand {
         return 'Executes module migrations to update the database';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [];
     }

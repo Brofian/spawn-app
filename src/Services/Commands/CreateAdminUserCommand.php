@@ -22,7 +22,7 @@ class CreateAdminUserCommand extends AbstractCommand {
         return 'Creates an admin user for the backend';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [
             'username' => ['u', 'username'],

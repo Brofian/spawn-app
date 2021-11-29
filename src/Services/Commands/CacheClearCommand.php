@@ -15,7 +15,7 @@ class CacheClearCommand extends AbstractCommand  {
         return 'Clears the caches. If no parameter is passed, all caches are cleared';
     }
 
-    protected static function getParameters(): array   {
+    public static function getParameters(): array   {
         return [
             'resources' => 'r',
             'compiled' => 'c',

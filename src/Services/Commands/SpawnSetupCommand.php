@@ -23,7 +23,7 @@ class SpawnSetupCommand extends AbstractCommand {
         return 'Executes the default setup for a clean start in the project';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [];
     }

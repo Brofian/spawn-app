@@ -21,7 +21,7 @@ class ListModulesCommand extends AbstractCommand {
         return 'Outputs a list of all available modules';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [
             'refresh' => ['r', '--refresh']

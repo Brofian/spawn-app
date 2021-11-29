@@ -38,7 +38,7 @@ class ModulesRefreshCommand extends AbstractCommand {
         return 'Refreshes module data';
     }
 
-    protected static function getParameters(): array
+    public static function getParameters(): array
     {
         return [
             'modules' => 'm',
