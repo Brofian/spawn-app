@@ -8,7 +8,8 @@
         <div class="login-frame">
 
             <form action="{{ seo_url('system.backend.administrator', 'loginSubmitAction') }}" method="get" data-ajax-form>
-
+                {{ csrf('admin.login.token') }}
+                {{ honeypot('age') }}
                 <div class="h2 inset"></div>
 
                 <div class="spacer-m"></div>

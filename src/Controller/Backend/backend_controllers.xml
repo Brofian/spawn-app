@@ -14,6 +14,7 @@
 
     <service id="system.backend.administrator" class="spawnApp\Controller\Backend\AdminLoginController">
         <argument type='service' value="system.service.admin_login_manager"/>
+        <argument type='service' value="system.csrf_token.helper"/>
         <tag>base.controller</tag>
     </service>
 

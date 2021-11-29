@@ -8,20 +8,26 @@ use spawn\system\Core\Base\Database\Definition\TableDefinition\ColumnDefinition;
 use spawn\system\Core\Contents\Response\AbstractResponse;
 use spawn\system\Core\Contents\Response\JsonResponse;
 use spawn\system\Core\Contents\Response\TwigResponse;
+use spawn\system\Core\Custom\CSRFTokenAssistant;
 use spawn\system\Core\Request;
+use spawn\system\Core\Services\Service;
 use spawn\system\Core\Services\ServiceContainerProvider;
+use spawnApp\Extensions\Exceptions\HoneypotException;
 use spawnApp\Services\AdminLoginManager;
 
 class AdminLoginController extends AbstractBackendController {
 
     protected AdminLoginManager $adminLoginManager;
+    protected CSRFTokenAssistant $csrfTokenAssistant;
 
     public function __construct(
-        AdminLoginManager $adminLoginManager
+        AdminLoginManager $adminLoginManager,
+        CSRFTokenAssistant $csrfTokenAssistant
     )
     {
         parent::__construct();
         $this->adminLoginManager = $adminLoginManager;
+        $this->csrfTokenAssistant = $csrfTokenAssistant;
     }
 
 
@@ -36,7 +42,6 @@ class AdminLoginController extends AbstractBackendController {
      * @return AbstractResponse
      */
     public function loginAction(): AbstractResponse {
-
         return new TwigResponse('backend/login/page.html.twig');
     }
 
@@ -50,10 +55,20 @@ class AdminLoginController extends AbstractBackendController {
         $errors = [];
 
         try {
-            /** @var Request $request */
-            $request = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.kernel.request');
+            $serviceContainer = ServiceContainerProvider::getServiceContainer();
 
+            /** @var Request $request */
+            $request = $serviceContainer->getServiceInstance('system.kernel.request');
             $post = $request->getPost();
+
+            //honeypot
+            if($post->get('age')) {
+                throw new HoneypotException();
+            }
+
+            //csrf validation
+            $this->csrfTokenAssistant->validateToken($post->get('csrf'), 'admin.login.token');
+
             $this->adminLoginManager->tryAdminLogin(
                 $post->get('username'),
                 $post->get('password')

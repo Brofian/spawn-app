@@ -11,4 +11,21 @@
     </service>
 
 
+    <service
+            id="spawn.app.twig.extension.function.csrf_token"
+            class="spawnApp\Extensions\Twig\CSRFTokenFunction"
+            static="true"
+    >
+        <tag>extension.twig</tag>
+    </service>
+
+    <service
+            id="spawn.app.twig.extension.function.form_honeypot"
+            class="spawnApp\Extensions\Twig\FormHoneypotFunction"
+            static="true"
+    >
+        <tag>extension.twig</tag>
+    </service>
+
+
 </services>
