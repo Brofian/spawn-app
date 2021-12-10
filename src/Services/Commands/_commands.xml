@@ -62,6 +62,10 @@
         <tag>console.command</tag>
     </service>
 
+    <service id="system.command.cron_queue_start" class="spawnApp\Services\Commands\CronQueueCommand">
+        <tag>console.command</tag>
+    </service>
+
 
 </services>
 

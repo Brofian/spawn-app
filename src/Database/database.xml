@@ -48,4 +48,16 @@
         <tag>base.service.static</tag>
     </service>
 
+
+
+    <!-- Cronjobs -->
+    <service id="system.database.table.crons" class="spawnApp\Database\CronTable\CronTable" static="true">
+        <tag>database.table</tag>
+    </service>
+
+    <service id="system.repository.crons" class="spawnApp\Database\CronTable\CronRepository" static="true">
+        <argument type="service" value="system.database.table.crons" />
+        <tag>base.service.static</tag>
+    </service>
+
 </services>
