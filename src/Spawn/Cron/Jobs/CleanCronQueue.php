@@ -2,9 +2,23 @@
 
 namespace spawnCore\Cron\Jobs;
 
+use spawn\system\Core\Base\Database\DatabaseConnection;
+use spawnApp\Database\CronTable\CronRepository;
+use spawnApp\Database\CronTable\CronTable;
 use spawnCore\Cron\AbstractCron;
+use spawnCore\Cron\CronStates;
 
 class CleanCronQueue extends AbstractCron {
+
+    protected CronRepository $cronRepository;
+
+    public function __construct(
+        CronRepository $cronRepository
+    )
+    {
+        $this->cronRepository = $cronRepository;
+    }
+
 
     public static function getCronTime(): string
     {
@@ -20,8 +34,23 @@ class CleanCronQueue extends AbstractCron {
 
     public function run(): int
     {
+        //get Timestamp from one week ago
+        $lastWeek = new \DateTime('-1 week');
 
-        $this->addInfo('Hello world');
+        $cronEntities = $this->cronRepository->search([
+            'state' => CronStates::SUCCESS,
+            'updatedAt' => [
+                'operator' => '>',
+                'value' => $lastWeek->format('Y-m-d')
+            ]
+        ]);
+
+        dd('TODO: Find out, why this does not return any lines (the cause is the updatedAt condition)');
+
+
+        //TODO cleanup
+
+        $this->addInfo('');
 
         return 0;
     }

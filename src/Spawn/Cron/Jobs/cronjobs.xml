@@ -3,6 +3,7 @@
 <services>
 
     <service id="system.core.cron.job.clean_cron_queue" class="spawnCore\Cron\Jobs\CleanCronQueue">
+        <argument type="service" value="system.repository.crons" />
         <tag>cron.service</tag>
     </service>
 
