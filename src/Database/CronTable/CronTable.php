@@ -9,6 +9,7 @@ use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringCol
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
 use spawn\system\Core\Base\Database\Definition\TableDefinition\AbstractTable;
+use spawnCore\Cron\CronStates;
 
 class CronTable extends AbstractTable {
 
@@ -20,7 +21,7 @@ class CronTable extends AbstractTable {
             new UuidColumn('id', null),
             new StringColumn('action', false, null, false, 255, true),
             new StringColumn('result', true, ''),
-            new StringColumn('state', false, 'open', false, 255, true),
+            new StringColumn('state', false, CronStates::DEFAULT_STATE, false, 255, true),
             new UpdatedAtColumn(),
             new CreatedAtColumn()
         ];

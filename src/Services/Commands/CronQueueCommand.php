@@ -8,6 +8,7 @@ use spawn\system\Core\Base\Database\Definition\EntityCollection;
 use spawn\system\Core\Custom\AbstractCommand;
 use spawn\system\Core\Helper\FrameworkHelper\ResourceCollector;
 use spawn\system\Core\Helper\ScssHelper;
+use spawn\system\Core\Services\ServiceContainerProvider;
 use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnCore\Cron\CronManager;
 
@@ -34,10 +35,9 @@ class CronQueueCommand extends AbstractCommand {
      */
     public function execute(array $parameters): int
     {
-
-        $cronManager = new CronManager();
-        $cronManager->shouldCronBeExecuted('* * * * *');
-
+        /** @var CronManager $cronManager */
+        $cronManager = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.core.cron.manager');
+        $cronManager->executeCrons();
 
         return 0;
     }

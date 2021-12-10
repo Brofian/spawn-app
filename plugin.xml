@@ -19,6 +19,8 @@
 
         <import file="/src/Database/database.xml"/>
 
+        <import file="/src/Spawn/services.xml"/>
+
     </services>
 
 

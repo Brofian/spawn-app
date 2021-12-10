@@ -4,6 +4,7 @@ namespace spawnApp\Database\CronTable;
 
 
 use spawn\system\Core\Base\Database\Definition\Entity;
+use spawnCore\Cron\CronStates;
 
 class CronEntityDefinition extends Entity
 {
@@ -16,7 +17,7 @@ class CronEntityDefinition extends Entity
     public function __construct(
         string $action,
         string $result,
-        string $state = 'open',
+        string $state = CronStates::DEFAULT_STATE,
         ?string $id = null,
         ?\DateTime $createdAt = null,
         ?\DateTime $updatedAt = null
@@ -24,6 +25,7 @@ class CronEntityDefinition extends Entity
     {
         $this->action = $action;
         $this->result = $result;
+        $this->state = $state;
         $this->id = $id;
         $this->updatedAt = $updatedAt;
         $this->createdAt = $createdAt;
