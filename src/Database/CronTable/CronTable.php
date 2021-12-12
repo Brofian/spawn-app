@@ -2,9 +2,7 @@
 
 namespace spawnApp\Database\CronTable;
 
-use spawnCore\Database\Entity\TableDefinition\DefaultColumns\BooleanColumn;
 use spawnCore\Database\Entity\TableDefinition\DefaultColumns\CreatedAtColumn;
-use spawnCore\Database\Entity\TableDefinition\DefaultColumns\DateTimeColumn;
 use spawnCore\Database\Entity\TableDefinition\DefaultColumns\StringColumn;
 use spawnCore\Database\Entity\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawnCore\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;

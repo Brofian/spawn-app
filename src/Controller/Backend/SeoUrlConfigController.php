@@ -3,13 +3,14 @@
 
 namespace spawnApp\Controller\Backend;
 
-use spawn\system\Core\Base\Controller\AbstractBackendController;
-use spawn\system\Core\Contents\Response\AbstractResponse;
-use spawn\system\Core\Contents\Response\JsonResponse;
-use spawn\system\Core\Contents\Response\TwigResponse;
-use spawn\system\Core\Request;
+use Exception;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Services\SeoUrlManager;
+use spawnCore\CardinalSystem\Request;
+use spawnCore\Custom\FoundationStorage\AbstractBackendController;
+use spawnCore\Custom\Response\AbstractResponse;
+use spawnCore\Custom\Response\JsonResponse;
+use spawnCore\Custom\Response\TwigResponse;
 
 class SeoUrlConfigController extends AbstractBackendController {
 
@@ -115,7 +116,7 @@ class SeoUrlConfigController extends AbstractBackendController {
 
             $this->seoUrlManager->saveSeoUrlEntity($seoUrlEntity);
         }
-        catch(\Exception $e) {
+        catch(Exception $e) {
             $errors[] = $e->getMessage();
         }
 

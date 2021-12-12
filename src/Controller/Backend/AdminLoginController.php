@@ -2,18 +2,17 @@
 
 namespace spawnApp\Controller\Backend;
 
-use http\Exception\InvalidArgumentException;
-use spawn\system\Core\Base\Controller\AbstractBackendController;
-use spawnCore\Database\Entity\TableDefinition\ColumnDefinition;
-use spawn\system\Core\Contents\Response\AbstractResponse;
-use spawn\system\Core\Contents\Response\JsonResponse;
-use spawn\system\Core\Contents\Response\TwigResponse;
-use spawn\system\Core\Custom\CSRFTokenAssistant;
-use spawn\system\Core\Request;
-use spawn\system\Core\Services\Service;
-use spawn\system\Core\Services\ServiceContainerProvider;
+
+use Exception;
 use spawnApp\Extensions\Exceptions\HoneypotException;
 use spawnApp\Services\AdminLoginManager;
+use spawnCore\CardinalSystem\Request;
+use spawnCore\Custom\FoundationStorage\AbstractBackendController;
+use spawnCore\Custom\Gadgets\CSRFTokenAssistant;
+use spawnCore\Custom\Response\AbstractResponse;
+use spawnCore\Custom\Response\JsonResponse;
+use spawnCore\Custom\Response\TwigResponse;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class AdminLoginController extends AbstractBackendController {
 
@@ -74,7 +73,7 @@ class AdminLoginController extends AbstractBackendController {
                 $post->get('password')
             );
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $errors[] = $e->getMessage();
         }
 
@@ -100,7 +99,7 @@ class AdminLoginController extends AbstractBackendController {
             try {
                 $this->adminLoginManager->logoutAdmin();
             }
-            catch (\Exception $e) {
+            catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }

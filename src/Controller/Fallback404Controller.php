@@ -3,9 +3,9 @@
 namespace spawnApp\Controller;
 
 
-use spawn\system\Core\Base\Controller\AbstractController;
-use spawn\system\Core\Contents\Response\AbstractResponse;
-use spawn\system\Core\Contents\Response\SimpleResponse;
+use spawnCore\Custom\FoundationStorage\AbstractController;
+use spawnCore\Custom\Response\AbstractResponse;
+use spawnCore\Custom\Response\SimpleResponse;
 
 class Fallback404Controller extends AbstractController  {
 

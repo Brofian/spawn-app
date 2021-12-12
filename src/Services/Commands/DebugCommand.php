@@ -2,8 +2,9 @@
 
 namespace spawnApp\Services\Commands;
 
+
 use bin\spawn\IO;
-use spawn\system\Core\Custom\AbstractCommand;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
 
 class DebugCommand extends AbstractCommand  {
 

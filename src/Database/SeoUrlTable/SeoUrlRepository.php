@@ -2,9 +2,11 @@
 
 namespace spawnApp\Database\SeoUrlTable;
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Database\Entity\TableRepository;
-use spawn\system\Core\Helper\UUID;
+use spawnCore\Custom\Gadgets\UUID;
 
 class SeoUrlRepository extends TableRepository {
 
@@ -14,9 +16,14 @@ class SeoUrlRepository extends TableRepository {
     }
 
 
+    /**
+     * @param array $values
+     * @return array
+     * @throws Exception
+     */
     protected function prepareValuesForInsert(array $values): array
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         $values['id'] = UUID::randomBytes();
         $values['parameters'] = json_encode($values['parameters']);
@@ -48,7 +55,7 @@ class SeoUrlRepository extends TableRepository {
     {
         $updateValues['id'] = UUID::hexToBytes($updateValues['id']);
         $updateValues['parameters'] = json_encode($updateValues['parameters']);
-        $updateValues['updatedAt'] = new \DateTime();
+        $updateValues['updatedAt'] = new DateTime();
 
         return $updateValues;
     }

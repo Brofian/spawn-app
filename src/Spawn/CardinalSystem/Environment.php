@@ -2,7 +2,7 @@
 
 namespace spawnCore\CardinalSystem;
 
-use spawn\system\Core\Custom\Logger;
+use spawnCore\Custom\Gadgets\Logger;
 use Throwable;
 
 /*

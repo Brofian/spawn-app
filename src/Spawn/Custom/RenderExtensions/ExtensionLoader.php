@@ -9,10 +9,10 @@ use spawnCore\Custom\RenderExtensions\Twig\AssetFunctionExtension;
 use spawnCore\Custom\RenderExtensions\Twig\DumpFunctionExtension;
 use spawnCore\Custom\RenderExtensions\Twig\HashFilterExtension;
 use spawnCore\Custom\RenderExtensions\Twig\IconFilterExtension;
+use spawnCore\Custom\RenderExtensions\Twig\PreviewFilterExtension;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
 use spawnCore\ServiceSystem\ServiceTags;
 use Twig\Environment;
-use Twig\PreviewFilterExtension;
 
 class ExtensionLoader
 {

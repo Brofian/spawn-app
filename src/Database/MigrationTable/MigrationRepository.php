@@ -2,9 +2,11 @@
 
 namespace spawnApp\Database\MigrationTable;
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Database\Entity\TableRepository;
-use spawn\system\Core\Helper\UUID;
+use spawnCore\Custom\Gadgets\UUID;
 
 class MigrationRepository extends TableRepository {
 
@@ -13,10 +15,15 @@ class MigrationRepository extends TableRepository {
         return MigrationEntity::class;
     }
 
+    /**
+     * @param array $values
+     * @return array
+     * @throws Exception
+     */
     protected function prepareValuesForInsert(array $values): array
     {
         $uuid = UUID::randomBytes();
-        $now = new \DateTime();
+        $now = new DateTime();
 
         $values['id'] = $uuid;
         $values['createdAt'] = $now;
@@ -44,7 +51,7 @@ class MigrationRepository extends TableRepository {
 
     protected function prepareValuesForUpdate(array $updateValues): array
     {
-        $updateValues['updatedAt'] = new \DateTime();
+        $updateValues['updatedAt'] = new DateTime();
 
         return $updateValues;
     }

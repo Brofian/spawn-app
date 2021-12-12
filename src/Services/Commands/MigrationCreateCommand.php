@@ -2,10 +2,11 @@
 
 namespace spawnApp\Services\Commands;
 
+
 use bin\spawn\IO;
-use spawn\system\Core\Base\Custom\FileEditor;
-use spawn\system\Core\Custom\AbstractCommand;
 use spawnApp\Database\ModuleTable\ModuleEntity;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\Gadgets\FileEditor;
 
 class MigrationCreateCommand extends AbstractCommand {
 

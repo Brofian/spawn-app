@@ -4,11 +4,11 @@ namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Services\ServiceContainerProvider;
-use spawn\system\Throwables\DatabaseConnectionException;
-use spawn\system\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Helpers\DatabaseHelper;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class SpawnSetupCommand extends AbstractCommand {
 

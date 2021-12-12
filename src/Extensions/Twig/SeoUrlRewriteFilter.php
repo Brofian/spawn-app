@@ -2,9 +2,10 @@
 
 namespace spawnApp\Extensions\Twig;
 
-use spawn\system\Core\Extensions\Twig\Abstracts\FunctionExtension;
-use spawn\system\Core\Helper\RoutingHelper;
-use spawn\system\Core\Services\ServiceContainerProvider;
+
+use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FunctionExtension;
+use spawnCore\NavigationSystem\Navigator;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class SeoUrlRewriteFilter extends FunctionExtension {
 
@@ -24,7 +25,7 @@ class SeoUrlRewriteFilter extends FunctionExtension {
                 $action .= 'Action';
             }
 
-            /** @var RoutingHelper $routingHelper */
+            /** @var Navigator $routingHelper */
             $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
 

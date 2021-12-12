@@ -3,10 +3,12 @@
 namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Services\ServiceContainerProvider;
+use Doctrine\DBAL\Exception;
 use spawnApp\Database\AdministratorTable\AdministratorEntity;
 use spawnApp\Database\AdministratorTable\AdministratorRepository;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class CreateAdminUserCommand extends AbstractCommand {
 
@@ -35,8 +37,8 @@ class CreateAdminUserCommand extends AbstractCommand {
     /**
      * @param array $parameters
      * @return int
-     * @throws \Doctrine\DBAL\Exception
-     * @throws \spawn\system\Throwables\WrongEntityForRepositoryException
+     * @throws WrongEntityForRepositoryException
+     * @throws Exception
      */
     public function execute(array $parameters): int
     {

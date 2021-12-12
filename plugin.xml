@@ -11,7 +11,7 @@
 
     <services>
 
-        <import file="/Spawn/spawn_services.xml"/>
+        <import file="/src/Spawn/spawn_services.xml"/>
 
         <import file="/src/Controller/controller.xml"/>
 
@@ -20,8 +20,6 @@
         <import file="/src/Extensions/extensions.xml"/>
 
         <import file="/src/Database/database.xml"/>
-
-        <import file="/src/Spawn/services.xml"/>
 
     </services>
 

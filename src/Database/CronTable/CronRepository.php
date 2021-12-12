@@ -2,10 +2,12 @@
 
 namespace spawnApp\Database\CronTable;
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Database\Entity\TableDefinition\AbstractTable;
 use spawnCore\Database\Entity\TableRepository;
-use spawn\system\Core\Helper\UUID;
+use spawnCore\Custom\Gadgets\UUID;
 
 class CronRepository extends TableRepository {
 
@@ -30,7 +32,7 @@ class CronRepository extends TableRepository {
     protected function prepareValuesForUpdate(array $updateValues): array
     {
         $updateValues['id'] = UUID::hexToBytes($updateValues['id']);
-        $updateValues['updatedAt'] = new \DateTime();
+        $updateValues['updatedAt'] = new DateTime();
 
         return $updateValues;
     }
@@ -41,9 +43,14 @@ class CronRepository extends TableRepository {
         $entity->setUpdatedAt($updatedValues['updatedAt']);
     }
 
+    /**
+     * @param array $values
+     * @return array
+     * @throws Exception
+     */
     protected function prepareValuesForInsert(array $values): array
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         $values['id'] = UUID::randomBytes();
         $values['createdAt'] = $now;

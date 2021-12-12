@@ -2,9 +2,10 @@
 
 namespace spawnApp\Services\Commands;
 
+
 use bin\spawn\IO;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Helper\FrameworkHelper\DatabaseStructureHelper;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Database\Helpers\DatabaseStructureHelper;
 
 class DatabaseUpdateCommand extends AbstractCommand {
 

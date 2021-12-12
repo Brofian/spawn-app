@@ -3,6 +3,8 @@
 namespace spawnApp\Database\CronTable;
 
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Cron\CronStates;
 
@@ -11,16 +13,16 @@ class CronEntityDefinition extends Entity
     protected string $action;
     protected string $result;
     protected string $state;
-    protected ?\DateTime $createdAt;
-    protected ?\DateTime $updatedAt;
+    protected ?DateTime $createdAt;
+    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $action,
         string $result,
         string $state = CronStates::DEFAULT_STATE,
         ?string $id = null,
-        ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null
     )
     {
         $this->action = $action;
@@ -51,14 +53,14 @@ class CronEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        if(!$values['updatedAt'] instanceof \DateTime) {
-            try {   $values['updatedAt'] = new \DateTime($values['updatedAt']); }
-            catch (\Exception $e) { $values['updatedAt'] = new \DateTime(); }
+        if(!$values['updatedAt'] instanceof DateTime) {
+            try {   $values['updatedAt'] = new DateTime($values['updatedAt']); }
+            catch (Exception $e) { $values['updatedAt'] = new DateTime(); }
         }
 
-        if(!$values['createdAt'] instanceof \DateTime) {
-            try {   $values['createdAt'] = new \DateTime($values['createdAt']); }
-            catch (\Exception $e) { $values['createdAt'] = new \DateTime(); }
+        if(!$values['createdAt'] instanceof DateTime) {
+            try {   $values['createdAt'] = new DateTime($values['createdAt']); }
+            catch (Exception $e) { $values['createdAt'] = new DateTime(); }
         }
 
         return new CronEntity(
@@ -92,22 +94,22 @@ class CronEntityDefinition extends Entity
     }
 
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): void
+    public function setCreatedAt(?DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): void
+    public function setUpdatedAt(?DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

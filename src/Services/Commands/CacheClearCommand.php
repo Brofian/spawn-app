@@ -3,8 +3,8 @@
 namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Custom\Stopwatch;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\Gadgets\Stopwatch;
 
 class CacheClearCommand extends AbstractCommand  {
 

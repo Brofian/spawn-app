@@ -2,6 +2,8 @@
 
 namespace spawnApp\Database\SeoUrlTable;
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 
 class SeoUrlEntityDefinition extends Entity {
@@ -12,8 +14,8 @@ class SeoUrlEntityDefinition extends Entity {
     protected array $parameters;
     protected bool $locked;
     protected bool $active;
-    protected ?\DateTime $createdAt;
-    protected ?\DateTime $updatedAt;
+    protected ?DateTime $createdAt;
+    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $cUrl,
@@ -23,8 +25,8 @@ class SeoUrlEntityDefinition extends Entity {
         bool $locked = false,
         bool $active = true,
         ?string $id = null,
-        ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null)
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null)
     {
         $this->cUrl = $cUrl;
         $this->controller = $controller;
@@ -44,21 +46,21 @@ class SeoUrlEntityDefinition extends Entity {
 
     public static function getEntityFromArray(array $values): Entity
     {
-        if(!$values['updatedAt'] instanceof \DateTime) {
+        if(!$values['updatedAt'] instanceof DateTime) {
             try {
-                $values['updatedAt'] = new \DateTime($values['updatedAt']);
+                $values['updatedAt'] = new DateTime($values['updatedAt']);
             }
-            catch (\Exception $e) {
-                $values['updatedAt'] = new \DateTime();
+            catch (Exception $e) {
+                $values['updatedAt'] = new DateTime();
             }
         }
 
-        if(!$values['createdAt'] instanceof \DateTime) {
+        if(!$values['createdAt'] instanceof DateTime) {
             try {
-                $values['createdAt'] = new \DateTime($values['createdAt']);
+                $values['createdAt'] = new DateTime($values['createdAt']);
             }
-            catch (\Exception $e) {
-                $values['createdAt'] = new \DateTime();
+            catch (Exception $e) {
+                $values['createdAt'] = new DateTime();
             }
         }
 
@@ -70,7 +72,7 @@ class SeoUrlEntityDefinition extends Entity {
             try {
                 $values['parameters'] = json_decode($values['parameters']);
             }
-            catch (\Exception $e) {
+            catch (Exception $e) {
                 $values['parameters'] = [];
             }
         }
@@ -138,23 +140,23 @@ class SeoUrlEntityDefinition extends Entity {
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): self
+    public function setCreatedAt(?DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
         return $this;

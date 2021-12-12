@@ -3,7 +3,8 @@
 namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
-use spawn\system\Core\Custom\AbstractCommand;
+use Exception;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
 
 class NpmInstallCommand extends AbstractCommand  {
 
@@ -30,7 +31,7 @@ class NpmInstallCommand extends AbstractCommand  {
             IO::execInDir('npm install -g --force npx', ROOT);
             IO::execInDir("npm install --force", ROOT . "/src/npm");
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             return $e->getCode();
         }
 

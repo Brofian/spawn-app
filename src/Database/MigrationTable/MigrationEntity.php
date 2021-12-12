@@ -2,16 +2,18 @@
 
 namespace spawnApp\Database\MigrationTable;
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 
 class MigrationEntity extends Entity {
 
     protected string $class;
     protected int $timestamp;
-    protected ?\DateTime $createdAt;
-    protected ?\DateTime $updatedAt;
+    protected ?DateTime $createdAt;
+    protected ?DateTime $updatedAt;
 
-    public function __construct(string $class, int $timestamp, ?string $id = null, ?\DateTime $createdAt = null, ?\DateTime $updatedAt = null)
+    public function __construct(string $class, int $timestamp, ?string $id = null, ?DateTime $createdAt = null, ?DateTime $updatedAt = null)
     {
         $this->class = $class;
         $this->timestamp = $timestamp;
@@ -30,10 +32,10 @@ class MigrationEntity extends Entity {
         $createdAt = null;
         $updatedAt = null;
         try {
-            $createdAt = new \DateTime($values['updatedAt']);
-            $updatedAt = new \DateTime($values['updatedAt']);
+            $createdAt = new DateTime($values['updatedAt']);
+            $updatedAt = new DateTime($values['updatedAt']);
         }
-        catch (\Exception $e) {}
+        catch (Exception $e) {}
 
         return new static(
             $values['class'],
@@ -78,23 +80,23 @@ class MigrationEntity extends Entity {
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): self
+    public function setCreatedAt(?DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
         return $this;

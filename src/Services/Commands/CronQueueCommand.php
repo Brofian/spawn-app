@@ -2,15 +2,9 @@
 
 namespace spawnApp\Services\Commands;
 
-use bin\spawn\IO;
-use Exception;
-use spawnCore\Database\Entity\EntityCollection;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Helper\FrameworkHelper\ResourceCollector;
-use spawn\system\Core\Helper\ScssHelper;
-use spawn\system\Core\Services\ServiceContainerProvider;
-use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnCore\Cron\CronManager;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class CronQueueCommand extends AbstractCommand {
 
@@ -31,7 +25,7 @@ class CronQueueCommand extends AbstractCommand {
 
     /**
      * @inheritDoc
-     * @throws Exception
+     * @throws \Exception
      */
     public function execute(array $parameters): int
     {

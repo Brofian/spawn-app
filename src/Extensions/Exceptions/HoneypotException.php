@@ -2,7 +2,8 @@
 
 namespace spawnApp\Extensions\Exceptions;
 
-use spawn\system\Throwables\AbstractException;
+
+use spawnCore\Custom\Throwables\AbstractException;
 
 class HoneypotException extends AbstractException {
 

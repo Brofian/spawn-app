@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Twig;
+namespace spawnCore\Custom\RenderExtensions\Twig;
 
 
 use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FilterExtension;

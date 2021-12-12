@@ -2,7 +2,8 @@
 
 namespace spawnApp\Services\Commands;
 
-use spawn\system\Core\Custom\AbstractCommand;
+
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
 
 class SpawnBuildCommand extends AbstractCommand  {
 

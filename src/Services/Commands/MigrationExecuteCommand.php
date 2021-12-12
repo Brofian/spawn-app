@@ -4,16 +4,16 @@ namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Base\Custom\FileEditor;
-use spawnCore\Database\Entity\EntityCollection;
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\base\AbstractMigration;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Services\Service;
-use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Database\MigrationTable\MigrationEntity;
 use spawnApp\Database\MigrationTable\MigrationRepository;
 use spawnApp\Database\ModuleTable\ModuleEntity;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\FoundationStorage\AbstractMigration;
+use spawnCore\Custom\Gadgets\FileEditor;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\Database\Helpers\DatabaseHelper;
+use spawnCore\ServiceSystem\Service;
 
 class MigrationExecuteCommand extends AbstractCommand {
 

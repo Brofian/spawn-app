@@ -3,17 +3,17 @@
 namespace spawnApp\Services;
 
 use Doctrine\DBAL\Exception;
-use spawnCore\Database\Entity\EntityCollection;
-use spawn\system\Core\Custom\ClassInspector;
-use spawn\system\Core\Custom\MethodInspector;
-use spawn\system\Core\Helper\UUID;
-use spawn\system\Core\Services\Service;
-use spawn\system\Core\Services\ServiceContainer;
-use spawn\system\Core\Services\ServiceContainerProvider;
-use spawn\system\Core\Services\ServiceTags;
-use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
+use spawnCore\Custom\Gadgets\ClassInspector;
+use spawnCore\Custom\Gadgets\MethodInspector;
+use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\ServiceSystem\Service;
+use spawnCore\ServiceSystem\ServiceContainer;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
+use spawnCore\ServiceSystem\ServiceTags;
 
 class SeoUrlManager {
 
@@ -47,6 +47,11 @@ class SeoUrlManager {
         ])->first();
     }
 
+    /**
+     * @param SeoUrlEntity $seoUrlEntity
+     * @throws Exception
+     * @throws WrongEntityForRepositoryException
+     */
     public function saveSeoUrlEntity(SeoUrlEntity $seoUrlEntity): void {
         $this->seoUrlRepository->upsert($seoUrlEntity);
     }

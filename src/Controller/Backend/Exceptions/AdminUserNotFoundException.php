@@ -2,7 +2,8 @@
 
 namespace spawnApp\Controller\Backend\Exceptions;
 
-use spawn\system\Throwables\AbstractException;
+
+use spawnCore\Custom\Throwables\AbstractException;
 use Throwable;
 
 class AdminUserNotFoundException extends AbstractException {

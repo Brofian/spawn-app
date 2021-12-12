@@ -2,12 +2,13 @@
 
 namespace spawnApp\Services\Commands;
 
+
 use bin\spawn\IO;
-use spawnCore\Database\Entity\EntityCollection;
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\Contents\Modules\ModuleLoader;
-use spawn\system\Core\Custom\AbstractCommand;
 use spawnApp\Database\ModuleTable\ModuleEntity;
+use spawnCore\CardinalSystem\ModuleNetwork\ModuleLoader;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\Database\Helpers\DatabaseHelper;
 
 class ListModulesCommand extends AbstractCommand {
 
@@ -41,7 +42,6 @@ class ListModulesCommand extends AbstractCommand {
     }
 
     public static function getModuleList(): EntityCollection {
-        $dbHelper = new DatabaseHelper();
         $moduleLoader = new ModuleLoader();
         return $moduleLoader->loadModules();
     }

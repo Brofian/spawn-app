@@ -3,6 +3,8 @@
 namespace spawnApp\Database\AdministratorTable;
 
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 
 class AdministratorEntityDefinition extends Entity
@@ -12,9 +14,9 @@ class AdministratorEntityDefinition extends Entity
     protected string $email;
     protected bool $active;
     protected ?string $loginHash;
-    protected ?\DateTime $loginExpiration;
-    protected ?\DateTime $createdAt;
-    protected ?\DateTime $updatedAt;
+    protected ?DateTime $loginExpiration;
+    protected ?DateTime $createdAt;
+    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $username,
@@ -22,10 +24,10 @@ class AdministratorEntityDefinition extends Entity
         string $email,
         bool $active = true,
         ?string $loginHash = null,
-        ?\DateTime $loginExpiration = null,
+        ?DateTime $loginExpiration = null,
         ?string $id = null,
-        ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null
     )
     {
         $this->username = $username;
@@ -62,19 +64,19 @@ class AdministratorEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        if(!$values['updatedAt'] instanceof \DateTime) {
-            try {   $values['updatedAt'] = new \DateTime($values['updatedAt']); }
-            catch (\Exception $e) { $values['updatedAt'] = new \DateTime(); }
+        if(!$values['updatedAt'] instanceof DateTime) {
+            try {   $values['updatedAt'] = new DateTime($values['updatedAt']); }
+            catch (Exception $e) { $values['updatedAt'] = new DateTime(); }
         }
 
-        if(!$values['createdAt'] instanceof \DateTime) {
-            try {   $values['createdAt'] = new \DateTime($values['createdAt']); }
-            catch (\Exception $e) { $values['createdAt'] = new \DateTime(); }
+        if(!$values['createdAt'] instanceof DateTime) {
+            try {   $values['createdAt'] = new DateTime($values['createdAt']); }
+            catch (Exception $e) { $values['createdAt'] = new DateTime(); }
         }
 
-        if(!$values['loginExpiration'] instanceof \DateTime && $values['loginExpiration'] !== null) {
-            try {   $values['loginExpiration'] = new \DateTime($values['loginExpiration']); }
-            catch (\Exception $e) { $values['loginExpiration'] = null; }
+        if(!$values['loginExpiration'] instanceof DateTime && $values['loginExpiration'] !== null) {
+            try {   $values['loginExpiration'] = new DateTime($values['loginExpiration']); }
+            catch (Exception $e) { $values['loginExpiration'] = null; }
         }
 
         return new AdministratorEntity(
@@ -130,22 +132,22 @@ class AdministratorEntityDefinition extends Entity
         $this->active = $active;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): void
+    public function setCreatedAt(?DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): void
+    public function setUpdatedAt(?DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -160,12 +162,12 @@ class AdministratorEntityDefinition extends Entity
         $this->loginHash = $loginHash;
     }
 
-    public function getLoginExpiration(): ?\DateTime
+    public function getLoginExpiration(): ?DateTime
     {
         return $this->loginExpiration;
     }
 
-    public function setLoginExpiration(?\DateTime $loginExpiration): void
+    public function setLoginExpiration(?DateTime $loginExpiration): void
     {
         $this->loginExpiration = $loginExpiration;
     }

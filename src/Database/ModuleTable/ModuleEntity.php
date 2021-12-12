@@ -2,6 +2,8 @@
 
 namespace spawnApp\Database\ModuleTable;
 
+use DateTime;
+use Exception;
 use spawnCore\Database\Entity\Entity;
 
 class ModuleEntity extends Entity {
@@ -12,8 +14,8 @@ class ModuleEntity extends Entity {
     protected string $information;
     protected string $resourceConfig;
     protected array $decodedConfig = [];
-    protected ?\DateTime $createdAt;
-    protected ?\DateTime $updatedAt;
+    protected ?DateTime $createdAt;
+    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $slug,
@@ -22,8 +24,8 @@ class ModuleEntity extends Entity {
         string $information,
         string $resourceConfig,
         ?string $id = null,
-        ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null
     )
     {
         $this->slug = $slug;
@@ -49,10 +51,10 @@ class ModuleEntity extends Entity {
         $createdAt = null;
         $updatedAt = null;
         try {
-            if(isset($values['createdAt'])) $createdAt = new \DateTime($values['createdAt']);
-            if(isset($values['updatedAt'])) $updatedAt = new \DateTime($values['updatedAt']);
+            if(isset($values['createdAt'])) $createdAt = new DateTime($values['createdAt']);
+            if(isset($values['updatedAt'])) $updatedAt = new DateTime($values['updatedAt']);
         }
-        catch (\Exception $e) {}
+        catch (Exception $e) {}
 
         return new static(
             $values['slug'],
@@ -173,23 +175,23 @@ class ModuleEntity extends Entity {
 
 
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): self
+    public function setCreatedAt(?DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
         return $this;

@@ -2,18 +2,19 @@
 
 namespace spawnApp\Services;
 
+use DateTime;
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Helper\SessionHelper;
-use spawn\system\Core\Helper\UUID;
-use spawn\system\Core\Request;
-use spawn\system\Core\Services\ServiceContainerProvider;
-use spawn\system\Core\Services\ServiceTags;
-use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Controller\Backend\Exceptions\AdminUserNotFoundException;
 use spawnApp\Database\AdministratorTable\AdministratorEntity;
 use spawnApp\Database\AdministratorTable\AdministratorRepository;
+use spawnCore\CardinalSystem\Request;
+use spawnCore\Custom\Gadgets\SessionHelper;
+use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
 use spawnCore\EventSystem\Events\RequestRoutedEvent;
 use spawnCore\EventSystem\EventSubscriberInterface;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
+use spawnCore\ServiceSystem\ServiceTags;
 
 class AdminLoginManager implements EventSubscriberInterface
 {
@@ -81,7 +82,7 @@ class AdminLoginManager implements EventSubscriberInterface
         try {
             $loginHash = UUID::randomHex();
             $admin->setLoginHash($loginHash);
-            $admin->setLoginExpiration((new \DateTime())->modify('+1 day'));
+            $admin->setLoginExpiration((new DateTime())->modify('+1 day'));
             $this->administratorRepository->upsert($admin);
             $this->sessionHelper->set('admin-login-hash', $loginHash);
             $this->sessionHelper->set('admin-login-username', $username);
@@ -150,7 +151,7 @@ class AdminLoginManager implements EventSubscriberInterface
 
         $expirationDate = $admin->getLoginExpiration();
 
-        if($expirationDate > new \DateTime()) {
+        if($expirationDate > new DateTime()) {
             //expirationDate is in the future, so the login hash is still valid
             return $admin;
         }

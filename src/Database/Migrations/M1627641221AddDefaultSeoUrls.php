@@ -2,11 +2,13 @@
 
 namespace spawnApp\Database\Migrations;
 
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\base\AbstractMigration;
-use spawn\system\Core\Services\ServiceContainerProvider;
+use Doctrine\DBAL\Exception;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
+use spawnCore\Custom\FoundationStorage\AbstractMigration;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Helpers\DatabaseHelper;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class M1627641221AddDefaultSeoUrls extends AbstractMigration {
     
@@ -16,6 +18,12 @@ class M1627641221AddDefaultSeoUrls extends AbstractMigration {
         return 1627641221;
     }
 
+    /**
+     * @param DatabaseHelper $dbHelper
+     * @return mixed|void
+     * @throws Exception
+     * @throws WrongEntityForRepositoryException
+     */
     function run(DatabaseHelper $dbHelper)
     {
         /** @var SeoUrlRepository $seoUrlRepository */

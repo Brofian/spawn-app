@@ -2,9 +2,8 @@
 
 namespace spawnApp\Extensions\Twig;
 
-use spawn\system\Core\Custom\CSRFTokenAssistant;
-use spawn\system\Core\Extensions\Twig\Abstracts\FunctionExtension;
-use spawn\system\Core\Services\ServiceContainerProvider;
+
+use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FunctionExtension;
 
 class CSRFTokenFunction extends FunctionExtension {
 

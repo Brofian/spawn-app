@@ -4,15 +4,15 @@ namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\Custom\AbstractCommand;
-use spawn\system\Core\Helper\UUID;
-use spawn\system\Core\Services\ServiceContainer;
-use spawn\system\Core\Services\ServiceContainerProvider;
-use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnApp\Database\ModuleTable\ModuleRepository;
 use spawnApp\Services\SeoUrlManager;
+use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Helpers\DatabaseHelper;
+use spawnCore\ServiceSystem\ServiceContainer;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class ModulesRefreshCommand extends AbstractCommand {
 
@@ -118,7 +118,6 @@ class ModulesRefreshCommand extends AbstractCommand {
     /**
      * @param bool $removeStaleActions
      * @throws Exception
-     * @throws WrongEntityForRepositoryException
      */
     protected function refreshActions(bool $removeStaleActions = false): void {
         /** @var ServiceContainer $serviceContainer */
