@@ -2,6 +2,8 @@
 
 namespace spawnCore\CardinalSystem;
 
+use Doctrine\DBAL\Configuration;
+use spawnCore\CardinalSystem\Guardian\Guardian;
 use spawnCore\Custom\Gadgets\Logger;
 use Throwable;
 
@@ -27,38 +29,10 @@ class Environment
             return $this->kernel->getAnswer();
 
         } catch (Throwable $exception) {
-            $this->handleException($exception);
-            return "This can never be reached, because handleException ends with a die()";
+            $guardian = new Guardian();
+            $guardian->handleException($exception);
+            return $guardian->getHandleResponse();
         }
     }
-
-
-    private function handleException(Throwable $exception)
-    {
-
-        Logger::writeToErrorLog($exception->getTraceAsString(), $exception->getMessage());
-
-        if (MODE == 'dev') {
-            $message = $exception->getMessage() ?? 'No error-message provided!';
-            $trace = $exception->getTrace() ?? [];
-
-            echo "ERROR: <b>" . $message . "</b><br><pre>";
-
-            echo "<ul>";
-            foreach ($trace as $step) {
-                echo "<li>";
-                echo "<b>" . ($step['file'] ?? "unknown") . ":" . ($step['line'] ?? "unknown") . "</b>";
-                echo " in function <b>" . $step['function'] . "</b>";
-            }
-            echo "</ul>";
-
-            var_dump($exception);
-        } else {
-            echo "Leider ist etwas schief gelaufen :(";
-        }
-
-        die();
-    }
-
 
 }
