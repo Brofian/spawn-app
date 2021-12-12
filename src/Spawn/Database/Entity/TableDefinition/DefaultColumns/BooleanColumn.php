@@ -1,6 +1,6 @@
 <?php
 
-namespace spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns;
+namespace spawnCore\Database\Entity\TableDefinition\DefaultColumns;
 
 
 use spawnCore\Database\Entity\TableDefinition\AbstractColumn;
@@ -10,7 +10,6 @@ class BooleanColumn extends AbstractColumn {
 
     protected string $columnName;
     protected bool $default;
-
 
     public function __construct(
         string $columnName,

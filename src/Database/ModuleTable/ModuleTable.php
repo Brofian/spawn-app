@@ -2,12 +2,12 @@
 
 namespace spawnApp\Database\ModuleTable;
 
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\BooleanColumn;
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\CreatedAtColumn;
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\JsonColumn;
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
-use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
+use spawnCore\Database\Entity\TableDefinition\DefaultColumns\BooleanColumn;
+use spawnCore\Database\Entity\TableDefinition\DefaultColumns\CreatedAtColumn;
+use spawnCore\Database\Entity\TableDefinition\DefaultColumns\JsonColumn;
+use spawnCore\Database\Entity\TableDefinition\DefaultColumns\StringColumn;
+use spawnCore\Database\Entity\TableDefinition\DefaultColumns\UpdatedAtColumn;
+use spawnCore\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 use spawnCore\Database\Entity\TableDefinition\AbstractTable;
 
 class ModuleTable extends AbstractTable {
