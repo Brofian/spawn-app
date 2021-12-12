@@ -40,7 +40,7 @@ class ThemeCompileCommand extends AbstractCommand {
     {
         $moduleCollection = ListModulesCommand::getModuleList();
 
-        $compileAll = (!!$parameters['js'] && !!$parameters['scss']);
+        $compileAll = !($parameters['js'] || $parameters['scss']);
 
 
 

@@ -2,8 +2,10 @@
 
 namespace spawnCore\Database\Helpers;
 
+use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
 
 class DatabaseHelper
 {
@@ -23,10 +25,28 @@ class DatabaseHelper
     {
         $this->loadDBConfig();
         $this->createConnection();
+        $this->checkConnection();
     }
 
 
-    private function loadDBConfig()
+    /**
+     * @throws DatabaseConnectionException
+     */
+    protected function checkConnection() {
+        try {
+            $connection = $this->getConnection()::getConnection();
+            if(!$connection->isConnected()) {
+                $connection->connect();
+            }
+        } catch (DatabaseConnectionException $e) {
+            throw new DatabaseConnectionException($this->host, $this->database, $this->port, '', $this->username, $this->password, $e);
+        } catch (Exception $e) {
+            throw new DatabaseConnectionException($this->host, $this->database, $this->port, '', $this->username, $this->password, $e);
+        }
+    }
+
+
+    protected function loadDBConfig()
     {
         $this->host = DB_HOST;
         $this->username = DB_USERNAME;
@@ -36,7 +56,7 @@ class DatabaseHelper
     }
 
 
-    private function createConnection()
+    protected function createConnection()
     {
         $this->connection = new DatabaseConnection();
     }

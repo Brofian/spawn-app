@@ -118,6 +118,7 @@ class ModulesRefreshCommand extends AbstractCommand {
     /**
      * @param bool $removeStaleActions
      * @throws Exception
+     * @throws WrongEntityForRepositoryException
      */
     protected function refreshActions(bool $removeStaleActions = false): void {
         /** @var ServiceContainer $serviceContainer */

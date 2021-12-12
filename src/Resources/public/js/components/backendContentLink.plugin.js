@@ -1,6 +1,6 @@
 import Plugin from 'Plugin';
 import DeviceManager from 'DeviceManager';
-import AjaxDataReplace from './ajaxDataReplace.plugin';
+import AjaxDataReplace from './ajaxDataReplace.function';
 
 export default class BackendContentLinkPlugin extends Plugin {
 

@@ -33,7 +33,6 @@ class SpawnSetupCommand extends AbstractCommand {
      * @return int
      * @throws Exception
      * @throws WrongEntityForRepositoryException
-     * @throws DatabaseConnectionException
      */
     public function execute(array $parameters): int
     {
@@ -50,17 +49,6 @@ class SpawnSetupCommand extends AbstractCommand {
 
 
         $databaseHelper = new DatabaseHelper();
-
-        try {
-            $connection = $databaseHelper->getConnection()::getConnection();
-            if(!$connection->isConnected()) {
-                $connection->connect();
-            }
-        }catch (Exception $e) {
-            IO::printError('Cant connect to Database! Aborting...');
-            return 1;
-        }
-
         $container = ServiceContainerProvider::getServiceContainer();
 
 

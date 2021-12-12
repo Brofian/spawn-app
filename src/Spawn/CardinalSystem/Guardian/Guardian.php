@@ -2,14 +2,21 @@
 
 namespace spawnCore\CardinalSystem\Guardian;
 
+use Error;
 use Exception;
 use spawnCore\Custom\Gadgets\Logger;
+use Throwable;
 
 class Guardian {
 
     protected Exception $exception;
 
-    public function handleException(Exception $exception): void {
+    public function handleException(Throwable $exception): void {
+        if(!$exception instanceof Exception) {
+            /** @var Error $exception */
+            $exception = new Exception($exception->getMessage(), $exception->getCode(), $exception);
+        }
+
         $this->exception = $exception;
         Logger::writeToErrorLog($exception->getTraceAsString(), $exception->getMessage());
     }

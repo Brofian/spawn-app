@@ -3,9 +3,24 @@
 namespace spawnApp\Services\Commands;
 
 
+use spawnApp\Database\ModuleTable\ModuleRepository;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Database\Helpers\DatabaseHelper;
 
 class SpawnBuildCommand extends AbstractCommand  {
+
+    protected DatabaseHelper $databaseHelper;
+    protected ModuleRepository $moduleRepository;
+
+    public function __construct(
+        DatabaseHelper $databaseHelper,
+        ModuleRepository $moduleRepository
+    )
+    {
+        $this->databaseHelper = $databaseHelper;
+        $this->moduleRepository = $moduleRepository;
+    }
+
 
     public static function getCommand(): string {
         return 'spawn:build';
@@ -28,14 +43,13 @@ class SpawnBuildCommand extends AbstractCommand  {
         (new CacheClearCommand())->execute(CacheClearCommand::createParameterArray(['a'=>true]));
 
         //upsert database
-        //todo: include(__DIR__ . "/../database/update.php");
+        (new DatabaseUpdateCommand())->execute(DatabaseUpdateCommand::createParameterArray([]));
 
         //update module list
-        //todo: include(__DIR__ . "/../modules/refresh-actions.php");
+        (new ModulesRefreshCommand($this->databaseHelper, $this->moduleRepository))->execute(ModulesRefreshCommand::createParameterArray([]));
 
         //compile modules
-        //todo: include(__DIR__ . "/../modules/compile-js.php");
-        //todo: include(__DIR__ . "/../modules/compile-scss.php");
+        (new ThemeCompileCommand())->execute(ThemeCompileCommand::createParameterArray([]));
 
         return 0;
     }

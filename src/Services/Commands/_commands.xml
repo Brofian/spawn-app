@@ -11,6 +11,8 @@
     </service>
 
     <service id="system.command.spawn_build" class="spawnApp\Services\Commands\SpawnBuildCommand">
+        <argument type="service" value="system.database.helper"/>
+        <argument type="service" value="system.repository.modules"/>
         <tag>console.command</tag>
     </service>
 
