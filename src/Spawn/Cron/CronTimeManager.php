@@ -3,9 +3,12 @@
 namespace spawnCore\Cron;
 
 
+use DateTime;
+use spawnCore\Custom\Throwables\InvalidCronPatternException;
+
 class CronTimeManager {
 
-    protected \DateTime $now;
+    protected DateTime $now;
 
     protected const METHOD_ALLOW_ALL = 0;
     protected const METHOD_TIMESPAN = 1;
@@ -22,7 +25,7 @@ class CronTimeManager {
 
     public function __construct()
     {
-        $this->now = new \DateTime();
+        $this->now = new DateTime();
     }
 
     public function shouldCronBeExecuted(string $cronPattern): bool {

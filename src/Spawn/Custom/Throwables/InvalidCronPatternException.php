@@ -1,8 +1,7 @@
 <?php
 
-namespace spawnCore\Cron;
+namespace spawnCore\Custom\Throwables;
 
-use spawnCore\Custom\Throwables\AbstractException;
 use Throwable;
 
 class InvalidCronPatternException extends AbstractException {

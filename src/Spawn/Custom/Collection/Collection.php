@@ -2,8 +2,6 @@
 
 namespace spawnCore\Custom\Collection;
 
-use spawnCore\system\Core\Contents\Collection\AbstractCollectionBase;
-
 class Collection extends AbstractCollectionBase
 {
 

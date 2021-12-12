@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace spawnCore\system\Core\Contents\Collection;
+namespace spawnCore\Custom\Collection;
 
 
 use Countable;
