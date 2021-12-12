@@ -2,14 +2,15 @@
 
 namespace spawnCore\Cron;
 
-use spawn\system\Core\Services\Service;
-use spawn\system\Core\Services\ServiceContainerProvider;
-use spawn\system\Core\Services\ServiceTags;
+
 use spawnApp\Database\CronTable\CronEntity;
 use spawnApp\Database\CronTable\CronRepository;
-use spawnCore\Cron\CronStates;
+use spawnCore\ServiceSystem\Service;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
+use spawnCore\ServiceSystem\ServiceTags;
 
-class CronManager {
+class CronManager
+{
 
     protected CronRepository $cronRepository;
 

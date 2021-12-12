@@ -3,6 +3,7 @@
 namespace spawnCore\Database\Entity\TableDefinition\DefaultColumns;
 
 
+use PDO;
 use spawnCore\Database\Entity\TableDefinition\AbstractColumn;
 use spawnCore\Database\Entity\TableDefinition\Constants\ColumnTypes;
 use spawnCore\Database\Entity\TableDefinition\ForeignKey;
@@ -80,6 +81,6 @@ class StringColumn extends AbstractColumn {
 
     public function getTypeIdentifier()
     {
-        return \PDO::PARAM_STR;
+        return PDO::PARAM_STR;
     }
 }

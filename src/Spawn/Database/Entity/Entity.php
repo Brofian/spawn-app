@@ -2,16 +2,18 @@
 
 namespace spawnCore\Database\Entity;
 
-use spawn\system\Core\Contents\Collection\AssociativeCollection;
-use spawn\system\Core\Custom\Mutable;
 
-abstract class Entity extends Mutable {
+use spawnCore\Custom\Collection\AssociativeCollection;
+use spawnCore\Custom\FoundationStorage\Mutable;
+
+abstract class Entity extends Mutable
+{
 
     protected ?string $id = null;
 
     protected ?AssociativeCollection $payload = null;
 
-    public abstract function getRepositoryClass() : string;
+    public abstract function getRepositoryClass(): string;
 
     abstract public function toArray(): array;
 

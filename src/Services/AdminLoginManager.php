@@ -3,8 +3,6 @@
 namespace spawnApp\Services;
 
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Base\EventSystem\Events\RequestRoutedEvent;
-use spawn\system\Core\Base\EventSystem\EventSubscriberInterface;
 use spawn\system\Core\Helper\SessionHelper;
 use spawn\system\Core\Helper\UUID;
 use spawn\system\Core\Request;
@@ -14,8 +12,11 @@ use spawn\system\Throwables\WrongEntityForRepositoryException;
 use spawnApp\Controller\Backend\Exceptions\AdminUserNotFoundException;
 use spawnApp\Database\AdministratorTable\AdministratorEntity;
 use spawnApp\Database\AdministratorTable\AdministratorRepository;
+use spawnCore\EventSystem\Events\RequestRoutedEvent;
+use spawnCore\EventSystem\EventSubscriberInterface;
 
-class AdminLoginManager implements EventSubscriberInterface {
+class AdminLoginManager implements EventSubscriberInterface
+{
 
     public const BACKEND_LOGIN_CONTROLLER_SERVICE_ID = 'system.backend.administrator';
     public const BACKEND_LOGIN_ACTION = 'loginAction';

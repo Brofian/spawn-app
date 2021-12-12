@@ -2,7 +2,7 @@
 
 namespace spawnCore\Database\Criteria\Filters;
 
-use spawn\system\Throwables\AbstractException;
+use spawnCore\Custom\Throwables\AbstractException;
 use Throwable;
 
 class InvalidFilterValueException extends AbstractException {

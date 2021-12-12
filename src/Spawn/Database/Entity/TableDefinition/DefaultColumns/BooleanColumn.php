@@ -3,6 +3,7 @@
 namespace spawnCore\Database\Entity\TableDefinition\DefaultColumns;
 
 
+use PDO;
 use spawnCore\Database\Entity\TableDefinition\AbstractColumn;
 use spawnCore\Database\Entity\TableDefinition\Constants\ColumnTypes;
 
@@ -43,6 +44,6 @@ class BooleanColumn extends AbstractColumn {
 
     public function getTypeIdentifier()
     {
-        return \PDO::PARAM_BOOL;
+        return PDO::PARAM_BOOL;
     }
 }

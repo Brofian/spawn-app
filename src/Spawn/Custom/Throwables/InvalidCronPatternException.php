@@ -2,7 +2,7 @@
 
 namespace spawnCore\Cron;
 
-use spawn\system\Throwables\AbstractException;
+use spawnCore\Custom\Throwables\AbstractException;
 use Throwable;
 
 class InvalidCronPatternException extends AbstractException {

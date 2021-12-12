@@ -2,13 +2,11 @@
 
 namespace spawnCore\Cron\Jobs;
 
-use spawn\system\Core\Base\Database\DatabaseConnection;
-use spawn\system\Core\Helper\UUID;
 use spawnApp\Database\CronTable\CronEntity;
 use spawnApp\Database\CronTable\CronRepository;
-use spawnApp\Database\CronTable\CronTable;
 use spawnCore\Cron\AbstractCron;
 use spawnCore\Cron\CronStates;
+use spawnCore\Custom\Gadgets\UUID;
 
 class CleanCronQueue extends AbstractCron {
 

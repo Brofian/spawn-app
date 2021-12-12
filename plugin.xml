@@ -11,6 +11,8 @@
 
     <services>
 
+        <import file="/Spawn/spawn_services.xml"/>
+
         <import file="/src/Controller/controller.xml"/>
 
         <import file="/src/Services/services.xml"/>

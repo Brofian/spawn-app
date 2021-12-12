@@ -9,9 +9,9 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
-use spawn\system\Core\Base\Database\DatabaseConnection;
+use spawnCore\Custom\Gadgets\Slugifier;
 use spawnCore\Database\Entity\TableDefinition\Constants\ColumnTypeOptions;
-use spawn\system\Core\Helper\Slugifier;
+use spawnCore\Database\Helpers\DatabaseConnection;
 
 
 abstract class AbstractTable {

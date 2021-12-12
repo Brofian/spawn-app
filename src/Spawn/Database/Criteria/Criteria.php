@@ -3,7 +3,6 @@
 namespace spawnCore\Database\Criteria;
 
 use spawnCore\Database\Criteria\Filters\AbstractFilter;
-use spawnCore\Database\Criteria\Filters\AndFilter;
 
 class Criteria {
 

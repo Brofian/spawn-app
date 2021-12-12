@@ -2,7 +2,7 @@
 
 namespace spawnCore\Database\Entity;
 
-use spawn\system\Core\Contents\Collection\Collection;
+use spawnCore\Custom\Collection\Collection;
 
 class EntityCollection extends Collection {
 

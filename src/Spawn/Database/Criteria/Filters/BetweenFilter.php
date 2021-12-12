@@ -27,12 +27,11 @@ class BetweenFilter extends AbstractFilter {
 
     public function getCondition(): string
     {
-        $placeholders = str_repeat('?,', count($this->values));
-        return "($this->column IN (" . rtrim($placeholders, ',') . '))';
+        return "($this->column BETWEEN ? and ?)";
     }
 
     public function getParameters(): array
     {
-        return $this->values;
+        return [$this->min, $this->max];
     }
 }

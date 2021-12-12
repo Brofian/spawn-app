@@ -2,7 +2,7 @@
     
 namespace CustomSpawnApp;
 
-use spawn\system\Core\Base\Module\BaseModule;
+use spawnCore\Custom\FoundationStorage\BaseModule;
 
 class App extends BaseModule {
 

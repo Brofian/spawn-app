@@ -2,7 +2,7 @@
 
 <services>
 
-    <import file="/Cron/Jobs/cronjobs.xml"/>
+    <import file="/Jobs/cronjobs.xml"/>
 
     <service id="system.core.cron.manager" class="spawnCore\Cron\CronManager">
         <argument type="service" value="system.repository.crons" />

@@ -4,17 +4,18 @@ namespace spawnCore\Database\Entity;
 
 
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Base\Database\DatabaseConnection;
+use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
 use spawnCore\Database\Entity\TableDefinition\AbstractTable;
-use spawn\system\Core\Helper\UUID;
-use spawn\system\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Helpers\DatabaseConnection;
 
-abstract class TableRepository {
+abstract class TableRepository
+{
 
     protected array $tableColumns = [];
     protected string $tableName;
 
-    abstract public static function getEntityClass() : string;
+    abstract public static function getEntityClass(): string;
 
     abstract protected function getUpdateFilterColumnsFromValues(array $updateValues): array;
 
@@ -79,9 +80,6 @@ abstract class TableRepository {
         } catch (Exception $e) {
             if(MODE == 'dev') { dd($e); }
             return $entityCollection;
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
-            if(MODE == 'dev') { dd($e); }
-            return $entityCollection;
         }
 
 
@@ -133,9 +131,6 @@ abstract class TableRepository {
 
             $stmt->executeQuery();
         } catch (Exception $e) {
-            if(MODE == 'dev') { dd($e); }
-            return false;
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             if(MODE == 'dev') { dd($e); }
             return false;
         }
