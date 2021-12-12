@@ -3,6 +3,8 @@
 namespace spawnCore\Cron\Jobs;
 
 use spawn\system\Core\Base\Database\DatabaseConnection;
+use spawn\system\Core\Helper\UUID;
+use spawnApp\Database\CronTable\CronEntity;
 use spawnApp\Database\CronTable\CronRepository;
 use spawnApp\Database\CronTable\CronTable;
 use spawnCore\Cron\AbstractCron;
@@ -35,22 +37,29 @@ class CleanCronQueue extends AbstractCron {
     public function run(): int
     {
         //get Timestamp from one week ago
-        $lastWeek = new \DateTime('-1 week');
+        $lastWeek = new \DateTime('-1 day');
 
         $cronEntities = $this->cronRepository->search([
             'state' => CronStates::SUCCESS,
             'updatedAt' => [
-                'operator' => '>',
-                'value' => $lastWeek->format('Y-m-d')
+                'operator' => '<',
+                'value' => $lastWeek->format('Y-m-d H:i:s')
             ]
         ]);
 
-        dd('TODO: Find out, why this does not return any lines (the cause is the updatedAt condition)');
+        $this->addInfo('Start cleaning ' . $cronEntities->count() . ' old entities!');
 
+        $ids = [];
+        /** @var CronEntity $cronEntity */
+        foreach ($cronEntities as $cronEntity) {
+            $ids[] = UUID::hexToBytes($cronEntity->getId());
+        }
 
-        //TODO cleanup
+        $this->cronRepository->delete([
+            'id' => $ids
+        ]);
 
-        $this->addInfo('');
+        $this->addInfo('Finished cleaning entities');
 
         return 0;
     }
