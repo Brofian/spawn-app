@@ -2,7 +2,7 @@
 
 namespace spawnApp\Database\ModuleTable;
 
-use spawn\system\Core\Base\Database\Definition\Entity;
+use spawnCore\Database\Entity\Entity;
 
 class ModuleEntity extends Entity {
 

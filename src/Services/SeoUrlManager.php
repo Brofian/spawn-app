@@ -3,7 +3,7 @@
 namespace spawnApp\Services;
 
 use Doctrine\DBAL\Exception;
-use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawnCore\Database\Entity\EntityCollection;
 use spawn\system\Core\Custom\ClassInspector;
 use spawn\system\Core\Custom\MethodInspector;
 use spawn\system\Core\Helper\UUID;

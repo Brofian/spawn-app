@@ -7,7 +7,7 @@ use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\IntColumn
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
-use spawn\system\Core\Base\Database\Definition\TableDefinition\AbstractTable;
+use spawnCore\Database\Entity\TableDefinition\AbstractTable;
 
 class MigrationTable extends AbstractTable {
 

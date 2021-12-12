@@ -3,7 +3,7 @@
 namespace spawnApp\Controller\Backend;
 
 use spawn\system\Core\Base\Controller\AbstractBackendController;
-use spawn\system\Core\Base\Database\Definition\TableDefinition\ColumnDefinition;
+use spawnCore\Database\Entity\TableDefinition\ColumnDefinition;
 use spawn\system\Core\Contents\Response\AbstractResponse;
 use spawn\system\Core\Contents\Response\TwigResponse;
 use spawnApp\Database\MigrationTable\MigrationRepository;

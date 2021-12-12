@@ -5,7 +5,7 @@ namespace spawnApp\Services\Commands;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use spawn\system\Core\Base\Custom\FileEditor;
-use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawnCore\Database\Entity\EntityCollection;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 use spawn\system\Core\base\AbstractMigration;
 use spawn\system\Core\Custom\AbstractCommand;

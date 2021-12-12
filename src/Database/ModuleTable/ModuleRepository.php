@@ -2,8 +2,8 @@
 
 namespace spawnApp\Database\ModuleTable;
 
-use spawn\system\Core\Base\Database\Definition\Entity;
-use spawn\system\Core\Base\Database\Definition\TableRepository;
+use spawnCore\Database\Entity\Entity;
+use spawnCore\Database\Entity\TableRepository;
 use spawn\system\Core\Helper\UUID;
 
 class ModuleRepository extends TableRepository {

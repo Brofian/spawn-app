@@ -2,7 +2,7 @@
 
 namespace spawnApp\Database\MigrationTable;
 
-use spawn\system\Core\Base\Database\Definition\Entity;
+use spawnCore\Database\Entity\Entity;
 
 class MigrationEntity extends Entity {
 

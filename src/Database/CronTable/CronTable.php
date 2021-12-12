@@ -8,7 +8,7 @@ use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\DateTimeC
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
-use spawn\system\Core\Base\Database\Definition\TableDefinition\AbstractTable;
+use spawnCore\Database\Entity\TableDefinition\AbstractTable;
 use spawnCore\Cron\CronStates;
 
 class CronTable extends AbstractTable {

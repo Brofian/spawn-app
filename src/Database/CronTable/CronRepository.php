@@ -2,9 +2,9 @@
 
 namespace spawnApp\Database\CronTable;
 
-use spawn\system\Core\Base\Database\Definition\Entity;
-use spawn\system\Core\Base\Database\Definition\TableDefinition\AbstractTable;
-use spawn\system\Core\Base\Database\Definition\TableRepository;
+use spawnCore\Database\Entity\Entity;
+use spawnCore\Database\Entity\TableDefinition\AbstractTable;
+use spawnCore\Database\Entity\TableRepository;
 use spawn\system\Core\Helper\UUID;
 
 class CronRepository extends TableRepository {

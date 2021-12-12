@@ -3,7 +3,7 @@
 namespace spawnApp\Database\CronTable;
 
 
-use spawn\system\Core\Base\Database\Definition\Entity;
+use spawnCore\Database\Entity\Entity;
 use spawnCore\Cron\CronStates;
 
 class CronEntityDefinition extends Entity

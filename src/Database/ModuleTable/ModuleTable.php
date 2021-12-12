@@ -8,7 +8,7 @@ use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\JsonColum
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\StringColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use spawn\Core\Base\Database\Definition\TableDefinition\DefaultColumns\UuidColumn;
-use spawn\system\Core\Base\Database\Definition\TableDefinition\AbstractTable;
+use spawnCore\Database\Entity\TableDefinition\AbstractTable;
 
 class ModuleTable extends AbstractTable {
 

@@ -3,7 +3,7 @@
 namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
-use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawnCore\Database\Entity\EntityCollection;
 use spawn\system\Core\Base\Helper\DatabaseHelper;
 use spawn\system\Core\Contents\Modules\ModuleLoader;
 use spawn\system\Core\Custom\AbstractCommand;

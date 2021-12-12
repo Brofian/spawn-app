@@ -4,7 +4,7 @@ namespace spawnApp\Services\Commands;
 
 use bin\spawn\IO;
 use Exception;
-use spawn\system\Core\Base\Database\Definition\EntityCollection;
+use spawnCore\Database\Entity\EntityCollection;
 use spawn\system\Core\Custom\AbstractCommand;
 use spawn\system\Core\Helper\FrameworkHelper\ResourceCollector;
 use spawn\system\Core\Helper\ScssHelper;

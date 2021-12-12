@@ -3,7 +3,7 @@
 namespace spawnApp\Database\AdministratorTable;
 
 
-use spawn\system\Core\Base\Database\Definition\Entity;
+use spawnCore\Database\Entity\Entity;
 
 class AdministratorEntityDefinition extends Entity
 {
