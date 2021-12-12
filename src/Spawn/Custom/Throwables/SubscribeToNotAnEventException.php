@@ -1,7 +1,6 @@
 <?php
 
-namespace spawnCore\EventSystem;
-
+namespace spawnCore\Custom\Throwables;
 
 use spawnCore\Custom\Throwables\AbstractException;
 use Throwable;
