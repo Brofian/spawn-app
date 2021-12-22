@@ -18,7 +18,7 @@ class SeoUrlTable extends AbstractTable {
     {
         return [
             new UuidColumn('id', null),
-            new StringColumn('cUrl', false, null, true),
+            new StringColumn('cUrl', false, null),
             new StringColumn('controller', false, 'system.fallback.404'),
             new StringColumn('action', false, 'error404Action'),
             new JsonColumn('parameters', true),

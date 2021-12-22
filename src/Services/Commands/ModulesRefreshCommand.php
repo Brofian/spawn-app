@@ -83,7 +83,7 @@ class ModulesRefreshCommand extends AbstractCommand {
     protected function refreshModules(bool $deleteMissing = false): void {
         IO::printWarning('> Refreshing Modules');
 
-        $moduleCollection = ListModulesCommand::getModuleList();
+        $moduleCollection = ListModulesCommand::getModuleList(true);
         $existingModules = $this->moduleRepository->search(new Criteria());
 
         $registeredPaths = [];

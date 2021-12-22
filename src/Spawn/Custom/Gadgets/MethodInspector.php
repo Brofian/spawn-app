@@ -77,11 +77,12 @@ class MethodInspector extends Mutable
         $lines = explode(PHP_EOL, $phpDoc);
         //trim spaces, asterisk and slashes
         $lines = array_map(function ($line) {
-            return trim($line, ' */');
+            $line = ltrim($line, ' */');
+            return rtrim($line);
         }, $lines);
+
         //remove now empty lines
         $lines = array_filter($lines);
-
         $docData = [];
 
         foreach ($lines as $line) {

@@ -119,6 +119,14 @@ class ModuleEntity extends Entity {
         return $this->information;
     }
 
+    public function getInformationValue(string $key, $default = ''): string {
+        $data = json_decode($this->getInformation(), true, 999, JSON_THROW_ON_ERROR);
+        if(isset($data[$key])) {
+            return $data[$key];
+        }
+        return $default;
+    }
+
     public function setInformation(string $information): ModuleEntity
     {
         $this->information = $information;

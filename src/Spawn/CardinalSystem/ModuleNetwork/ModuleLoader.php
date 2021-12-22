@@ -20,7 +20,7 @@ class ModuleLoader
     const REL_XML_PATH = "/plugin.xml";
 
     protected array $moduleRootPaths = [
-        ROOT . "/custom",
+        ROOT . "/src/custom",
         ROOT . "/vendor"
     ];
 
@@ -30,18 +30,20 @@ class ModuleLoader
     ];
 
 
-    public function loadModules(): EntityCollection
+    public function loadModules(bool $forceReloadFromFiles = false): EntityCollection
     {
-        $databaseTable = new DatabaseHelper();
+        if(!$forceReloadFromFiles) {
+            $databaseTable = new DatabaseHelper();
 
-        if ($this->doesCacheExist()) {
-            return $this->readModulesFromCache();
-        }
+            if ($this->doesCacheExist()) {
+                return $this->readModulesFromCache();
+            }
 
-        if ($databaseTable->doesTableExist(ModuleTable::TABLE_NAME)) {
-            $moduleCollection = $this->readModulesFromDB();
-            if ($moduleCollection->count()) {
-                return $moduleCollection;
+            if ($databaseTable->doesTableExist(ModuleTable::TABLE_NAME)) {
+                $moduleCollection = $this->readModulesFromDB();
+                if ($moduleCollection->count()) {
+                    return $moduleCollection;
+                }
             }
         }
 

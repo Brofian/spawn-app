@@ -15,6 +15,7 @@ use spawnCore\Database\Criteria\Filters\AndFilter;
 use spawnCore\Database\Criteria\Filters\EqualsFilter;
 use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
 use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\Database\Entity\InvalidRepositoryInteractionException;
 use spawnCore\Database\Entity\RepositoryException;
 use spawnCore\ServiceSystem\Service;
 use spawnCore\ServiceSystem\ServiceContainer;
@@ -73,8 +74,11 @@ class SeoUrlManager {
      *  This part is used for "bin/console modules:refresh-actions"
      * @param bool $removeStaleEntries
      * @return array
+     * @throws DatabaseConnectionException
      * @throws Exception
+     * @throws RepositoryException
      * @throws WrongEntityForRepositoryException
+     * @throws InvalidRepositoryInteractionException
      */
     public function refreshSeoUrlEntries(bool $removeStaleEntries = true) {
         /** @var EntityCollection $registeredSeoUrls */
@@ -184,6 +188,5 @@ class SeoUrlManager {
             ]
         );
     }
-
 
 }

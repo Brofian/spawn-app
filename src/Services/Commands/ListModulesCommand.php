@@ -41,9 +41,9 @@ class ListModulesCommand extends AbstractCommand {
         return 0;
     }
 
-    public static function getModuleList(): EntityCollection {
+    public static function getModuleList(bool $forceReloadFromFiles = false): EntityCollection {
         $moduleLoader = new ModuleLoader();
-        return $moduleLoader->loadModules();
+        return $moduleLoader->loadModules($forceReloadFromFiles);
     }
 
     protected function outputModuleCollectionAsTable(EntityCollection $collection): void {
@@ -62,8 +62,8 @@ class ListModulesCommand extends AbstractCommand {
                 $module->getId(),
                 $module->getSlug(),
                 $module->isActive() ? "Yes" : "No",
-                $module->getInformation("version"),
-                $module->getInformation("author")
+                $module->getInformationValue("version"),
+                $module->getInformationValue("author")
             ];
         }
 
