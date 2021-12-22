@@ -7,9 +7,9 @@ class AndFilter extends AbstractFilter {
     /** @var AbstractFilter[]  */
     protected array $filters = [];
 
-    public function __construct(AbstractFilter ...$filters)
+    public function __construct(AbstractFilter $filter1, AbstractFilter ...$filters)
     {
-        $this->addFilter(...$filters);
+        $this->addFilter($filter1, ...$filters);
     }
 
     public function addFilter(AbstractFilter ...$filters)
@@ -38,7 +38,7 @@ class AndFilter extends AbstractFilter {
     {
         $parameters = [];
         foreach ($this->filters as $filter) {
-            $parameters = array_merge($filter->getParameters());
+            $parameters = array_merge($parameters, $filter->getParameters());
         }
         return $parameters;
     }

@@ -11,6 +11,7 @@ use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Custom\FoundationStorage\AbstractMigration;
 use spawnCore\Custom\Gadgets\FileEditor;
 use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Entity\EntityCollection;
 use spawnCore\Database\Helpers\DatabaseHelper;
 use spawnCore\ServiceSystem\Service;
@@ -116,7 +117,7 @@ class MigrationExecuteCommand extends AbstractCommand {
     }
 
     protected function loadAlreadyExecutedMigrations(): array   {
-        $executedMigrationEntities = $this->migrationRepository->search();
+        $executedMigrationEntities = $this->migrationRepository->search(new Criteria());
 
         $executedMigrations = [];
         /** @var Service $migrationEntity */

@@ -7,6 +7,9 @@ use spawnApp\Database\MigrationTable\MigrationRepository;
 use spawnCore\Custom\FoundationStorage\AbstractBackendController;
 use spawnCore\Custom\Response\AbstractResponse;
 use spawnCore\Custom\Response\TwigResponse;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
+use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Entity\RepositoryException;
 
 class BaseBackendController extends AbstractBackendController {
 
@@ -31,11 +34,13 @@ class BaseBackendController extends AbstractBackendController {
      * @route /backend
      * @locked
      * @return AbstractResponse
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
      */
     public function homeAction(): AbstractResponse {
        /** @var MigrationRepository $migrationRepository */
         $migrationRepository = $this->container->getServiceInstance('system.repository.migrations');
-        $migrationCollection = $migrationRepository->search();
+        $migrationCollection = $migrationRepository->search(new Criteria());
 
 
         $this->twig->assign('content_file', 'backend/contents/home/content.html.twig');

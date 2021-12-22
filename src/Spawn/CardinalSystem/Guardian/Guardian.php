@@ -23,7 +23,7 @@ class Guardian {
 
     public function getHandleResponse(): string {
         if(MODE === 'dev') {
-            return $this->createPrivateResponse();
+            return $this->createPrivateResponse($this->exception);
         }
         else {
             return $this->createPublicResponse();
@@ -35,9 +35,9 @@ class Guardian {
         return '<b>Oops, something went wrong!</b> If this problem consists, please contact the page owner';
     }
 
-    protected function createPrivateResponse(): string {
-        $message = $this->exception->getMessage() ?? 'No error-message provided!';
-        $trace = $this->exception->getTrace() ?? [];
+    protected function createPrivateResponse(Exception $e): string {
+        $message = $e->getMessage() ?? 'No error-message provided!';
+        $trace = $e->getTrace() ?? [];
 
         $response = "ERROR: <b>" . $message . "</b><br><pre>";
         $response .= '<ul>';
@@ -48,6 +48,12 @@ class Guardian {
             $response .= '</li>';
         }
         $response .= '</ul>';
+
+        if($e->getPrevious() instanceof Exception) {
+            $response .= '<br><hr><br>';
+            $response .= $this->createPrivateResponse($e->getPrevious());
+        }
+
         return $response;
     }
 

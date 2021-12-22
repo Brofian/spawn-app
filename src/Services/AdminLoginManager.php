@@ -10,7 +10,13 @@ use spawnApp\Database\AdministratorTable\AdministratorRepository;
 use spawnCore\CardinalSystem\Request;
 use spawnCore\Custom\Gadgets\SessionHelper;
 use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Criteria\Filters\AndFilter;
+use spawnCore\Database\Criteria\Filters\EqualsFilter;
+use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
+use spawnCore\Database\Entity\RepositoryException;
 use spawnCore\EventSystem\Events\RequestRoutedEvent;
 use spawnCore\EventSystem\EventSubscriberInterface;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
@@ -62,13 +68,17 @@ class AdminLoginManager implements EventSubscriberInterface
      * @param string $password
      * @return AdministratorEntity|null
      * @throws AdminUserNotFoundException
+     * @throws InvalidFilterValueException
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
      */
     public function tryAdminLogin(string $username, string $password): ?AdministratorEntity {
 
         /** @var AdministratorEntity|null $admin */
-        $admin = $this->administratorRepository->search([
-            'username' => $username
-        ], 1)->first();
+        $admin = $this->administratorRepository->search(
+            new Criteria(new EqualsFilter('username', $username)),
+            1
+        )->first();
 
         if($admin === null) {
             throw new AdminUserNotFoundException();
@@ -139,11 +149,21 @@ class AdminLoginManager implements EventSubscriberInterface
             return null;
         }
 
-        /** @var AdministratorEntity|null $admin */
-        $admin = $this->administratorRepository->search([
-            'username' => $adminLoginUsername,
-            'loginHash' => $adminLoginHash
-        ], 1)->first();
+        try {
+            /** @var AdministratorEntity|null $admin */
+            $admin = $this->administratorRepository->search(
+                new Criteria(
+                    new AndFilter(
+                        new EqualsFilter('username', $adminLoginUsername),
+                        new EqualsFilter('loginHash', $adminLoginHash)
+                    )
+                ),
+                1
+            )->first();
+        }
+        catch (\Exception $e) {
+            return null;
+        }
 
         if(!$admin instanceof AdministratorEntity) {
             return null;

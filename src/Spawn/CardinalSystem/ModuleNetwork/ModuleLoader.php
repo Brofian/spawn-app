@@ -8,7 +8,10 @@ use spawnApp\Database\ModuleTable\ModuleTable;
 use spawnCore\Custom\Gadgets\Slugifier;
 use spawnCore\Custom\Gadgets\XMLContentModel;
 use spawnCore\Custom\Gadgets\XMLReader;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
+use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\Database\Entity\RepositoryException;
 use spawnCore\Database\Helpers\DatabaseHelper;
 
 class ModuleLoader
@@ -62,11 +65,16 @@ class ModuleLoader
         return $moduleCollection;
     }
 
+    /**
+     * @return EntityCollection
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     protected function readModulesFromDB(): EntityCollection
     {
         //load modules from database
         $moduleRepository = new ModuleRepository(new ModuleTable());
-        return $moduleRepository->search();
+        return $moduleRepository->search(new Criteria());
     }
 
     protected function readModulesFromFileSystem(): EntityCollection

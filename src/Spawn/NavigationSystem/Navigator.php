@@ -4,7 +4,11 @@ namespace spawnCore\NavigationSystem;
 
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
+use spawnCore\Cron\CronStates;
 use spawnCore\Custom\Gadgets\CUriConverter;
+use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Criteria\Filters\AndFilter;
+use spawnCore\Database\Criteria\Filters\EqualsFilter;
 use spawnCore\ServiceSystem\Service;
 use spawnCore\ServiceSystem\ServiceContainer;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
@@ -69,7 +73,9 @@ class Navigator
 
         /** @var SeoUrlRepository $seoUrlRepository */
         $seoUrlRepository = $this->serviceContainer->getServiceInstance('system.repository.seo_urls');
-        $rewrite_urls = $seoUrlRepository->search(['active' => true]);
+        $rewrite_urls = $seoUrlRepository->search(
+            new Criteria(new EqualsFilter('active', true))
+        );
 
         /** @var SeoUrlEntity $seo_url */
         foreach ($rewrite_urls as $seo_url) {
@@ -105,10 +111,14 @@ class Navigator
 
         /** @var SeoUrlRepository $seoUrlRepository */
         $seoUrlRepository = $this->serviceContainer->getServiceInstance('system.repository.seo_urls');
-        $seoUrlCollection = $seoUrlRepository->search([
-            'controller' => $controller,
-            'action' => $action
-        ]);
+        $seoUrlCollection = $seoUrlRepository->search(
+            new Criteria(
+                new AndFilter(
+                    new EqualsFilter('controller', $controller),
+                    new EqualsFilter('action', $action)
+                )
+            )
+        );
 
 
         $seoUrl = $seoUrlCollection->first();

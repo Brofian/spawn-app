@@ -3,24 +3,44 @@
 namespace spawnCore\Database\Criteria;
 
 use spawnCore\Database\Criteria\Filters\AbstractFilter;
+use spawnCore\Database\Criteria\Filters\AndFilter;
 
 class Criteria {
 
-    protected ?AbstractFilter $filter;
+    /** @var AbstractFilter[]  */
+    protected array $filters = [];
 
-    public function __construct(?AbstractFilter $filter = null)
+    public function __construct(AbstractFilter ...$filters)
     {
-        $this->filter = $filter;
+        foreach($filters as $filter) {
+            $this->filters[] = $filter;
+        }
     }
 
 
     public function getFilters(): array {
-        return [$this->filter];
+        return $this->filters;
     }
 
+    public function addFilter(AbstractFilter $filter): void {
+        $this->filters[] = $filter;
+    }
+
+    public function getParameters(): array {
+        $params = [];
+        foreach($this->filters as $filter) {
+            $params = array_merge($params, $filter->getParameters());
+        }
+
+        return $params;
+    }
 
     public function generateCriteria(): string {
-        return '(' . $this->filter->getCondition() . ')';
+        if(!empty($this->filters)) {
+            $combinedFilter = new AndFilter(...$this->filters);
+            return $combinedFilter->getCondition();
+        }
+        return '(1)';
     }
 
 

@@ -3,6 +3,7 @@
 <services>
 
     <service id="system.command.debug" class="spawnApp\Services\Commands\DebugCommand">
+        <argument type="service" value="system.repository.modules"/>
         <tag>console.command</tag>
     </service>
 

@@ -7,6 +7,11 @@ use spawnApp\Database\CronTable\CronRepository;
 use spawnCore\Cron\AbstractCron;
 use spawnCore\Cron\CronStates;
 use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Criteria\Filters\AndFilter;
+use spawnCore\Database\Criteria\Filters\EqualsFilter;
+use spawnCore\Database\Criteria\Filters\InFilter;
+use spawnCore\Database\Criteria\Filters\LessThanFilter;
 
 class CleanCronQueue extends AbstractCron {
 
@@ -37,13 +42,14 @@ class CleanCronQueue extends AbstractCron {
         //get Timestamp from one week ago
         $lastWeek = new \DateTime('-1 day');
 
-        $cronEntities = $this->cronRepository->search([
-            'state' => CronStates::SUCCESS,
-            'updatedAt' => [
-                'operator' => '<',
-                'value' => $lastWeek->format('Y-m-d H:i:s')
-            ]
-        ]);
+        $cronEntities = $this->cronRepository->search(
+            new Criteria(
+                new AndFilter(
+                    new EqualsFilter('state', CronStates::SUCCESS),
+                    new LessThanFilter('updatedAt', $lastWeek->format('Y-m-d H:i:s'))
+                )
+            )
+        );
 
         $this->addInfo('Start cleaning ' . $cronEntities->count() . ' old entities!');
 
@@ -53,9 +59,11 @@ class CleanCronQueue extends AbstractCron {
             $ids[] = UUID::hexToBytes($cronEntity->getId());
         }
 
-        $this->cronRepository->delete([
-            'id' => $ids
-        ]);
+        $this->cronRepository->delete(
+            new Criteria(
+                new InFilter('id', $ids)
+            )
+        );
 
         $this->addInfo('Finished cleaning entities');
 

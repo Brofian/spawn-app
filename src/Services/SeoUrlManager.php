@@ -8,8 +8,14 @@ use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
 use spawnCore\Custom\Gadgets\ClassInspector;
 use spawnCore\Custom\Gadgets\MethodInspector;
 use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Criteria\Filters\AndFilter;
+use spawnCore\Database\Criteria\Filters\EqualsFilter;
+use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
 use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\Database\Entity\RepositoryException;
 use spawnCore\ServiceSystem\Service;
 use spawnCore\ServiceSystem\ServiceContainer;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
@@ -30,27 +36,33 @@ class SeoUrlManager {
 
     public function getSeoUrls(int $limit = 0, int $offset = 0): EntityCollection {
         if($limit !== 0) {
-            return $this->seoUrlRepository->search([], $limit, $offset);
+            return $this->seoUrlRepository->search(new Criteria(), $limit, $offset);
         }
-        return $this->seoUrlRepository->search();
+        return $this->seoUrlRepository->search(new Criteria());
     }
 
     /**
      * @param string $controller
      * @param string $method
      * @return SeoUrlEntity|null
+     * @throws DatabaseConnectionException
+     * @throws InvalidFilterValueException
+     * @throws RepositoryException
      */
     public function getSeoUrl(string $controller, string $method) {
-        return $this->seoUrlRepository->search([
-            'controller' => $controller,
-            'action' => $method
-        ])->first();
+        return $this->seoUrlRepository->search(
+            new Criteria(new AndFilter(
+                new EqualsFilter('controller', $controller),
+                new EqualsFilter('action', $method)
+            ))
+        )->first();
     }
 
     /**
      * @param SeoUrlEntity $seoUrlEntity
      * @throws Exception
      * @throws WrongEntityForRepositoryException
+     * @throws DatabaseConnectionException
      */
     public function saveSeoUrlEntity(SeoUrlEntity $seoUrlEntity): void {
         $this->seoUrlRepository->upsert($seoUrlEntity);

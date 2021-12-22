@@ -9,7 +9,11 @@ use spawnApp\Database\ModuleTable\ModuleRepository;
 use spawnApp\Services\SeoUrlManager;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Custom\Gadgets\UUID;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
+use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Entity\InvalidRepositoryInteractionException;
+use spawnCore\Database\Entity\RepositoryException;
 use spawnCore\Database\Helpers\DatabaseHelper;
 use spawnCore\ServiceSystem\ServiceContainer;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
@@ -72,12 +76,15 @@ class ModulesRefreshCommand extends AbstractCommand {
      * @param bool $deleteMissing
      * @throws Exception
      * @throws WrongEntityForRepositoryException
+     * @throws DatabaseConnectionException
+     * @throws InvalidRepositoryInteractionException
+     * @throws RepositoryException
      */
     protected function refreshModules(bool $deleteMissing = false): void {
         IO::printWarning('> Refreshing Modules');
 
         $moduleCollection = ListModulesCommand::getModuleList();
-        $existingModules = $this->moduleRepository->search();
+        $existingModules = $this->moduleRepository->search(new Criteria());
 
         $registeredPaths = [];
         /** @var ModuleEntity $existingModule */
