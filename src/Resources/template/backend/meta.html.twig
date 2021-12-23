@@ -26,3 +26,7 @@
 {% block meta_css %}
     <link rel="stylesheet" type="text/css" href="/cache/css/all{% if environment == 'dev' %}.min{% endif %}.css">
 {% endblock %}
+
+{% block meta_robots %}
+    <meta name="robots" content="noindex,nofollow"/>
+{% endblock %}
