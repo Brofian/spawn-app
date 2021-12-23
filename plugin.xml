@@ -2,7 +2,15 @@
 
 <plugin test="abc">
 
-    <resources weight='1' namespace='WebuApp'>/src/Resources</resources>
+    <resources>
+        <namespace>SpawnApp</namespace>
+        <path>/src/Resources</path>
+        <weight>1</weight>
+        <using>
+            <namespace>exampleABC</namespace>
+        </using>
+    </resources>
+
 
     <info>
         <author>Fabian Holzwarth</author>

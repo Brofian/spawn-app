@@ -11,9 +11,8 @@ class ModuleEntity extends Entity {
     protected string $slug;
     protected string $path;
     protected bool $active;
-    protected string $information;
-    protected string $resourceConfig;
-    protected array $decodedConfig = [];
+    protected array $information;
+    protected array $resourceConfig;
     protected ?DateTime $createdAt;
     protected ?DateTime $updatedAt;
 
@@ -21,8 +20,8 @@ class ModuleEntity extends Entity {
         string $slug,
         string $path,
         bool $active,
-        string $information,
-        string $resourceConfig,
+        $information,
+        $resourceConfig,
         ?string $id = null,
         ?DateTime $createdAt = null,
         ?DateTime $updatedAt = null
@@ -31,11 +30,12 @@ class ModuleEntity extends Entity {
         $this->slug = $slug;
         $this->path = $path;
         $this->active = $active;
-        $this->information = $information;
-        $this->resourceConfig = $resourceConfig;
-        if($resourceConfig) {
-            $this->decodedConfig = json_decode($resourceConfig, true);
-        }
+        if(is_array($information)) $this->information = $information;
+        elseif(is_string($information)) $this->information = json_decode($information, true);
+
+        if(is_array($resourceConfig)) $this->resourceConfig = $resourceConfig;
+        elseif(is_string($resourceConfig)) $this->resourceConfig = json_decode($resourceConfig, true);
+
         $this->id = $id;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
@@ -74,8 +74,8 @@ class ModuleEntity extends Entity {
             'id' => $this->getId(),
             'slug' => $this->getSlug(),
             'path' => $this->getPath(),
-            'information' => $this->getInformation(),
-            'resourceConfig' => $this->getResourceConfig(),
+            'information' => json_encode($this->getInformations()),
+            'resourceConfig' => json_encode($this->getResourceConfig()),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
         ];
@@ -114,39 +114,34 @@ class ModuleEntity extends Entity {
         return $this;
     }
 
-    public function getInformation(): string
+    public function getInformations(): array
     {
         return $this->information;
     }
 
-    public function getInformationValue(string $key, $default = ''): string {
-        $data = json_decode($this->getInformation(), true, 999, JSON_THROW_ON_ERROR);
-        if(isset($data[$key])) {
-            return $data[$key];
+    /**
+     * @return mixed
+     */
+    public function getInformation(string $key, $default = null)
+    {
+        if(isset($this->information[$key])) {
+            return $this->information[$key];
         }
         return $default;
     }
 
-    public function setInformation(string $information): ModuleEntity
+    public function setInformation(array $information): ModuleEntity
     {
         $this->information = $information;
         return $this;
     }
 
-    /**
-     * @param bool $asArray
-     * @return string|array
-     */
-    public function getResourceConfig(bool $asArray = false)
+    public function getResourceConfig(bool $asArray = false): array
     {
-        if($asArray) {
-            return $this->decodedConfig;
-        }
-
         return $this->resourceConfig;
     }
 
-    public function setResourceConfig(string $resourceConfig): ModuleEntity
+    public function setResourceConfig(array $resourceConfig): ModuleEntity
     {
         $this->resourceConfig = $resourceConfig;
         return $this;
@@ -156,16 +151,12 @@ class ModuleEntity extends Entity {
      * @return mixed;
      */
     public function getResourceConfigValue(string $key, $default = null) {
-        if(isset($this->decodedConfig[$key])) {
-            return $this->decodedConfig[$key];
+        if(isset($this->resourceConfig[$key])) {
+            return $this->resourceConfig[$key];
         }
         return $default;
     }
 
-    /**
-     * @param ModuleEntity[] $moduleEntities
-     * @return array
-     */
     public static function sortModuleEntityArrayByWeight(array $moduleEntities): array {
         usort($moduleEntities, function($a, $b) {
             /** @var $a ModuleEntity */
@@ -205,5 +196,8 @@ class ModuleEntity extends Entity {
         return $this;
     }
 
+    public function getNamespace(): string {
+        return $this->getResourceConfigValue('namespace', $this->getSlug());
+    }
 
 }

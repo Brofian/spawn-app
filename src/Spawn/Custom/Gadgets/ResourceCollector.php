@@ -28,31 +28,93 @@ class ResourceCollector
      */
     public function gatherModuleData(EntityCollection $moduleCollection)
     {
-
-        $scssIndexFile = "";
-        $jsIndexFile = "";
-
         /** @var ModuleEntity $module */
         foreach ($moduleCollection->getArray() as $module) {
             //move the modules from this namespace
-            $this->moveModuleData($module, $scssIndexFile, $jsIndexFile);
+            $this->moveModuleData($module);
         }
 
-        //create entry file for css and js compilation
-        FileEditor::createFile(
-            self::RESOURCE_CACHE_PATH . '/scss/index.scss',
-            "/* Index File - generated automatically*/" . PHP_EOL . PHP_EOL . $scssIndexFile
-        );
-        FileEditor::createFile(
-            self::RESOURCE_CACHE_PATH . '/js/index.js',
-            "/* Index File - generated automatically*/" . PHP_EOL . PHP_EOL . $jsIndexFile
-        );
+        $namespaces = $this->getNamespacesFromModuleList($moduleCollection);
+
+        foreach($namespaces as $namespace => $moduleSlugs) {
+            //create scss file
+            $scssIndexFile = '';
+            //create js file
+            $jsIndexFile = '';
+
+            foreach($moduleSlugs as $slug) {
+                if(file_exists(self::RESOURCE_CACHE_PATH . '/scss/'.$slug.'/base.scss')) {
+                    $scssIndexFile .= '@import "'.$slug .'/base.scss";'. PHP_EOL;
+                }
+                if(file_exists(self::RESOURCE_CACHE_PATH . '/js/'.$slug.'/main.js')) {
+                    $jsIndexFile .= 'import "./'.$slug.'/main.js";' . PHP_EOL;
+                }
+            }
+
+            //create entry file for css and js compilation
+            FileEditor::createFile(
+                self::RESOURCE_CACHE_PATH . '/scss/'.$namespace.'_index.scss',
+                "/* Index File - generated automatically*/" . PHP_EOL . PHP_EOL . $scssIndexFile
+            );
+            FileEditor::createFile(
+                self::RESOURCE_CACHE_PATH . '/js/'.$namespace.'_index.js',
+                "/* Index File - generated automatically*/" . PHP_EOL . PHP_EOL . $jsIndexFile
+            );
+
+        }
+
+    }
+
+    protected function getNamespacesFromModuleList(EntityCollection $moduleCollection): array {
+        $modulesInNamespaces = [];
+        $slugToModule = [];
+
+        //gather available namespaces
+        /** @var ModuleEntity $module */
+        foreach($moduleCollection->getArray() as $module) {
+            $namespace = $module->getNamespace();
+            $slug = $module->getSlug();
+            $namespaceDefinitions[$slug] = $namespace;
+            $slugToModule[$slug] = &$module;
+
+            if(!isset($modulesInNamespaces[$namespace])) {
+                $modulesInNamespaces[$namespace] = [];
+            }
+            $modulesInNamespaces[$namespace][] = $slug;
+        }
+
+        //assign modules to namespaces
+        foreach($modulesInNamespaces as $namespace => &$slugs) {
+
+            do {
+                $hasChanged = false;
+                $slugsToAdd = [];
+                foreach($slugs as $slug) {
+                    $module = $slugToModule[$slug];
+                    $using = $module->getResourceConfigValue('using');
+                    if(is_array($using)) {
+                        $slugsToAdd = array_merge($using);
+                    }
+                }
+
+                foreach($slugsToAdd as $slugToAdd) {
+                    if(!in_array($slugToAdd, $slugs)) {
+                        $slugs[] = $slugToAdd;
+                        $hasChanged = true;
+                    }
+                }
+            }
+            while($hasChanged);
+
+            $slugs = array_unique($slugs);
+        }
+
+        return $modulesInNamespaces;
     }
 
 
-    private function moveModuleData(ModuleEntity $module, &$scssIndexFile, &$jsIndexFile)
+    private function moveModuleData(ModuleEntity $module)
     {
-
         $resourcePath = $module->getResourceConfigValue('path');
 
         if (!$resourcePath) {
@@ -65,12 +127,6 @@ class ResourceCollector
          * SCSS
          */
         $scssFolder = $absoluteModuleResourcePath . '/public/scss';
-        if (file_exists($scssFolder . "/base.scss")) {
-            $scssIndexFile .= "@import \"{$module->getSlug()}/base\";" . PHP_EOL;
-        }
-        if (file_exists($scssFolder . "/_global/base.scss")) {
-            $scssIndexFile = "@import \"{$module->getSlug()}/_global/base\";" . PHP_EOL . $scssIndexFile;
-        }
         self::copyFolderRecursive($scssFolder, self::RESOURCE_CACHE_PATH . '/scss/' . $module->getSlug());
 
 
@@ -78,12 +134,6 @@ class ResourceCollector
          * Javascript
          */
         $jsFolder = $absoluteModuleResourcePath . '/public/js';
-        if (file_exists($jsFolder . "/main.js")) {
-            $jsIndexFile .= "import \"./{$module->getSlug()}/main.js\";\n";
-        }
-        if (file_exists($jsFolder . "/_global/main.js")) {
-            $jsIndexFile = "import \"./{$module->getSlug()}/_global/main.js\";\n" . $jsIndexFile;
-        }
         self::copyFolderRecursive($jsFolder, self::RESOURCE_CACHE_PATH . '/js/' . $module->getSlug());
 
         /*

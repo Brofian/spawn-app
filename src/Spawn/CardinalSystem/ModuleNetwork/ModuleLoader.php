@@ -167,22 +167,24 @@ class ModuleLoader
         /** @var XMLContentModel $moduleResources */
         $moduleResources = $moduleXML->getChildrenByType("resources")->first();
         if ($moduleResources) {
-            $config['path'] = $moduleResources->getValue();
-            $config['weight'] = (int)$moduleResources->getAttribute("weight");
-            $config['namespace'] = $moduleResources->getAttribute("namespace") ?? ModuleNamespacer::GLOBAL_NAMESPACE_RAW;
-        }
+            foreach($moduleResources->getChildren() as $configChild) {
+                $value = $configChild->getValue();
 
-        /*
-         * Get module "use" data (to include resources from another namespace)
-         */
-        /** @var XMLContentModel $moduleUsing */
-        $moduleUsing = $moduleXML->getChildrenByType("using")->first();
-        if ($moduleUsing) {
-            $usingNamespaces = [];
-            foreach ($moduleUsing->getChildrenByType("namespace") as $namespace) {
-                $usingNamespaces[] = $namespace->getValue();
+                // special cases
+                if($configChild->getType() == 'namespace') {
+                    $value = $value ?? ModuleNamespacer::GLOBAL_NAMESPACE_RAW;
+                }
+                elseif($configChild->getType() == 'using') {
+                    $useNamespaces = [];
+                    foreach($configChild->getChildren() as $child) {
+                        $useNamespaces[] = $child->getValue();
+                    }
+
+                    $value = $useNamespaces;
+                }
+
+                $config[$configChild->getType()] = $value;
             }
-            $config['using'] = $usingNamespaces;
         }
 
 
