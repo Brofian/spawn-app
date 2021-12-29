@@ -7,12 +7,18 @@ namespace spawnApp\Services\Commands;
 use bin\spawn\IO;
 use Exception;
 use spawnApp\Database\ModuleTable\ModuleEntity;
+use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
+use spawnCore\Custom\Gadgets\NamespaceHelper;
 use spawnCore\Custom\Gadgets\ResourceCollector;
 use spawnCore\Custom\Gadgets\ScssHelper;
 use spawnCore\Database\Entity\EntityCollection;
 
 class ThemeCompileCommand extends AbstractCommand {
+
+    public const WEBPACK_CONFIG_FILE = ROOT .'/src/npm/webpack.config.js';
+    public const MODULE_FILES_CACHE = ROOT . '/var/cache/resources/modules/js';
+    public const OUTPUT_PATH = ROOT . '/public/cache';
 
     public static function getCommand(): string
     {
@@ -42,16 +48,14 @@ class ThemeCompileCommand extends AbstractCommand {
 
         $compileAll = !($parameters['js'] || $parameters['scss']);
 
-
-
         $this->gatherFiles($moduleCollection);
-
-        if($parameters['js'] || $compileAll) {
-            $this->compileJavascript();
-        }
 
         if($parameters['scss'] || $compileAll) {
             $this->compileScss();
+        }
+
+        if($parameters['js'] || $compileAll) {
+            $this->compileJavascript();
         }
 
         return 0;
@@ -73,20 +77,44 @@ class ThemeCompileCommand extends AbstractCommand {
      * @throws Exception
      */
     protected function compileJavascript(): void {
-        //javascript kompilieren
+        //compile javascript
         IO::printWarning("> compiling JavaScript");
 
         NpmInstallCommand::addNodeJSToPath();
         $code = 0;
-        $webpackDir = ROOT . "/src/npm";
-        $output = IO::execInDir("npx webpack --config webpack.config.js --progress", $webpackDir, false, $result, $code);
+        $webpackDir = dirname(self::WEBPACK_CONFIG_FILE);
+        $configPath = self::WEBPACK_CONFIG_FILE;;
 
-        if($code != 0) {
-            IO::printError(implode(PHP_EOL, $result));
-            throw new Exception('Could not compile javascript with webpack');
+        $moduleCollection = ListModulesCommand::getModuleList();
+        $namespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleCollection);
+
+        $output = '';
+        foreach($namespaces as $namespace => $moduleList) {
+            $entryFile = self::MODULE_FILES_CACHE . '/'.$namespace.'_index.js';
+
+
+            if (file_exists($entryFile)) {
+                $outputPath = self::OUTPUT_PATH . '/' . ModuleNamespacer::hashNamespace($namespace) . '/js';
+                $command = "npx webpack --entry $entryFile --output-path $outputPath";
+
+                $result = '';
+                $output = IO::execInDir("$command --config $configPath  --progress", $webpackDir, false, $result, $code);
+
+                if($code != 0) {
+                    if(is_string($result)) {
+                        $result = [$result];
+                    }
+                    IO::printError(implode(PHP_EOL, $result));
+
+                    throw new Exception('Could not compile javascript with webpack');
+                }
+
+            }
+
+            IO::printLine(IO::TAB . '- ' . $namespace, '', 1);
+            IO::printLine(IO::TAB . '   > ' . $output, '', 2);
         }
 
-        IO::printLine(IO::TAB . '- ' . $output);
         IO::printSuccess("> - successfully compiled JavaScript");
     }
 

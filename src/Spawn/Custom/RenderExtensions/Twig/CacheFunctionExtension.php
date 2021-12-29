@@ -6,7 +6,7 @@ namespace spawnCore\Custom\RenderExtensions\Twig;
 use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FunctionExtension;
 
-class AssetFunctionExtension extends FunctionExtension
+class CacheFunctionExtension extends FunctionExtension
 {
 
     /**
@@ -14,7 +14,7 @@ class AssetFunctionExtension extends FunctionExtension
      */
     protected function getFunctionName(): string
     {
-        return "assetPath";
+        return "cache";
     }
 
 
@@ -23,13 +23,11 @@ class AssetFunctionExtension extends FunctionExtension
      */
     protected function getFunctionFunction(): callable
     {
-        return function ($namespace, $doHash = false) {
+        return function ($namespace) {
 
-            if ($doHash) {
-                $namespace = ModuleNamespacer::hashNamespace($namespace);
-            }
+            $namespace = ModuleNamespacer::hashNamespace($namespace);
 
-            return '/pack/' . $namespace . '/';
+            return '/cache/' . $namespace . '/';
         };
     }
 

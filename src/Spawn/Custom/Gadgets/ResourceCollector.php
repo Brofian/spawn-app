@@ -34,7 +34,7 @@ class ResourceCollector
             $this->moveModuleData($module);
         }
 
-        $namespaces = $this->getNamespacesFromModuleList($moduleCollection);
+        $namespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleCollection);
 
         foreach($namespaces as $namespace => $moduleSlugs) {
             //create scss file
@@ -63,53 +63,6 @@ class ResourceCollector
 
         }
 
-    }
-
-    protected function getNamespacesFromModuleList(EntityCollection $moduleCollection): array {
-        $modulesInNamespaces = [];
-        $slugToModule = [];
-
-        //gather available namespaces
-        /** @var ModuleEntity $module */
-        foreach($moduleCollection->getArray() as $module) {
-            $namespace = $module->getNamespace();
-            $slug = $module->getSlug();
-            $namespaceDefinitions[$slug] = $namespace;
-            $slugToModule[$slug] = &$module;
-
-            if(!isset($modulesInNamespaces[$namespace])) {
-                $modulesInNamespaces[$namespace] = [];
-            }
-            $modulesInNamespaces[$namespace][] = $slug;
-        }
-
-        //assign modules to namespaces
-        foreach($modulesInNamespaces as $namespace => &$slugs) {
-
-            do {
-                $hasChanged = false;
-                $slugsToAdd = [];
-                foreach($slugs as $slug) {
-                    $module = $slugToModule[$slug];
-                    $using = $module->getResourceConfigValue('using');
-                    if(is_array($using)) {
-                        $slugsToAdd = array_merge($using);
-                    }
-                }
-
-                foreach($slugsToAdd as $slugToAdd) {
-                    if(!in_array($slugToAdd, $slugs)) {
-                        $slugs[] = $slugToAdd;
-                        $hasChanged = true;
-                    }
-                }
-            }
-            while($hasChanged);
-
-            $slugs = array_unique($slugs);
-        }
-
-        return $modulesInNamespaces;
     }
 
 

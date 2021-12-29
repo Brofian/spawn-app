@@ -3,17 +3,19 @@
 namespace spawnCore\Custom\Gadgets;
 
 
+use bin\spawn\IO;
 use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\Exception\CompilerException;
 use ScssPhp\ScssPhp\OutputStyle;
+use spawnApp\Services\Commands\ListModulesCommand;
+use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 
 class ScssHelper
 {
 
     const SCSS_FILES_PATH = ROOT . '/vendor/scssphp/scssphp/scss.inc.php';
-    public string $cacheFilePath = ROOT . '/public/cache/css';
-    public string $baseFolder = ROOT . CACHE_DIR . '/resources/modules';
-    public string $baseFileName = '/scss/index.scss';
+    public string $cacheFilePath = ROOT . '/public/cache';
+    public string $baseFolder = ROOT . CACHE_DIR . '/resources/modules/scss';
     private bool $alwaysReload = false;
     private array $baseVariables = array();
 
@@ -30,19 +32,31 @@ class ScssHelper
 
     public function createCss()
     {
-        $baseFile = $this->baseFolder . '/' . $this->baseFileName;
+        $moduleCollection = ListModulesCommand::getModuleList();
+        $namespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleCollection);
 
-        $css = $this->compile($baseFile);
-        $cssMinified = $this->compile($baseFile, true);
 
-        /** @var FileEditor $fileWriter */
-        $fileWriter = new FileEditor();
-        $fileWriter->createFolder($this->cacheFilePath);
+        foreach($namespaces as $namespace => $moduleList) {
+            $baseFile = $this->baseFolder . '/' . $namespace . '_index.scss';
 
-        $filePath = URIHelper::joinPaths($this->cacheFilePath, 'all.css');
-        $fileWriter->createFile($filePath, $css);
-        $minifiedFilePath = URIHelper::joinPaths($this->cacheFilePath, 'all.min.css');
-        $fileWriter->createFile($minifiedFilePath, $cssMinified);
+            if(file_exists($baseFile)) {
+                $css = $this->compile($baseFile);
+                $cssMinified = $this->compile($baseFile, true);
+
+                $hashedNamespace = ModuleNamespacer::hashNamespace($namespace);
+                $targetFolder = $this->cacheFilePath . '/' . $hashedNamespace . '/css';
+
+                //create output file
+                /** @var FileEditor $fileWriter */
+                $fileWriter = new FileEditor();
+                $fileWriter->createFolder($targetFolder);
+                $fileWriter->createFile($targetFolder.'/all.css', $css);
+                $fileWriter->createFile($targetFolder.'/all.min.css', $cssMinified);
+            }
+
+            IO::printLine(IO::TAB . '- ' . $namespace, '', 1);
+
+        }
 
     }
 

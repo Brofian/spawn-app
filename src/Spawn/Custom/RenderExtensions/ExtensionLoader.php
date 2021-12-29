@@ -6,6 +6,7 @@ namespace spawnCore\Custom\RenderExtensions;
 use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FilterExtension;
 use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FunctionExtension;
 use spawnCore\Custom\RenderExtensions\Twig\AssetFunctionExtension;
+use spawnCore\Custom\RenderExtensions\Twig\CacheFunctionExtension;
 use spawnCore\Custom\RenderExtensions\Twig\DumpFunctionExtension;
 use spawnCore\Custom\RenderExtensions\Twig\HashFilterExtension;
 use spawnCore\Custom\RenderExtensions\Twig\IconFilterExtension;
@@ -50,6 +51,9 @@ class ExtensionLoader
          */
         $assetFunction = new AssetFunctionExtension();
         $assetFunction->addToTwig($twig);
+
+        $cacheFunction = new CacheFunctionExtension();
+        $cacheFunction->addToTwig($twig);
 
         $dumpFunction = new DumpFunctionExtension();
         $dumpFunction->addToTwig($twig);
