@@ -3,15 +3,14 @@
 namespace spawnCore\Database\Entity;
 
 
-use spawnCore\Custom\Collection\AssociativeCollection;
+use DateTime;
+use Exception;
 use spawnCore\Custom\FoundationStorage\Mutable;
+use spawnCore\Database\Entity\EntityTraits\EntityPayloadTrait;
 
 abstract class Entity extends Mutable
 {
-
-    protected ?string $id = null;
-
-    protected ?AssociativeCollection $payload = null;
+    use EntityPayloadTrait;
 
     public abstract function getRepositoryClass(): string;
 
@@ -19,20 +18,32 @@ abstract class Entity extends Mutable
 
     abstract public static function getEntityFromArray(array $values): Entity;
 
-    public function getId(): ?string {
-        return $this->id;
-    }
+    protected static function getDateTimeFromVariable($dateTime): DateTime
+    {
 
-    public function setId(?string $id): self {
-        $this->id = $id;
-        return $this;
-    }
-
-    public function getPayload(): AssociativeCollection {
-        if(!$this->payload) {
-            $this->payload = new AssociativeCollection();
+        if ($dateTime instanceof DateTime) {
+            return $dateTime;
         }
-        return $this->payload;
+
+        try {
+            return new DateTime($dateTime);
+        } catch (Exception $e) {
+            return new DateTime();
+        }
+    }
+
+    protected static function getArrayFromVariable($array): array
+    {
+
+        if (is_array($array)) {
+            return $array;
+        }
+
+        try {
+            return json_decode($array, true);
+        } catch (Exception $e) {
+            return [$array];
+        }
     }
 
 

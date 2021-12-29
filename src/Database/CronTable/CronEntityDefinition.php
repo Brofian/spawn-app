@@ -4,17 +4,22 @@ namespace spawnApp\Database\CronTable;
 
 
 use DateTime;
-use Exception;
-use spawnCore\Database\Entity\Entity;
 use spawnCore\Cron\CronStates;
+use spawnCore\Database\Entity\Entity;
+use spawnCore\Database\Entity\EntityTraits\EntityCreatedAtTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityIDTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityUpdatedAtTrait;
 
 class CronEntityDefinition extends Entity
 {
+    use EntityIDTrait;
+    use EntityUpdatedAtTrait;
+    use EntityCreatedAtTrait;
+
+
     protected string $action;
     protected string $result;
     protected string $state;
-    protected ?DateTime $createdAt;
-    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $action,
@@ -25,12 +30,14 @@ class CronEntityDefinition extends Entity
         ?DateTime $updatedAt = null
     )
     {
-        $this->action = $action;
-        $this->result = $result;
-        $this->state = $state;
-        $this->id = $id;
-        $this->updatedAt = $updatedAt;
-        $this->createdAt = $createdAt;
+        $this->setAction($action);
+        $this->setResult($result);
+        $this->setState($state);
+        $this->setId($id);
+        $this->setUpdatedAt($updatedAt);
+        $this->setId($id);
+        $this->setUpdatedAt($updatedAt);
+        $this->setCreatedAt($createdAt);
     }
 
 
@@ -53,15 +60,8 @@ class CronEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        if(!$values['updatedAt'] instanceof DateTime) {
-            try {   $values['updatedAt'] = new DateTime($values['updatedAt']); }
-            catch (Exception $e) { $values['updatedAt'] = new DateTime(); }
-        }
-
-        if(!$values['createdAt'] instanceof DateTime) {
-            try {   $values['createdAt'] = new DateTime($values['createdAt']); }
-            catch (Exception $e) { $values['createdAt'] = new DateTime(); }
-        }
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
 
         return new CronEntity(
             $values['action'],
@@ -91,27 +91,6 @@ class CronEntityDefinition extends Entity
     public function setResult(string $result): void
     {
         $this->result = $result;
-    }
-
-
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function getUpdatedAt(): ?DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
     }
 
     public function getState(): string

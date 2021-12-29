@@ -60,4 +60,15 @@
         <tag>base.service.static</tag>
     </service>
 
+
+    <!-- Configuration -->
+    <service id="system.database.table.configuration" class="spawnApp\Database\ConfigurationTable\ConfigurationTable" static="true">
+        <tag>database.table</tag>
+    </service>
+
+    <service id="system.repository.configuration" class="spawnApp\Database\CronTable\ConfigurationRepository" static="true">
+        <argument type="service" value="system.database.table.configuration" />
+        <tag>base.service.static</tag>
+    </service>
+
 </services>

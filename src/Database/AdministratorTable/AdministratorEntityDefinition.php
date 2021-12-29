@@ -4,19 +4,23 @@ namespace spawnApp\Database\AdministratorTable;
 
 
 use DateTime;
-use Exception;
 use spawnCore\Database\Entity\Entity;
+use spawnCore\Database\Entity\EntityTraits\EntityCreatedAtTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityIDTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityUpdatedAtTrait;
 
 class AdministratorEntityDefinition extends Entity
 {
+    use EntityIDTrait;
+    use EntityUpdatedAtTrait;
+    use EntityCreatedAtTrait;
+
     protected string $username;
     protected string $password;
     protected string $email;
     protected bool $active;
     protected ?string $loginHash;
     protected ?DateTime $loginExpiration;
-    protected ?DateTime $createdAt;
-    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $username,
@@ -30,15 +34,15 @@ class AdministratorEntityDefinition extends Entity
         ?DateTime $updatedAt = null
     )
     {
-        $this->username = $username;
-        $this->password = $password;
-        $this->email = $email;
-        $this->active = $active;
-        $this->loginHash = $loginHash;
-        $this->loginExpiration = $loginExpiration;
-        $this->id = $id;
-        $this->updatedAt = $updatedAt;
-        $this->createdAt = $createdAt;
+        $this->setUsername($username);
+        $this->setPassword($password);
+        $this->setEmail($email);
+        $this->setActive($active);
+        $this->setLoginHash($loginHash);
+        $this->setLoginExpiration($loginExpiration);
+        $this->setId($id);
+        $this->setUpdatedAt($updatedAt);
+        $this->setCreatedAt($createdAt);
     }
 
 
@@ -64,20 +68,9 @@ class AdministratorEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        if(!$values['updatedAt'] instanceof DateTime) {
-            try {   $values['updatedAt'] = new DateTime($values['updatedAt']); }
-            catch (Exception $e) { $values['updatedAt'] = new DateTime(); }
-        }
-
-        if(!$values['createdAt'] instanceof DateTime) {
-            try {   $values['createdAt'] = new DateTime($values['createdAt']); }
-            catch (Exception $e) { $values['createdAt'] = new DateTime(); }
-        }
-
-        if(!$values['loginExpiration'] instanceof DateTime && $values['loginExpiration'] !== null) {
-            try {   $values['loginExpiration'] = new DateTime($values['loginExpiration']); }
-            catch (Exception $e) { $values['loginExpiration'] = null; }
-        }
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
+        $values['loginExpiration'] = self::getDateTimeFromVariable($values['loginExpiration']);
 
         return new AdministratorEntity(
             $values['username'],
@@ -97,9 +90,10 @@ class AdministratorEntityDefinition extends Entity
         return $this->username;
     }
 
-    public function setUsername(string $username): void
+    public function setUsername(string $username): self
     {
         $this->username = $username;
+        return $this;
     }
 
     public function getPassword(): string
@@ -107,9 +101,10 @@ class AdministratorEntityDefinition extends Entity
         return $this->password;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+        return $this;
     }
 
     public function getEmail(): string
@@ -117,9 +112,10 @@ class AdministratorEntityDefinition extends Entity
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+        return $this;
     }
 
     public function isActive(): bool
@@ -127,39 +123,22 @@ class AdministratorEntityDefinition extends Entity
         return $this->active;
     }
 
-    public function setActive(bool $active): void
+    public function setActive(bool $active): self
     {
         $this->active = $active;
+        return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function getUpdatedAt(): ?DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
 
     public function getLoginHash(): ?string
     {
         return $this->loginHash;
     }
 
-    public function setLoginHash(?string $loginHash): void
+    public function setLoginHash(?string $loginHash): self
     {
         $this->loginHash = $loginHash;
+        return $this;
     }
 
     public function getLoginExpiration(): ?DateTime
@@ -167,13 +146,10 @@ class AdministratorEntityDefinition extends Entity
         return $this->loginExpiration;
     }
 
-    public function setLoginExpiration(?DateTime $loginExpiration): void
+    public function setLoginExpiration(?DateTime $loginExpiration): self
     {
         $this->loginExpiration = $loginExpiration;
+        return $this;
     }
-
-
-
-
 
 }

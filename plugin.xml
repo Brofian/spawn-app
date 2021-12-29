@@ -1,36 +1,38 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
-<plugin test="abc">
+<configuration>
 
-    <resources>
-        <namespace>SpawnApp</namespace>
-        <path>/src/Resources</path>
-        <weight>1</weight>
-        <using>
-            <namespace>exampleABC</namespace>
-        </using>
-    </resources>
+    <collection folder="global">
+
+        <textfield>
+            <name>config_debug_text</name>
+            <default>Example</default>
+        </textfield>
+
+        <selectfield>
+            <name>config_debug_select</name>
+            <default>A</default>
+            <opations>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option>C</option>
+            </opations>
+        </selectfield>
+
+        <boolfield>
+            <name>config_debug_bool</name>
+            <default>false</default>
+        </boolfield>
+
+        <entityselectfield>
+            <name>config_debug_text</name>
+            <entity>SeoUrlTable</entity>
+            <identifier>getId</identifier>
+            <label>getLabel</label>
+        </entityselectfield>
+
+    </collection>
 
 
-    <info>
-        <author>Fabian Holzwarth</author>
-        <version>1.0.0</version>
-    </info>
 
-    <services>
-
-        <import file="/src/Spawn/spawn_services.xml"/>
-
-        <import file="/src/Controller/controller.xml"/>
-
-        <import file="/src/Services/services.xml"/>
-
-        <import file="/src/Extensions/extensions.xml"/>
-
-        <import file="/src/Database/database.xml"/>
-
-    </services>
-
-
-
-</plugin>
+</configuration>

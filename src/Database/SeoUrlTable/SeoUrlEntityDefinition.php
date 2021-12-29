@@ -3,10 +3,17 @@
 namespace spawnApp\Database\SeoUrlTable;
 
 use DateTime;
-use Exception;
 use spawnCore\Database\Entity\Entity;
+use spawnCore\Database\Entity\EntityTraits\EntityCreatedAtTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityIDTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityUpdatedAtTrait;
 
-class SeoUrlEntityDefinition extends Entity {
+class SeoUrlEntityDefinition extends Entity
+{
+
+    use EntityIDTrait;
+    use EntityUpdatedAtTrait;
+    use EntityCreatedAtTrait;
 
     protected string $cUrl;
     protected string $controller;
@@ -14,8 +21,6 @@ class SeoUrlEntityDefinition extends Entity {
     protected array $parameters;
     protected bool $locked;
     protected bool $active;
-    protected ?DateTime $createdAt;
-    protected ?DateTime $updatedAt;
 
     public function __construct(
         string $cUrl,
@@ -28,15 +33,15 @@ class SeoUrlEntityDefinition extends Entity {
         ?DateTime $createdAt = null,
         ?DateTime $updatedAt = null)
     {
-        $this->cUrl = $cUrl;
-        $this->controller = $controller;
-        $this->action = $action;
-        $this->parameters = $parameters;
-        $this->locked = $locked;
-        $this->active = $active;
-        $this->id = $id;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
+        $this->setCUrl($cUrl);
+        $this->setController($controller);
+        $this->setAction($action);
+        $this->setParameters($parameters);
+        $this->setLocked($locked);
+        $this->setActive($active);
+        $this->setId($id);
+        $this->setCreatedAt($createdAt);
+        $this->setUpdatedAt($updatedAt);
     }
 
     public function getRepositoryClass(): string
@@ -46,38 +51,9 @@ class SeoUrlEntityDefinition extends Entity {
 
     public static function getEntityFromArray(array $values): Entity
     {
-        if(!$values['updatedAt'] instanceof DateTime) {
-            try {
-                $values['updatedAt'] = new DateTime($values['updatedAt']);
-            }
-            catch (Exception $e) {
-                $values['updatedAt'] = new DateTime();
-            }
-        }
-
-        if(!$values['createdAt'] instanceof DateTime) {
-            try {
-                $values['createdAt'] = new DateTime($values['createdAt']);
-            }
-            catch (Exception $e) {
-                $values['createdAt'] = new DateTime();
-            }
-        }
-
-        if(!isset($values['parameters'])) {
-            $values['parameters'] = [];
-        }
-        elseif(!is_array($values['parameters']))
-        {
-            try {
-                $values['parameters'] = json_decode($values['parameters']);
-            }
-            catch (Exception $e) {
-                $values['parameters'] = [];
-            }
-        }
-
-
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
+        $values['parameters'] = self::getArrayFromVariable($values['parameters']);
 
         return new SeoUrlEntity(
             $values['cUrl'],
@@ -140,28 +116,6 @@ class SeoUrlEntityDefinition extends Entity {
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTime $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
     public function isLocked(): bool
     {
         return $this->locked;
@@ -198,8 +152,5 @@ class SeoUrlEntityDefinition extends Entity {
     {
         $this->parameters = $parameters;
     }
-
-
-
 
 }

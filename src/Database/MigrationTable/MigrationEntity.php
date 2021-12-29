@@ -3,23 +3,34 @@
 namespace spawnApp\Database\MigrationTable;
 
 use DateTime;
-use Exception;
 use spawnCore\Database\Entity\Entity;
+use spawnCore\Database\Entity\EntityTraits\EntityCreatedAtTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityIDTrait;
+use spawnCore\Database\Entity\EntityTraits\EntityUpdatedAtTrait;
 
-class MigrationEntity extends Entity {
+class MigrationEntity extends Entity
+{
+
+    use EntityIDTrait;
+    use EntityUpdatedAtTrait;
+    use EntityCreatedAtTrait;
 
     protected string $class;
     protected int $timestamp;
-    protected ?DateTime $createdAt;
-    protected ?DateTime $updatedAt;
 
-    public function __construct(string $class, int $timestamp, ?string $id = null, ?DateTime $createdAt = null, ?DateTime $updatedAt = null)
+    public function __construct(
+        string $class,
+        int $timestamp,
+        ?string $id = null,
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null
+    )
     {
-        $this->class = $class;
-        $this->timestamp = $timestamp;
-        $this->id = $id;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
+        $this->setClass($class);
+        $this->setTimestamp($timestamp);
+        $this->setId($id);
+        $this->setUpdatedAt($updatedAt);
+        $this->setCreatedAt($createdAt);
     }
 
     public function getRepositoryClass(): string
@@ -29,20 +40,16 @@ class MigrationEntity extends Entity {
 
     public static function getEntityFromArray(array $values): Entity
     {
-        $createdAt = null;
-        $updatedAt = null;
-        try {
-            $createdAt = new DateTime($values['updatedAt']);
-            $updatedAt = new DateTime($values['updatedAt']);
-        }
-        catch (Exception $e) {}
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
+
 
         return new static(
             $values['class'],
             $values['timestamp'],
             $values['id'],
-            $updatedAt,
-            $createdAt
+            $values['updatedAt'],
+            $values['createdAt']
         );
     }
 
@@ -63,7 +70,7 @@ class MigrationEntity extends Entity {
         return $this->class;
     }
 
-    public function setClass(string $class): MigrationEntity
+    public function setClass(string $class): self
     {
         $this->class = $class;
         return $this;
@@ -74,33 +81,9 @@ class MigrationEntity extends Entity {
         return $this->timestamp;
     }
 
-    public function setTimestamp(int $timestamp): MigrationEntity
+    public function setTimestamp(int $timestamp): self
     {
         $this->timestamp = $timestamp;
         return $this;
     }
-
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTime $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
-
 }
