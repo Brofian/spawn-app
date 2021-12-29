@@ -51,9 +51,9 @@ class SeoUrlEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
-        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
-        $values['parameters'] = self::getArrayFromVariable($values['parameters']);
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
+        $values['parameters'] = self::getArrayFromVariable($values['parameters']??null);
 
         return new SeoUrlEntity(
             $values['cUrl'],

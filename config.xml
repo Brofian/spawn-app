@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<configuration>
+
+    <collection folder="global">
+
+        <selectfield>
+            <name>config_debug_select</name>
+            <default>1</default>
+            <multiple>true</multiple>
+            <options>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option>C</option>
+            </options>
+        </selectfield>
+
+        <boolfield>
+            <name>config_debug_bool</name>
+            <default>false</default>
+        </boolfield>
+
+        <entityselectfield>
+            <name>config_debug_entity</name>
+            <entity>SeoUrl</entity>
+            <identifier>getId</identifier><!-- The function on the entity, that is called to get an unique identifier -->
+            <label>getLabel</label><!-- The function on the entity, that is called to get an label to display -->
+        </entityselectfield>
+
+    </collection>
+
+
+
+</configuration>

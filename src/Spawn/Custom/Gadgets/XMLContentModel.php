@@ -24,13 +24,13 @@ class XMLContentModel
         return $this->attributes;
     }
 
-    public function getAttribute(string $key): ?string
+    public function getAttribute(string $key, $default = null): ?string
     {
         if (isset($this->attributes[$key])) {
             return $this->attributes[$key];
         }
 
-        return null;
+        return $default;
     }
 
     public function getType(): ?string

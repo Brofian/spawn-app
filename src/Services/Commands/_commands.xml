@@ -52,6 +52,8 @@
     <service id="system.command.module_refresh" class="spawnApp\Services\Commands\ModulesRefreshCommand">
         <argument type="service" value="system.database.helper"/>
         <argument type="service" value="system.repository.modules"/>
+        <argument type="service" value="system.service.seo_url_manager"/>
+        <argument type="service" value="system.service.configuration_manager"/>
         <tag>console.command</tag>
     </service>
 

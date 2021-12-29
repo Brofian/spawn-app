@@ -47,10 +47,10 @@ class ModuleEntityDefinition extends Entity {
         return ModuleRepository::class;
     }
 
-    public static function getEntityFromArray(array $values): ModuleEntity
+    public static function getEntityFromArray(array $values): self
     {
-        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
-        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
 
         return new static(
             $values['slug'],
@@ -129,7 +129,7 @@ class ModuleEntityDefinition extends Entity {
     /**
      * @param string|array $information
      */
-    public function setInformation($information): ModuleEntity
+    public function setInformation($information): self
     {
         if(is_array($information)) {
             $this->information = $information;

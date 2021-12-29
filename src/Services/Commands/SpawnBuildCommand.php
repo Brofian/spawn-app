@@ -6,6 +6,7 @@ namespace spawnApp\Services\Commands;
 use spawnApp\Database\ModuleTable\ModuleRepository;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Database\Helpers\DatabaseHelper;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class SpawnBuildCommand extends AbstractCommand  {
 
@@ -35,6 +36,7 @@ class SpawnBuildCommand extends AbstractCommand  {
     }
 
     public function execute(array $parameters): int  {
+        $container = ServiceContainerProvider::getServiceContainer();
 
         //print SPAWN
         (new PrintSpawnCommand())->execute(CacheClearCommand::createParameterArray(['a'=>true]));
@@ -46,7 +48,8 @@ class SpawnBuildCommand extends AbstractCommand  {
         (new DatabaseUpdateCommand())->execute(DatabaseUpdateCommand::createParameterArray([]));
 
         //update module list
-        (new ModulesRefreshCommand($this->databaseHelper, $this->moduleRepository))->execute(ModulesRefreshCommand::createParameterArray([]));
+        $modulesRefreshCommand = $container->getServiceInstance('system.command.module_refresh');
+        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray([]));
 
         //compile modules
         (new ThemeCompileCommand())->execute(ThemeCompileCommand::createParameterArray([]));

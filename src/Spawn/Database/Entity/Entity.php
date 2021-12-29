@@ -3,6 +3,7 @@
 namespace spawnCore\Database\Entity;
 
 
+use Cassandra\Date;
 use DateTime;
 use Exception;
 use spawnCore\Custom\FoundationStorage\Mutable;
@@ -26,7 +27,11 @@ abstract class Entity extends Mutable
         }
 
         try {
-            return new DateTime($dateTime);
+            if(is_string($dateTime)) {
+                return new DateTime($dateTime);
+            }
+            return new DateTime();
+
         } catch (Exception $e) {
             return new DateTime();
         }

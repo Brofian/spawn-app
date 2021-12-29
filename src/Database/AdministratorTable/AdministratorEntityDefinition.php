@@ -68,9 +68,9 @@ class AdministratorEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
-        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
-        $values['loginExpiration'] = self::getDateTimeFromVariable($values['loginExpiration']);
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
+        $values['loginExpiration'] = self::getDateTimeFromVariable($values['loginExpiration']??null);
 
         return new AdministratorEntity(
             $values['username'],

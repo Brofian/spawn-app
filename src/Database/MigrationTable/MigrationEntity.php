@@ -40,8 +40,8 @@ class MigrationEntity extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
-        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
 
 
         return new static(

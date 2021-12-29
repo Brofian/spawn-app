@@ -95,12 +95,13 @@ abstract class TableRepository
         $conn = DatabaseConnection::getConnection();
         $qb = $conn->createQueryBuilder();
         $query = $qb->delete($this->tableName);
-        $query->where($criteria->getParameters());
+        $query->where($criteria->generateCriteria());
 
         try {
             $stmt = $conn->prepare($query->getSQL());
             foreach($criteria->getParameters() as $id => $parameter) {
                 $stmt->bindValue($id+1, $parameter);
+
             }
 
             $stmt->executeQuery();

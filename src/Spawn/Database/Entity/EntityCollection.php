@@ -14,7 +14,7 @@ class EntityCollection extends Collection {
     }
 
     public function getContainedEntityType(): string {
-        return $this->getContainedEntityType();
+        return $this->containedEntityType;
     }
 
     public function add($value) {

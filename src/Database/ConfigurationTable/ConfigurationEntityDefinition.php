@@ -18,12 +18,17 @@ class ConfigurationEntityDefinition extends Entity
 
     protected string $internalName;
     protected string $type;
-    protected array $definition;
+    protected ?string $value;
+    protected array $definition = [];
     protected string $folder;
 
+    /**
+     * @param string|array $definition
+     */
     public function __construct(
         string $internalName,
         string $type,
+        ?string $value,
         $definition,
         string $folder,
         ?string $id = null,
@@ -31,13 +36,14 @@ class ConfigurationEntityDefinition extends Entity
         ?DateTime $updatedAt = null
     )
     {
-        $this->internalName = $internalName;
-        $this->type = $type;
-        $this->definition = $definition;
-        $this->folder = $folder;
-        $this->id = $id;
-        $this->updatedAt = $updatedAt;
-        $this->createdAt = $createdAt;
+        $this->setInternalName($internalName);
+        $this->setType($type);
+        $this->setValue($value);
+        $this->setDefinition($definition);
+        $this->setFolder($folder);
+        $this->setId($id);
+        $this->setUpdatedAt($updatedAt);
+        $this->setCreatedAt($createdAt);
     }
 
 
@@ -52,6 +58,7 @@ class ConfigurationEntityDefinition extends Entity
             'id' => $this->getId(),
             'internalName' => $this->getInternalName(),
             'type' => $this->getType(),
+            'value' => $this->getValue(),
             'definition' => $this->getDefinition(),
             'folder' => $this->getFolder(),
             'updatedAt' => $this->getUpdatedAt(),
@@ -61,12 +68,13 @@ class ConfigurationEntityDefinition extends Entity
 
     public static function getEntityFromArray(array $values): Entity
     {
-        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']);
-        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']);
+        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
+        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
 
         return new ConfigurationEntity(
             $values['internalName'],
             $values['type'],
+            $values['value'],
             $values['definition'],
             $values['folder'],
             $values['id'] ?? null,
@@ -97,14 +105,32 @@ class ConfigurationEntityDefinition extends Entity
         return $this;
     }
 
-    public function getDefinition(): array
+    /**
+     * @return string|array
+     */
+    public function getDefinition(bool $asArray = false)
     {
-        return $this->definition;
+        if($asArray) {
+            return $this->definition;
+        }
+        return json_encode($this->definition);
     }
 
-    public function setDefinition(array $definition): self
+    /**
+     * @param string|array $definition
+     */
+    public function setDefinition($definition): self
     {
-        $this->definition = $definition;
+        if(is_array($definition)) {
+            $this->definition = $definition;
+        }
+        elseif(is_string($definition)) {
+            try {
+                $this->definition = json_decode($definition, true, 999, JSON_THROW_ON_ERROR);
+            }
+            catch (Exception $e) {}
+        }
+
         return $this;
     }
 
@@ -118,5 +144,18 @@ class ConfigurationEntityDefinition extends Entity
         $this->folder = $folder;
         return $this;
     }
+
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    public function setValue(?string $value): self
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+
 
 }

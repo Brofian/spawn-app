@@ -69,7 +69,7 @@ class SpawnSetupCommand extends AbstractCommand {
         $migrationExecuteCommand->execute(MigrationExecuteCommand::createParameterArray([]));
 
         //refresh actions
-        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray(['a'=>true]));
+        $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray(['a'=>true, 'c'=>true]));
 
         //clear cache
         (new CacheClearCommand())->execute(CacheClearCommand::createParameterArray([]));

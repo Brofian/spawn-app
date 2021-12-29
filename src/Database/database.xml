@@ -66,7 +66,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.configuration" class="spawnApp\Database\CronTable\ConfigurationRepository" static="true">
+    <service id="system.repository.configuration" class="spawnApp\Database\ConfigurationTable\ConfigurationRepository" static="true">
         <argument type="service" value="system.database.table.configuration" />
         <tag>base.service.static</tag>
     </service>
