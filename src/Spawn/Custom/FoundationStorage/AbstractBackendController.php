@@ -38,8 +38,33 @@ abstract class AbstractBackendController extends AbstractController
             );
         }
 
+
+        $this->filterDuplicateArrayElements($sidebarStructure);
+
         return $sidebarStructure;
     }
+
+    private function filterDuplicateArrayElements(array &$array, bool $isFirst = true): void {
+
+        foreach($array as $key => &$element) {
+            if($isFirst) {
+                $this->filterDuplicateArrayElements($element, false);
+            }
+            elseif(is_array($element)) {
+                switch($key) {
+                    case 'title':
+                    case 'color':
+                    case 'controller':
+                        $element = $element[0];
+                        break;
+                    case 'actions':
+                        $this->filterDuplicateArrayElements($element, false);
+                        break;
+                }
+            }
+        }
+    }
+
 
     abstract public static function getSidebarMethods(): array;
 

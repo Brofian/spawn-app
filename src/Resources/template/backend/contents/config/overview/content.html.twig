@@ -1,0 +1,21 @@
+{% block content_inner %}
+
+    {% include 'backend/contents/misc/headline.html.twig' with {
+        title: 'System configuration'
+    } only %}
+
+
+    <div class="container">
+
+        <ul>
+            {% for folder in available_folders %}
+                <li data-backend-content-link="{{ seo_url('system.backend.system_config', 'folder', [folder]) }}">
+                    {{ folder }}
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+
+{% endblock %}

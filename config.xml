@@ -4,6 +4,11 @@
 
     <collection folder="global">
 
+        <textfield>
+            <name>config_debug_text</name>
+            <default>Example</default>
+        </textfield>
+
         <selectfield>
             <name>config_debug_select</name>
             <default>1</default>

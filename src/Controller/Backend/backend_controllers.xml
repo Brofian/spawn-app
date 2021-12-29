@@ -18,5 +18,10 @@
         <tag>base.controller</tag>
     </service>
 
+    <service id="system.backend.system_config" class="spawnApp\Controller\Backend\SystemConfigController">
+        <argument type='service' value="system.repository.configuration"/>
+        <tag>backend.controller</tag>
+    </service>
+
 </services>
 
