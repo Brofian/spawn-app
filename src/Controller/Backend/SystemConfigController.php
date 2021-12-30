@@ -3,6 +3,7 @@
 
 namespace spawnApp\Controller\Backend;
 
+use Error;
 use Exception;
 use spawnApp\Database\ConfigurationTable\ConfigurationEntity;
 use spawnApp\Database\ConfigurationTable\ConfigurationRepository;
@@ -14,24 +15,36 @@ use spawnCore\Custom\FoundationStorage\AbstractBackendController;
 use spawnCore\Custom\Response\AbstractResponse;
 use spawnCore\Custom\Response\JsonResponse;
 use spawnCore\Custom\Response\TwigResponse;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Criteria\Filters\EqualsFilter;
+use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
+use spawnCore\Database\Criteria\Filters\LikeFilter;
+use spawnCore\Database\Criteria\Filters\OrFilter;
 use spawnCore\Database\Entity\EntityCollection;
+use spawnCore\Database\Entity\InvalidRepositoryInteractionException;
+use spawnCore\Database\Entity\RepositoryException;
+use spawnCore\Database\Entity\TableRepository;
 use spawnCore\Database\Helpers\DatabaseConnection;
 use spawnCore\Database\Helpers\DatabaseHelper;
 use spawnCore\ServiceSystem\Service;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
+use Throwable;
 
 class SystemConfigController extends AbstractBackendController {
 
     protected ConfigurationRepository $configurationRepository;
+    protected Request $request;
+
 
     public function __construct(
-        ConfigurationRepository $configurationRepository
+        ConfigurationRepository $configurationRepository,
+        Request $request
     )
     {
         parent::__construct();
         $this->configurationRepository = $configurationRepository;
+        $this->request = $request;
     }
 
 
@@ -107,13 +120,97 @@ class SystemConfigController extends AbstractBackendController {
      * @route /backend/config/submit/folder
      * @locked
      * @return AbstractResponse
+     * @throws DatabaseConnectionException
      */
     public function folderSaveSubmitAction(): AbstractResponse {
 
+        $queryBuilder = DatabaseConnection::getConnection()->createQueryBuilder();
+        $stmt = $queryBuilder->update(ConfigurationTable::TABLE_NAME, 'c')
+            ->set('c.value', '?')
+            ->where('c.internalName = ?');
+
+        $errors = [];
+        try {
+            foreach($this->request->getPost() as $key => $value) {
+                if(strpos($key, 'field__') === 0) {
+                    $key = str_replace('field__', '', $key);
+                    $stmt->setParameters([$value, $key]);
+                    $stmt->executeStatement();
+                }
+            }
+        }
+        catch (\Doctrine\DBAL\Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+
+
+
+        //save the fields
+
         return new JsonResponse([
-            'success' => false,
-            'errors' => ['TODO: ' . __CLASS__ . ':' . __LINE__]
+            'success' => empty($errors),
+            'errors' => $errors
         ]);
     }
+
+
+    /**
+     * @route /backend/api/config/entity/{}/{}
+     * @locked
+     * @param string $internalName
+     * @param string $search
+     * @return AbstractResponse
+     * @throws InvalidFilterValueException
+     */
+    public function getEntitySearchAction(string $internalName, string $search = ''): AbstractResponse {
+
+        $config = null;
+        try {
+            $config = $this->configurationRepository->search(new Criteria(new EqualsFilter('internalName', $internalName)))->first();
+            if(!$config) {
+                throw new InvalidRepositoryInteractionException('Could not find configuration for "'.$internalName.'"');
+            }
+
+
+            /** @var ConfigurationEntity $config */
+            $entity = $config->getDefinition(true)['entity'];
+            $entityGetLabel = $config->getDefinition(true)['label'];
+            $entityGetIdentifier = $config->getDefinition(true)['identifier'];
+
+
+            /** @var TableRepository $repository */
+            $repository = ServiceContainerProvider::getServiceContainer()->getServiceInstance($entity);
+            if(!$repository) {
+                throw new InvalidRepositoryInteractionException('Invalid entity "'.$entity.'"');
+            }
+
+
+            $criteria = new Criteria();
+            if($search) {
+                //TODO
+            }
+            $entities = $repository->search($criteria, 10);
+            $entries = [];
+            foreach ($entities as $entity) {
+                $entries[] = [
+                    'identifier' => $entity->{$entityGetIdentifier}(),
+                    'label' => $entity->{$entityGetLabel}(),
+                ];
+            }
+
+            return new JsonResponse([
+                'success' => true,
+                'entities' => $entries
+            ]);
+        }
+        catch (Throwable $e) {
+            return new JsonResponse([
+                'success' => false,
+                'errors' => [$e->getMessage()]
+            ]);
+        }
+    }
+
+
 
 }
