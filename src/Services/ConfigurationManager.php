@@ -210,6 +210,10 @@ class ConfigurationManager {
                 $fieldData['type'] = 'text';
                 $this->getTextFieldData($field, $fieldData);
                 break;
+            case 'numberfield':
+                $fieldData['type'] = 'number';
+                $this->getNumberFieldData($field, $fieldData);
+                break;
             case 'selectfield':
                 $fieldData['type'] = 'select';
                 $this->getSelectFieldData($field, $fieldData);
@@ -233,6 +237,14 @@ class ConfigurationManager {
     protected function getTextFieldData(XMLContentModel $field, array &$fieldData): void {
         $defaultElement = $field->getChildrenByType('default')->first();
         $fieldData['definition']['default'] = $defaultElement ? $defaultElement->getValue() : '';
+    }
+
+    protected function getNumberFieldData(XMLContentModel $field, array &$fieldData): void {
+        $defaultElement = $field->getChildrenByType('default')->first();
+        $fieldData['definition']['default'] = $defaultElement ? $defaultElement->getValue() : 0;
+
+        $stepElement = $field->getChildrenByType('step')->first();
+        $fieldData['definition']['step'] = $stepElement ? $stepElement->getValue() : 1;
     }
 
     /**

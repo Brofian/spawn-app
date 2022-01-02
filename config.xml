@@ -9,6 +9,13 @@
             <default>Example</default>
         </textfield>
 
+        <numberfield>
+            <name>config_debug_number</name>
+            <default>0</default>
+            <step>0.01</step>
+        </numberfield>
+
+
         <selectfield>
             <name>config_debug_select</name>
             <default>1</default>

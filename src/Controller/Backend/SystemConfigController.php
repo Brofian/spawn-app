@@ -119,17 +119,21 @@ class SystemConfigController extends AbstractBackendController {
             // if this field is an entity search and has a value, load the selected label
             if($configurationField->getType() === 'entity' && $configurationField->getValue()) {
                 /** @var TableRepository $repository */
-                $definition = $configurationField->getDefinition(true);
-                $repositoryID = $definition['repository'];
-                $identifierColumn = $definition['identifier'];
-                $labelGetter = $definition['label'];
-                $value = ($identifierColumn == 'id') ? UUID::hexToBytes($configurationField->getValue()) : $configurationField->getValue();
+                try {
+                    $definition = $configurationField->getDefinition(true);
+                    $repositoryID = $definition['repository'];
+                    $identifierColumn = $definition['identifier'];
+                    $labelGetter = $definition['label'];
 
-                $repository = ServiceContainerProvider::getServiceContainer()->get($repositoryID);
-                $el = $repository->search(new Criteria(new EqualsFilter($identifierColumn, $value)))->first();
-                if($el) {
-                    $configurationField->set('selectedEntityLabel', $el->{$labelGetter}());
+                    $value = ($identifierColumn == 'id') ? UUID::hexToBytes($configurationField->getValue()) : $configurationField->getValue();
+
+                    $repository = ServiceContainerProvider::getServiceContainer()->get($repositoryID);
+                    $el = $repository->search(new Criteria(new EqualsFilter($identifierColumn, $value)))->first();
+                    if($el) {
+                        $configurationField->set('selectedEntityLabel', $el->{$labelGetter}());
+                    }
                 }
+                catch (Exception $e) {}
             }
         }
 

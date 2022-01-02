@@ -64,7 +64,6 @@ export default class EntitySelect extends CustomSelect {
         }
 
         let options = this.optionsContainer.querySelectorAll('.js-entity-select-option');
-        console.log("removing "+options.length+" elements");
         for (let option of options) {
             this.optionsContainer.removeChild(option);
         }
@@ -95,7 +94,8 @@ export default class EntitySelect extends CustomSelect {
 
     getCurrentValue() {
         this.currentValue = this._element.dataset.entitySelectValue;
-        this.currentLabel = this._element.dataset.entitySelectValue;
+        this.currentLabel = this._element.dataset.entitySelectLabel;
+        console.log('set currentvalue to ' + this.currentValue);
     }
 
 }

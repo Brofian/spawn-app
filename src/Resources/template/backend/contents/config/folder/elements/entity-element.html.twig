@@ -1,4 +1,5 @@
 <div data-entity-select="field__{{ field.internalName }}"
-     data-entity-select-value="{{ field.selectedEntityLabel|default('-') }}"
+     data-entity-select-value="{{ field.value|default('') }}"
+     data-entity-select-label="{{ field.selectedEntityLabel|default('-') }}"
      data-entity-select-name="{{ field.internalName }}"
 ></div>
