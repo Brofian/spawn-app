@@ -1,10 +1,6 @@
-<div>
-
-    <label>
-        <span class="align-self-center">
-            <input type="checkbox" id="field__{{ field.internalName }}" name="field__{{ field.internalName }}" {% if field.value %}checked="checked"{% endif %}>
-            <label for="field__{{ field.internalName }}"></label>
-        </span>
-    </label>
-
-</div>
+<label>
+    <span class="align-self-center">
+        <input type="checkbox" id="field__{{ field.internalName }}" name="field__{{ field.internalName }}" {% if field.value %}checked="checked"{% endif %}>
+        <label for="field__{{ field.internalName }}"></label>
+    </span>
+</label>

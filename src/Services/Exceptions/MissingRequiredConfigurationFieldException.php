@@ -17,7 +17,7 @@ class MissingRequiredConfigurationFieldException extends AbstractException {
 
     protected function getMessageTemplate(): string
     {
-        return 'Missing required element %element% for config field type %type%!';
+        return 'Missing required element "%element%" for config field type "%type%"!';
     }
 
     protected function getExitCode(): int

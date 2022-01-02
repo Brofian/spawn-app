@@ -1,21 +1,7 @@
-<div>
+<select name="field__{{ field.internalName }}">
+    {% for option in field.definition.options %}
 
-    <label>
+        <option value="{{ option.value }}" {% if option.value == field.value %}selected{% endif %}>{{ option.item }}</option>
 
-
-        <select name="field__{{ field.internalName }}">
-            {% for option in field.definition.options %}
-
-                <option value="{{ option.value }}" {% if option.value == field.value %}selected{% endif %}>
-                    {{ option.item }}
-                </option>
-
-            {% endfor %}
-        </select>
-
-
-    </label>
-
-
-
-</div>
+    {% endfor %}
+</select>

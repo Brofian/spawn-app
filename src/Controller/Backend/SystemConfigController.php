@@ -3,6 +3,7 @@
 
 namespace spawnApp\Controller\Backend;
 
+use Doctrine\DBAL\Schema\Table;
 use Error;
 use Exception;
 use spawnApp\Database\ConfigurationTable\ConfigurationEntity;
@@ -12,11 +13,14 @@ use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Services\SeoUrlManager;
 use spawnCore\CardinalSystem\Request;
 use spawnCore\Custom\FoundationStorage\AbstractBackendController;
+use spawnCore\Custom\Gadgets\UUID;
 use spawnCore\Custom\Response\AbstractResponse;
 use spawnCore\Custom\Response\JsonResponse;
 use spawnCore\Custom\Response\TwigResponse;
 use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Database\Criteria\Criteria;
+use spawnCore\Database\Criteria\Filters\AlwaysFilter;
+use spawnCore\Database\Criteria\Filters\AlwaysTrueFilter;
 use spawnCore\Database\Criteria\Filters\EqualsFilter;
 use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
 use spawnCore\Database\Criteria\Filters\LikeFilter;
@@ -94,6 +98,7 @@ class SystemConfigController extends AbstractBackendController {
      * @route /backend/config/folder/{}
      * @locked
      * @return AbstractResponse
+     * @throws InvalidFilterValueException
      */
     public function folderAction(string $folderName): AbstractResponse {
 
@@ -108,6 +113,25 @@ class SystemConfigController extends AbstractBackendController {
             $configurationFields = new EntityCollection(ConfigurationEntity::class);
         }
 
+
+        /** @var ConfigurationEntity $configurationField */
+        foreach($configurationFields as $configurationField) {
+            // if this field is an entity search and has a value, load the selected label
+            if($configurationField->getType() === 'entity' && $configurationField->getValue()) {
+                /** @var TableRepository $repository */
+                $definition = $configurationField->getDefinition(true);
+                $repositoryID = $definition['repository'];
+                $identifierColumn = $definition['identifier'];
+                $labelGetter = $definition['label'];
+                $value = ($identifierColumn == 'id') ? UUID::hexToBytes($configurationField->getValue()) : $configurationField->getValue();
+
+                $repository = ServiceContainerProvider::getServiceContainer()->get($repositoryID);
+                $el = $repository->search(new Criteria(new EqualsFilter($identifierColumn, $value)))->first();
+                if($el) {
+                    $configurationField->set('selectedEntityLabel', $el->{$labelGetter}());
+                }
+            }
+        }
 
         $this->twig->assign('config_folder', $folderName);
         $this->twig->assign('config_fields', $configurationFields);
@@ -143,8 +167,6 @@ class SystemConfigController extends AbstractBackendController {
             $errors[] = $e->getMessage();
         }
 
-
-
         //save the fields
 
         return new JsonResponse([
@@ -155,15 +177,13 @@ class SystemConfigController extends AbstractBackendController {
 
 
     /**
-     * @route /backend/api/config/entity/{}/{}
+     * @route /backend/api/config/entity/{}
      * @locked
      * @param string $internalName
      * @param string $search
      * @return AbstractResponse
-     * @throws InvalidFilterValueException
      */
-    public function getEntitySearchAction(string $internalName, string $search = ''): AbstractResponse {
-
+    public function getEntitySearchAction(string $internalName): AbstractResponse {
         $config = null;
         try {
             $config = $this->configurationRepository->search(new Criteria(new EqualsFilter('internalName', $internalName)))->first();
@@ -173,21 +193,27 @@ class SystemConfigController extends AbstractBackendController {
 
 
             /** @var ConfigurationEntity $config */
-            $entity = $config->getDefinition(true)['entity'];
+            $repositoryID = $config->getDefinition(true)['repository'];
             $entityGetLabel = $config->getDefinition(true)['label'];
-            $entityGetIdentifier = $config->getDefinition(true)['identifier'];
+            $entityGetIdentifier = $config->getDefinition(true)['identifier_getter'];
+            $entitySearchColumns = $config->getDefinition(true)['search'] ?? [];
 
 
             /** @var TableRepository $repository */
-            $repository = ServiceContainerProvider::getServiceContainer()->getServiceInstance($entity);
+            $repository = ServiceContainerProvider::getServiceContainer()->getServiceInstance($repositoryID);
             if(!$repository) {
-                throw new InvalidRepositoryInteractionException('Invalid entity "'.$entity.'"');
+                throw new InvalidRepositoryInteractionException('Invalid repository ID "'.$repositoryID.'"');
             }
 
-
             $criteria = new Criteria();
-            if($search) {
-                //TODO
+            $search = $this->request->getPost()->get('search') ?? '';
+            $search = trim(urldecode($search));
+            if(strlen($search) > 2 && !empty($entitySearchColumns)) {
+                $searchFilter = new OrFilter(new AlwaysFilter(false));
+                foreach($entitySearchColumns as $entitySearchColumn) {
+                    $searchFilter->addFilter(new LikeFilter($entitySearchColumn, "%$search%"));
+                }
+                $criteria->addFilter($searchFilter);
             }
             $entities = $repository->search($criteria, 10);
             $entries = [];

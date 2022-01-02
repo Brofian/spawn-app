@@ -2,7 +2,7 @@
 
 <configuration>
 
-    <collection folder="global">
+    <collection folder="debug">
 
         <textfield>
             <name>config_debug_text</name>
@@ -27,9 +27,14 @@
 
         <entityselectfield>
             <name>config_debug_entity</name>
-            <entity>system.repository.seo_urls</entity>
-            <identifier>getId</identifier><!-- The function on the entity, that is called to get an unique identifier -->
-            <label>getLabel</label><!-- The function on the entity, that is called to get an label to display -->
+            <repository>system.repository.seo_urls</repository>
+            <search> <!-- If this is given, the repository can be searched-->
+                <column>controller</column>
+                <column>action</column>
+            </search><!-- The function on the entity, that is called to get an unique identifier -->
+            <identifier>id</identifier><!-- The unique identifier column to be searched -->
+            <identifier_getter>getId</identifier_getter><!-- The function on the entity, that is called to get an unique identifier -->
+            <label>getLabel</label><!-- The function on the entity, that is called to get a label to display -->
         </entityselectfield>
 
     </collection>

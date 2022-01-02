@@ -7,10 +7,12 @@
 
     <div class="container">
 
-        <ul>
+        <ul class="button-list ">
             {% for folder in available_folders %}
                 <li data-backend-content-link="{{ seo_url('system.backend.system_config', 'folder', [folder]) }}">
-                    {{ folder }}
+                    <div class="button-list-element">
+                        {{ folder }}
+                    </div>
                 </li>
             {% endfor %}
         </ul>

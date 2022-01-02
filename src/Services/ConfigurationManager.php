@@ -270,24 +270,31 @@ class ConfigurationManager {
      * @throws MissingRequiredConfigurationFieldException
      */
     protected function getEntitySelectFieldData(XMLContentModel $field, array &$fieldData): void {
-        /** @var XMLContentModel $entityTypeElement */
-        $entityTypeElement = $field->getChildrenByType('entity')->first();
-        $entityIdentifierElement = $field->getChildrenByType('identifier')->first();
-        $entityLabelElement = $field->getChildrenByType('label')->first();
+        $requiredElements = ['repository', 'identifier', 'identifier_getter', 'label'];
 
-        if(!$entityTypeElement) {
-            throw new MissingRequiredConfigurationFieldException('entity', $field->getType());
-        }
-        elseif(!$entityIdentifierElement) {
-            throw new MissingRequiredConfigurationFieldException('identifier', $field->getType());
-        }
-        elseif(!$entityLabelElement) {
-            throw new MissingRequiredConfigurationFieldException('label', $field->getType());
+        foreach($requiredElements as $requiredElement) {
+            /** @var XMLContentModel|null $element */
+            $element = $field->getChildrenByType($requiredElement)->first();
+            if(!$element) {
+                throw new MissingRequiredConfigurationFieldException($requiredElement, $field->getType());
+            }
+            $fieldData['definition'][$requiredElement] = $element->getValue();
         }
 
-        $fieldData['definition']['entity'] = $entityTypeElement->getValue();
-        $fieldData['definition']['identifier'] = $entityIdentifierElement->getValue();
-        $fieldData['definition']['label'] = $entityLabelElement->getValue();
+
+        $searchField = $field->getChildrenByType('search')->first();
+        if($searchField instanceof XMLContentModel) {
+            $columns = $searchField->getChildrenByType('column');
+            if($columns->count() < 1) {
+                throw new MissingRequiredConfigurationFieldException('search -> option', $field->getType());
+            }
+            $fieldData['definition']['search'] = array_map(function(XMLContentModel $item) {
+                return $item->getValue();
+            }, $columns->getArray());
+
+        }
+
+
     }
 
 }

@@ -1,9 +1,4 @@
-TODO: Entity select
-<br>
---> probably load via ajax? Because we have to check if the entity is valid and load the available entities
-<br>
---> maybe only load the selected entity and the rest only upon opening the selection
-<br>
-Remember to allow the user to select multiple entities, if set
-<br>
-Idea: store the selected entities by the identifier, separated by pipes
+<div data-entity-select="field__{{ field.internalName }}"
+     data-entity-select-value="{{ field.selectedEntityLabel|default('-') }}"
+     data-entity-select-name="{{ field.internalName }}"
+></div>
