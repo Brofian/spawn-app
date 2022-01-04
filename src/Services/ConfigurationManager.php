@@ -19,6 +19,13 @@ class ConfigurationManager {
 
     public const TRUE_VALUE = 'true';
 
+    public const TYPE_TEXT = 'text';
+    public const TYPE_NUMBER = 'number';
+    public const TYPE_ENTITY = 'entity';
+    public const TYPE_SELECT = 'select';
+    public const TYPE_BOOL = 'bool';
+
+
     protected ConfigurationRepository $configurationRepository;
 
     public function __construct(
@@ -207,23 +214,23 @@ class ConfigurationManager {
 
         switch($field->getType()) {
             case 'textfield':
-                $fieldData['type'] = 'text';
+                $fieldData['type'] = self::TYPE_TEXT;
                 $this->getTextFieldData($field, $fieldData);
                 break;
             case 'numberfield':
-                $fieldData['type'] = 'number';
+                $fieldData['type'] = self::TYPE_NUMBER;
                 $this->getNumberFieldData($field, $fieldData);
                 break;
             case 'selectfield':
-                $fieldData['type'] = 'select';
+                $fieldData['type'] = self::TYPE_SELECT;
                 $this->getSelectFieldData($field, $fieldData);
                 break;
             case 'boolfield':
-                $fieldData['type'] = 'bool';
+                $fieldData['type'] = self::TYPE_BOOL;
                 $this->getBoolFieldData($field, $fieldData);
                 break;
             case 'entityselectfield':
-                $fieldData['type'] = 'entity';
+                $fieldData['type'] = self::TYPE_ENTITY;
                 $this->getEntitySelectFieldData($field, $fieldData);
                 break;
             default:

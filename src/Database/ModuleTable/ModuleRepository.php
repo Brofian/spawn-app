@@ -60,4 +60,11 @@ class ModuleRepository extends TableRepository {
         /** @var ModuleEntity $entity */
         $entity->setUpdatedAt($updatedValues['updatedAt']);
     }
+
+
+    protected function adjustValuesAfterSelect(array &$values): void
+    {
+        $values['id'] = UUID::bytesToHex($values['id']);
+    }
+
 }

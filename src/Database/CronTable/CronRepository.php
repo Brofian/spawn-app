@@ -67,4 +67,10 @@ class CronRepository extends TableRepository {
         $entity->setCreatedAt($insertedValues['createdAt']);
         $entity->setUpdatedAt($insertedValues['updatedAt']);
     }
+
+
+    protected function adjustValuesAfterSelect(array &$values): void
+    {
+        $values['id'] = UUID::bytesToHex($values['id']);
+    }
 }

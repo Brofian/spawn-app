@@ -1,16 +1,15 @@
 <?php
 
-namespace spawnApp\Database\ConfigurationTable;
+namespace spawnApp\Database\SnippetTable;
 
 use DateTime;
 use Exception;
-use spawnApp\Database\AdministratorTable\AdministratorEntity;
 use spawnCore\Custom\Gadgets\UUID;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Database\Entity\TableDefinition\AbstractTable;
 use spawnCore\Database\Entity\TableRepository;
 
-class ConfigurationRepository extends TableRepository {
+class SnippetRepository extends TableRepository {
 
     public function __construct(AbstractTable $tableDefinition)
     {
@@ -20,7 +19,7 @@ class ConfigurationRepository extends TableRepository {
 
     public static function getEntityClass(): string
     {
-        return ConfigurationEntity::class;
+        return SnippetEntity::class;
     }
 
     protected function getUpdateFilterColumnsFromValues(array $updateValues): array
@@ -33,6 +32,7 @@ class ConfigurationRepository extends TableRepository {
     protected function prepareValuesForUpdate(array $updateValues): array
     {
         $updateValues['id'] = UUID::hexToBytes($updateValues['id']);
+        $updateValues['languageId'] = UUID::hexToBytes($updateValues['languageId']);
         $updateValues['updatedAt'] = new DateTime();
 
         return $updateValues;
@@ -40,7 +40,7 @@ class ConfigurationRepository extends TableRepository {
 
     protected function adjustEntityAfterSuccessfulUpdate(Entity $entity, array $updatedValues): void
     {
-        /** @var ConfigurationEntity $entity */
+        /** @var SnippetEntity $entity */
         $entity->setUpdatedAt($updatedValues['updatedAt']);
     }
 
@@ -54,6 +54,7 @@ class ConfigurationRepository extends TableRepository {
         $now = new DateTime();
 
         $values['id'] = UUID::randomBytes();
+        $values['languageId'] = UUID::hexToBytes($values['languageId']);
         $values['createdAt'] = $now;
         $values['updatedAt'] = $now;
 
@@ -62,16 +63,18 @@ class ConfigurationRepository extends TableRepository {
 
     protected function adjustEntityAfterSuccessfulInsert(Entity $entity, array $insertedValues): void
     {
-        /** @var AdministratorEntity $entity */
+        /** @var SnippetEntity $entity */
         //set the id after the insert command in case of an error
         $entity->setId(UUID::bytesToHex($insertedValues['id']));
+        $entity->setLanguageId(UUID::bytesToHex($insertedValues['languageId']));
         $entity->setCreatedAt($insertedValues['createdAt']);
         $entity->setUpdatedAt($insertedValues['updatedAt']);
     }
 
-
     protected function adjustValuesAfterSelect(array &$values): void
     {
         $values['id'] = UUID::bytesToHex($values['id']);
+        $values['languageId'] = UUID::bytesToHex($values['languageId']);
     }
+
 }

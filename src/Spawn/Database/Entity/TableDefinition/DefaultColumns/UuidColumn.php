@@ -56,7 +56,7 @@ class UuidColumn extends AbstractColumn {
 
     public function isPrimaryKey(): bool
     {
-        return true;
+        return $this->foreignKey === null;
     }
 
     /**

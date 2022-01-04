@@ -61,4 +61,10 @@ class MigrationRepository extends TableRepository {
 
         $entity->setUpdatedAt($updatedValues['updatedAt']);
     }
+
+
+    protected function adjustValuesAfterSelect(array &$values): void
+    {
+        $values['id'] = UUID::bytesToHex($values['id']);
+    }
 }

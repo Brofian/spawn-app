@@ -28,6 +28,8 @@ abstract class TableRepository
     abstract protected function prepareValuesForInsert(array $values): array;
     /**  */
     abstract protected function adjustEntityAfterSuccessfulInsert(Entity $entity, array $insertedValues): void;
+    /**  */
+    abstract protected function adjustValuesAfterSelect(array &$values): void;
 
     /**
      * TableRepository constructor.
@@ -67,9 +69,7 @@ abstract class TableRepository
             $queryResult = $stmt->executeQuery();
 
             while($row = $queryResult->fetchAssociative()) {
-                if(isset($row['id'])) {
-                    $row['id'] = UUID::bytesToHex($row['id']);
-                }
+                $this->adjustValuesAfterSelect($row);
                 $entityCollection->add($this->arrayToEntity($row));
             }
         } catch (Exception $e) {

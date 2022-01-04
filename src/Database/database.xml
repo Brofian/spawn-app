@@ -71,4 +71,26 @@
         <tag>base.service.static</tag>
     </service>
 
+
+    <!-- Language -->
+    <service id="system.database.table.language" class="spawnApp\Database\LanguageTable\LanguageTable" static="true">
+        <tag>database.table</tag>
+    </service>
+
+    <service id="system.repository.language" class="spawnApp\Database\LanguageTable\LanguageRepository" static="true">
+        <argument type="service" value="system.database.table.language" />
+        <tag>base.service.static</tag>
+    </service>
+
+
+    <!-- Snippet -->
+    <service id="system.database.table.snippet" class="spawnApp\Database\SnippetTable\SnippetTable" static="true">
+        <tag>database.table</tag>
+    </service>
+
+    <service id="system.repository.snippet" class="spawnApp\Database\SnippetTable\SnippetRepository" static="true">
+        <argument type="service" value="system.database.table.snippet" />
+        <tag>base.service.static</tag>
+    </service>
+
 </services>
