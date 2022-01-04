@@ -4,8 +4,6 @@ namespace spawnApp\Database\LanguageTable;
 
 use DateTime;
 use Exception;
-use spawnApp\Database\ConfigurationTable\LanguageEntity;
-use spawnApp\Database\ConfigurationTable\SnippetEntity;
 use spawnCore\Custom\Gadgets\UUID;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Database\Entity\TableDefinition\AbstractTable;
@@ -44,7 +42,7 @@ class LanguageRepository extends TableRepository {
 
     protected function adjustEntityAfterSuccessfulUpdate(Entity $entity, array $updatedValues): void
     {
-        /** @var SnippetEntity $entity */
+        /** @var LanguageEntity $entity */
         $entity->setUpdatedAt($updatedValues['updatedAt']);
     }
 

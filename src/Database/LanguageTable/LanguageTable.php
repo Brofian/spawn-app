@@ -20,9 +20,8 @@ class LanguageTable extends AbstractTable {
     {
         return [
             new UuidColumn('id', null),
-            new StringColumn('short', false, '', false, 1024),
+            new StringColumn('short', false, '', true, 1024, false),
             new UuidColumn('parentId', new ForeignKey(self::TABLE_NAME, 'id', true, false)),
-            new StringColumn('value', true, null, false),
             new UpdatedAtColumn(),
             new CreatedAtColumn()
         ];

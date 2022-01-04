@@ -151,7 +151,7 @@ class ConfigurationManager {
         $configurations = [];
 
         /** @var ModuleEntity $module */
-        foreach(ListModulesCommand::getModuleList()->getArray() as $module) {
+        foreach(ListModulesCommand::getModuleList(true)->getArray() as $module) {
 
             $configFile = ROOT . $module->getPath() . '/config.xml';
             if(file_exists($configFile)) {

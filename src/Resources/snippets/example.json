@@ -1,0 +1,14 @@
+{
+  "DE": {
+    "backend": {
+      "sidebar": {
+        "example": "example",
+        "test": "test"
+      },
+      "debug": {
+        "debug": "debug"
+      }
+    }
+  }
+
+}

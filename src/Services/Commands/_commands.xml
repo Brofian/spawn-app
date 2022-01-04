@@ -54,6 +54,7 @@
         <argument type="service" value="system.repository.modules"/>
         <argument type="service" value="system.service.seo_url_manager"/>
         <argument type="service" value="system.service.configuration_manager"/>
+        <argument type="service" value="system.service.snippet_manager"/>
         <tag>console.command</tag>
     </service>
 

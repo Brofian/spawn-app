@@ -8,6 +8,7 @@ use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnApp\Database\ModuleTable\ModuleRepository;
 use spawnApp\Services\ConfigurationManager;
 use spawnApp\Services\SeoUrlManager;
+use spawnApp\Services\SnippetManager;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Custom\Gadgets\UUID;
 use spawnCore\Custom\Throwables\DatabaseConnectionException;
@@ -27,18 +28,21 @@ class ModulesRefreshCommand extends AbstractCommand {
     protected ModuleRepository $moduleRepository;
     protected SeoUrlManager $seoUrlManager;
     protected ConfigurationManager $configurationManager;
+    protected SnippetManager $snippetManager;
 
     public function __construct(
         DatabaseHelper $databaseHelper,
         ModuleRepository $moduleRepository,
         SeoUrlManager $seoUrlManager,
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
+        SnippetManager $snippetManager
     )
     {
         $this->databaseHelper = $databaseHelper;
         $this->moduleRepository = $moduleRepository;
         $this->seoUrlManager = $seoUrlManager;
         $this->configurationManager = $configurationManager;
+        $this->snippetManager = $snippetManager;
     }
 
     public static function getCommand(): string
@@ -57,7 +61,8 @@ class ModulesRefreshCommand extends AbstractCommand {
             'modules' => 'm',
             'actions' => 'a',
             'configurations' => 'c',
-            'delete' => 'D'
+            'snippets' => 's',
+            'delete' => 'delete'
         ];
     }
 
@@ -81,6 +86,10 @@ class ModulesRefreshCommand extends AbstractCommand {
 
             if($parameters['configurations'] || $refreshAll) {
                 $this->refreshConfig(!!$parameters['delete']);
+            }
+
+            if($parameters['snippets'] || $refreshAll) {
+                $this->refreshSnippets(!!$parameters['delete']);
             }
         } catch (
             Exception |
@@ -161,7 +170,7 @@ class ModulesRefreshCommand extends AbstractCommand {
      * @throws WrongEntityForRepositoryException
      */
     protected function refreshActions(bool $removeStaleActions = false): void {
-        IO::printWarning('> Adding new available Methods and removing stale ones');
+        IO::printWarning('> Adding new available Methods' . ($removeStaleActions ? 'and removing stale ones' : ''));
 
         $result = $this->seoUrlManager->refreshSeoUrlEntries($removeStaleActions);
 
@@ -173,9 +182,7 @@ class ModulesRefreshCommand extends AbstractCommand {
 
 
     protected function refreshConfig(bool $removeStaleConfigurations = false): void {
-        ListModulesCommand::getModuleList(true);
-
-        IO::printWarning('> Adding new available configurations and removing stale ones');
+        IO::printWarning('> Adding new available configurations' . ($removeStaleConfigurations ? ' and removing stale ones' : ''));
 
         $result = $this->configurationManager->updateConfigurationEntries($removeStaleConfigurations);
 
@@ -184,6 +191,19 @@ class ModulesRefreshCommand extends AbstractCommand {
         IO::printSuccess('> Updated '.$result['updated'].' configurations', 1);
         if(isset($result['removed'])) {
             IO::printSuccess('> Removed '.$result['removed'].' configurations', 1);
+        }
+    }
+
+
+    protected function refreshSnippets(bool $removeStaleConfigurations = false): void {
+        IO::printWarning('> Adding new available snippets' . ($removeStaleConfigurations ? ' and removing stale ones' : ''));
+
+        $result = $this->snippetManager->updateSnippetEntries($removeStaleConfigurations);
+
+
+        IO::printSuccess('> Added '.$result['added'].' snippets', 1);
+        if(isset($result['removed'])) {
+            IO::printSuccess('> Removed '.$result['removed'].' snippets', 1);
         }
     }
 

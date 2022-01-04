@@ -5,6 +5,7 @@ namespace spawnApp\Database\SnippetTable;
 
 use DateTime;
 use Exception;
+use spawnApp\Services\SnippetManager;
 use spawnCore\Database\Entity\Entity;
 use spawnCore\Database\Entity\EntityTraits\EntityCreatedAtTrait;
 use spawnCore\Database\Entity\EntityTraits\EntityIDTrait;
@@ -46,7 +47,7 @@ class SnippetEntityDefinition extends Entity
 
     public function getRepositoryClass(): string
     {
-        return ConfigurationRepository::class;
+        return SnippetRepository::class;
     }
 
     public function toArray(): array
@@ -67,7 +68,7 @@ class SnippetEntityDefinition extends Entity
         $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
         $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
 
-        return new ConfigurationEntity(
+        return new SnippetEntity(
             $values['namespace'],
             $values['path'],
             $values['value'],
