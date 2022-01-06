@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+
+<services>
+
+    <service id="spawnapp.migration.migration1" class="spawnApp\Database\Migrations\Migration1641495755CreateDefaultLanguages" static="true">
+        <tag>base.service.migration</tag>
+    </service>
+
+</services>

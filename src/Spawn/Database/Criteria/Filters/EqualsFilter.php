@@ -11,7 +11,7 @@ class EqualsFilter extends AbstractFilter {
     public function __construct(string $column, $value)
     {
         if(!is_string($value) && !is_numeric($value) && !is_bool($value)) {
-            throw new InvalidFilterValueException(get_debug_type($value), self::class);
+            $value = (string)$value;
         }
 
         $this->column = $column;

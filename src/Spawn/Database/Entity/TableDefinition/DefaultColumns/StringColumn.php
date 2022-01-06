@@ -7,23 +7,26 @@ use PDO;
 use spawnCore\Database\Entity\TableDefinition\AbstractColumn;
 use spawnCore\Database\Entity\TableDefinition\Constants\ColumnTypes;
 use spawnCore\Database\Entity\TableDefinition\ForeignKey;
+use spawnCore\Database\Entity\TableDefinition\InvalidUniqueColumnCombinationException;
 
 class StringColumn extends AbstractColumn {
 
     protected string $columnName;
     protected ?bool $canBeNull;
     protected ?string $default;
-    protected bool $unique;
     protected ?int $length;
     protected ?bool $hasFixedLength;
     protected ?ForeignKey $foreignKey;
 
 
+    /**
+     * @param bool|string|array $unique
+     */
     public function __construct(
         string $columnName,
         ?bool $canBeNull = null,
         ?string $default = null,
-        bool $unique = false,
+        $uniqueColumnCombination = false,
         ?int $maxLength = null,
         ?bool $hasFixedLength = false,
         ?ForeignKey $foreignKey = null
@@ -32,10 +35,10 @@ class StringColumn extends AbstractColumn {
         $this->columnName = $columnName;
         $this->canBeNull = $canBeNull;
         $this->default = $default;
-        $this->unique = $unique;
         $this->hasFixedLength = $hasFixedLength;
         $this->length = $maxLength;
         $this->foreignKey = $foreignKey;
+        $this->setUniqueCombinedColumns($uniqueColumnCombination);
     }
 
 
@@ -47,11 +50,6 @@ class StringColumn extends AbstractColumn {
     public function getType(): string
     {
         return ($this->length !== null || $this->default !== null) ? ColumnTypes::STRING : ColumnTypes::TEXT;
-    }
-
-    public function isUnique(): bool
-    {
-        return $this->unique;
     }
 
     public function hasFixedLength(): ?bool

@@ -30,7 +30,13 @@
         <tag>event.subscriber</tag>
     </service>
 
-    <service id="system.service.snippet_manager" class="spawnApp\Services\SnippetManager">
+    <service id="system.service.snippet_system" class="spawnApp\Services\SnippetSystem">
+        <argument type='service' value="system.repository.snippet"/>
+        <argument type='service' value="system.repository.language"/>
+        <tag>service</tag>
+    </service>
+
+    <service id="system.service.snippet_manager" class="spawnApp\Services\SnippetManager" static="true">
         <argument type='service' value="system.repository.snippet"/>
         <argument type='service' value="system.repository.language"/>
         <tag>service</tag>

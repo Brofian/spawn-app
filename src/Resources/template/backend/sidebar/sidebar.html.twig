@@ -8,11 +8,9 @@
 
         {% block sidebar_inner %}
             <ul>
-
                 {% for sidebar_category in sidebar_tree %}
                     {% include 'backend/sidebar/branch.html.twig' %}
                 {% endfor %}
-
             </ul>
         {% endblock %}
 

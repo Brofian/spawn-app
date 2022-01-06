@@ -3,14 +3,10 @@
 
 namespace spawnApp\Controller\Backend;
 
-use Doctrine\DBAL\Schema\Table;
-use Error;
 use Exception;
 use spawnApp\Database\ConfigurationTable\ConfigurationEntity;
 use spawnApp\Database\ConfigurationTable\ConfigurationRepository;
 use spawnApp\Database\ConfigurationTable\ConfigurationTable;
-use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
-use spawnApp\Services\SeoUrlManager;
 use spawnCore\CardinalSystem\Request;
 use spawnCore\Custom\FoundationStorage\AbstractBackendController;
 use spawnCore\Custom\Gadgets\UUID;
@@ -20,7 +16,6 @@ use spawnCore\Custom\Response\TwigResponse;
 use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Criteria\Filters\AlwaysFilter;
-use spawnCore\Database\Criteria\Filters\AlwaysTrueFilter;
 use spawnCore\Database\Criteria\Filters\EqualsFilter;
 use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
 use spawnCore\Database\Criteria\Filters\LikeFilter;
@@ -57,13 +52,13 @@ class SystemConfigController extends AbstractBackendController {
     {
         return [
             'configuration' => [
-                'title' => "Einstellungen", //Kategory title
+                'title' => "config", //Kategory title
                 'color' => "#00ff00", //Kategory color
                 'actions' => [
                     [
                         'controller' => '%self.key%',
                         'action' => 'overviewAction',
-                        'title' => 'System config'
+                        'title' => 'system_config'
                     ]
                 ]
             ]

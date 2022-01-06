@@ -51,6 +51,11 @@ class SpawnBuildCommand extends AbstractCommand  {
         $modulesRefreshCommand = $container->getServiceInstance('system.command.module_refresh');
         $modulesRefreshCommand->execute(ModulesRefreshCommand::createParameterArray([]));
 
+        //execute migrations
+        /** @var MigrationExecuteCommand $modulesRefreshCommand */
+        $migrationExecuteCommand = $container->get('system.command.migration_execute');
+        $migrationExecuteCommand->execute(MigrationExecuteCommand::createParameterArray([]));
+
         //compile modules
         (new ThemeCompileCommand())->execute(ThemeCompileCommand::createParameterArray([]));
 

@@ -6,6 +6,8 @@ use spawnCore\Database\Entity\TableDefinition\Constants\ColumnTypeOptions;
 
 abstract class AbstractColumn {
 
+    protected array $uniqueColumnCombination = [];
+
     abstract public function getName(): string;
 
     abstract public function getType(): string;
@@ -16,8 +18,38 @@ abstract class AbstractColumn {
     abstract public function getTypeIdentifier();
 
     public function isUnique(): bool {
-        return false;
+        return !empty($this->getCombinedUniqueColumns());
     }
+
+    public function getCombinedUniqueColumns(): array {
+        return $this->uniqueColumnCombination;
+    }
+
+    /**
+     * Pass a falsy value for no unique Key,
+     * pass a positive value for this column to be a unique key of its own
+     * pass a string to create a combined unique key from this column and the passed column
+     * pass an array to freely define multiple columns for a constraint combination
+     *
+     * @param bool|string|array|null $columns
+     */
+    protected function setUniqueCombinedColumns($columns): void {
+        if(!$columns) {
+            return;
+        }
+
+        if(is_string($columns)) {
+            $this->uniqueColumnCombination = [$this->columnName, $columns];
+            return;
+        }
+        elseif(is_array($columns)) {
+            $this->uniqueColumnCombination = $columns;
+            return;
+        }
+
+        $this->uniqueColumnCombination = [$this->columnName];
+    }
+
 
     public function isPrimaryKey(): bool {
         return false;

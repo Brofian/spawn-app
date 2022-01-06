@@ -36,7 +36,7 @@ class MigrationCreateCommand extends AbstractCommand {
     {
         $moduleCollection = ListModulesCommand::getModuleList();
 
-        if(isset($parameters['module'])) {
+        if($parameters['module']) {
             $moduleSelector = $parameters['module'];
 
             $selectedModule = null;
@@ -82,7 +82,7 @@ class MigrationCreateCommand extends AbstractCommand {
 
 
 
-        if(isset($parameters['name'])) {
+        if($parameters['name']) {
             $name = $parameters['name'];
             if(strlen($name) <= 3 && strpos($name, '/') !== false) {
                 IO::printError('The name has to be at least three characters long and not contain slashes!');

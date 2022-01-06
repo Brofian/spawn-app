@@ -6,9 +6,9 @@ use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnApp\Database\ModuleTable\ModuleRepository;
-use spawnApp\Services\ConfigurationManager;
+use spawnApp\Services\ConfigurationSystem;
 use spawnApp\Services\SeoUrlManager;
-use spawnApp\Services\SnippetManager;
+use spawnApp\Services\SnippetSystem;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Custom\Gadgets\UUID;
 use spawnCore\Custom\Throwables\DatabaseConnectionException;
@@ -27,22 +27,22 @@ class ModulesRefreshCommand extends AbstractCommand {
     protected DatabaseHelper $databaseHelper;
     protected ModuleRepository $moduleRepository;
     protected SeoUrlManager $seoUrlManager;
-    protected ConfigurationManager $configurationManager;
-    protected SnippetManager $snippetManager;
+    protected ConfigurationSystem $configurationSystem;
+    protected SnippetSystem $snippetSystem;
 
     public function __construct(
         DatabaseHelper $databaseHelper,
         ModuleRepository $moduleRepository,
         SeoUrlManager $seoUrlManager,
-        ConfigurationManager $configurationManager,
-        SnippetManager $snippetManager
+        ConfigurationSystem $configurationSystem,
+        SnippetSystem $snippetSystem
     )
     {
         $this->databaseHelper = $databaseHelper;
         $this->moduleRepository = $moduleRepository;
         $this->seoUrlManager = $seoUrlManager;
-        $this->configurationManager = $configurationManager;
-        $this->snippetManager = $snippetManager;
+        $this->configurationSystem = $configurationSystem;
+        $this->snippetSystem = $snippetSystem;
     }
 
     public static function getCommand(): string
@@ -89,7 +89,7 @@ class ModulesRefreshCommand extends AbstractCommand {
             }
 
             if($parameters['snippets'] || $refreshAll) {
-                $this->refreshSnippets(!!$parameters['delete']);
+                $this->refreshSnippets();
             }
         } catch (
             Exception |
@@ -184,7 +184,7 @@ class ModulesRefreshCommand extends AbstractCommand {
     protected function refreshConfig(bool $removeStaleConfigurations = false): void {
         IO::printWarning('> Adding new available configurations' . ($removeStaleConfigurations ? ' and removing stale ones' : ''));
 
-        $result = $this->configurationManager->updateConfigurationEntries($removeStaleConfigurations);
+        $result = $this->configurationSystem->updateConfigurationEntries($removeStaleConfigurations);
 
 
         IO::printSuccess('> Added '.$result['added'].' configurations', 1);
@@ -195,16 +195,12 @@ class ModulesRefreshCommand extends AbstractCommand {
     }
 
 
-    protected function refreshSnippets(bool $removeStaleConfigurations = false): void {
-        IO::printWarning('> Adding new available snippets' . ($removeStaleConfigurations ? ' and removing stale ones' : ''));
+    protected function refreshSnippets(): void {
+        IO::printWarning('> Adding new available snippets');
 
-        $result = $this->snippetManager->updateSnippetEntries($removeStaleConfigurations);
-
+        $result = $this->snippetSystem->updateSnippetEntries();
 
         IO::printSuccess('> Added '.$result['added'].' snippets', 1);
-        if(isset($result['removed'])) {
-            IO::printSuccess('> Removed '.$result['removed'].' snippets', 1);
-        }
     }
 
 }

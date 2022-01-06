@@ -2,7 +2,7 @@
 
     {% block sidebar_branch_multiple_toggle %}
         <div class="sidebar_category_toggle js-accordion">
-            {{ sidebar_category.title }}
+            {{ ('backend.sidebar.branch.title.'~sidebar_category.title)|translate }}
         </div>
     {% endblock %}
 
@@ -13,7 +13,7 @@
 
                 <li class="sidebar_category_accordion_entry"
                     data-backend-content-link="{{ seo_url(sidebar_action.controller, sidebar_action.action) }}">
-                    {{ sidebar_action.title }}
+                {{ ('backend.sidebar.branch.title.'~sidebar_action.title)|translate }}
                 </li>
 
             {% endfor %}

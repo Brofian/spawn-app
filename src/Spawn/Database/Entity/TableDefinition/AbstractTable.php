@@ -175,7 +175,7 @@ abstract class AbstractTable {
             }
             else if($column->isUnique()) {
                 IO::printLine(IO::TAB.IO::TAB.IO::TAB.':: Adding Unique Index for '. $columnName, IO::YELLOW_TEXT, 2);
-                $table->addUniqueIndex([$columnName], $this->toUniqueIndex($table->getName(), $columnName));
+                $table->addUniqueIndex($column->getCombinedUniqueColumns(), $this->toUniqueIndex($table->getName(), $columnName));
             }
 
             if($column->getForeignKeyConstraint()) {
@@ -183,21 +183,25 @@ abstract class AbstractTable {
 
                 $foreignKeyConstraintData = $column->getForeignKeyConstraint();
                 $remoteTableName = $foreignKeyConstraintData->getForeignTableName();
-                $remoteColumnName = $foreignKeyConstraintData->getForeignColumnName();
+                $remoteColumnNames = $foreignKeyConstraintData->getForeignColumnNames();
                 $foreignKeyOptions = $foreignKeyConstraintData->getOptions();
 
                 if($schema->hasTable($remoteTableName)) {
                     $remoteTable = $schema->getTable($remoteTableName);
 
-                    if ($remoteTable->hasColumn($remoteColumnName)) {
-                        $table->addForeignKeyConstraint(
-                            $remoteTable,
-                            [$columnName],
-                            [$remoteColumnName],
-                            $foreignKeyOptions,
-                            $this->toForeignKey($table->getName(), $columnName)
-                        );
+                    foreach($remoteColumnNames as $remoteColumnName) {
+                        if(!$remoteTable->hasColumn($remoteColumnName)) {
+                            throw new InvalidForeignKeyConstraintException("Tried adding a foreign key to non existent column \"$remoteColumnName\" of table \"$remoteTableName\" ");
+                        }
                     }
+
+                    $table->addForeignKeyConstraint(
+                        $remoteTable,
+                        [$columnName],
+                        $remoteColumnNames,
+                        $foreignKeyOptions,
+                        $this->toForeignKey($table->getName(), $columnName)
+                    );
                 }
             }
         }

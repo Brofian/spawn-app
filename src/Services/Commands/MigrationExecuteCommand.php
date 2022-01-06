@@ -6,15 +6,14 @@ use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use spawnApp\Database\MigrationTable\MigrationEntity;
 use spawnApp\Database\MigrationTable\MigrationRepository;
-use spawnApp\Database\ModuleTable\ModuleEntity;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Custom\FoundationStorage\AbstractMigration;
-use spawnCore\Custom\Gadgets\FileEditor;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
 use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
 use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Entity\EntityCollection;
 use spawnCore\Database\Helpers\DatabaseHelper;
-use spawnCore\ServiceSystem\Service;
+use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class MigrationExecuteCommand extends AbstractCommand {
 
@@ -71,39 +70,12 @@ class MigrationExecuteCommand extends AbstractCommand {
 
     protected function gatherMigrations(EntityCollection $moduleCollection): array
     {
+        $migrationServices = ServiceContainerProvider::getServiceContainer()->getServicesByTag('base.service.migration');
         $migrations = [];
-        /** @var ModuleEntity $module */
-        foreach($moduleCollection->getArray() as $module) {
-
-            $migrationsFolder = ROOT.$module->getPath().'/src/Database/Migrations';
-            if(!file_exists($migrationsFolder) || !is_dir($migrationsFolder)) {
-                continue;
-            }
-
-            $migrationFiles = scandir($migrationsFolder);
-
-            foreach($migrationFiles as $file) {
-                if($file == "." || $file == "..") continue;
-                $path = $migrationsFolder.'/'.$file;
-                $fileContent = FileEditor::getFileContent($path);
-
-                //read classname
-                $matches = [];
-                $isMigration = preg_match_all('/class ([^{]*) extends AbstractMigration/', $fileContent, $matches);
-                if(!$isMigration || count($matches) < 2) continue;
-                $className = $matches[1][0];
-
-                //read namespace
-                $matches = [];
-                $hasNamespace = preg_match_all('/namespace ([^;]*);/', $fileContent, $matches);
-                if(!$hasNamespace || count($matches) < 2) continue;
-                $namespace = $matches[1][0];
-
-                /** @var AbstractMigration $fullClassName */
-                $fullClassName = $namespace . "\\" . $className;
-
-                $migrations[] = [$fullClassName::getUnixTimestamp(),$fullClassName];
-            }
+        foreach($migrationServices as $migrationService) {
+            /** @var AbstractMigration $class */
+            $class = $migrationService->getClass();
+            $migrations[] = [$class::getUnixTimestamp(),$class];
         }
 
         return $migrations;
@@ -120,11 +92,10 @@ class MigrationExecuteCommand extends AbstractCommand {
         $executedMigrationEntities = $this->migrationRepository->search(new Criteria());
 
         $executedMigrations = [];
-        /** @var Service $migrationEntity */
+        /** @var MigrationEntity $migrationEntity */
         foreach($executedMigrationEntities as $migrationEntity) {
-            /** @var AbstractMigration $class */
             $class = $migrationEntity->getClass();
-            $executedMigrations[] = $class . "-" . $class::getUnixTimestamp();
+            $executedMigrations[] = $class . "-" . $migrationEntity->getTimestamp();
         }
 
         return $executedMigrations;
@@ -180,6 +151,7 @@ class MigrationExecuteCommand extends AbstractCommand {
      * @param array $executedMigrations
      * @throws Exception
      * @throws WrongEntityForRepositoryException
+     * @throws DatabaseConnectionException
      */
     protected function saveExecutedMigrationsToDB(array $executedMigrations): void {
 

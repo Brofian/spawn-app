@@ -33,13 +33,13 @@ class SeoUrlConfigController extends AbstractBackendController {
     {
         return [
             'configuration' => [
-                'title' => "Einstellungen", //Kategory title
+                'title' => "config", //Kategory title
                 'color' => "#00ff00", //Kategory color
                 'actions' => [
                     [
                         'controller' => '%self.key%',
                         'action' => 'seoUrlOverviewAction',
-                        'title' => 'SEO URLs'
+                        'title' => 'seo_config'
                     ]
                 ]
             ]

@@ -12,6 +12,7 @@
         <tag>base.service.static</tag>
     </service>
 
+    <import file="./Migrations/_migrations.xml"/>
 
 
     <!-- Modules -->
