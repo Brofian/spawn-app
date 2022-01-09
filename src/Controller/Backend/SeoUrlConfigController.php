@@ -58,8 +58,8 @@ class SeoUrlConfigController extends AbstractBackendController {
         $get = $this->request->getGet();
 
         $numberOfEntriesPerPage = intval($get->get('num', 20) ?? 1);
-        $page = intval($get->get('page', 1) ?? 1);
-        $ignoreLocked = !$get->has('showLocked');
+        $page = max(intval($get->get('page', 1) ?? 1), 1);
+        $ignoreLocked = !($get->get('showLocked', 0));
         $totalNumberOfEntries = intval($this->seoUrlManager->getNumberAvailableSeoUrls($ignoreLocked) ?? 1);
         $availablePages = (int)ceil($totalNumberOfEntries / $numberOfEntriesPerPage);
         $seoUrls = $this->seoUrlManager->getSeoUrls($ignoreLocked, $numberOfEntriesPerPage, ($page-1)*$numberOfEntriesPerPage);
@@ -68,7 +68,8 @@ class SeoUrlConfigController extends AbstractBackendController {
             'table_info' => [
                 'page' => $page,
                 'entriesPerPage' => $numberOfEntriesPerPage,
-                'availablePages' => $availablePages
+                'availablePages' => $availablePages,
+                'showLocked' => ($ignoreLocked ? 0 : 1)
             ],
             'seo_urls' => $seoUrls,
             'content_file' => 'backend/contents/seo_url_config/overview/content.html.twig'

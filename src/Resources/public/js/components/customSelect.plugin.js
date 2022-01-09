@@ -1,4 +1,5 @@
 import Plugin from 'Plugin';
+import EventManager from "EventManager";
 
 
 export default class CustomSelect extends Plugin {
@@ -26,7 +27,8 @@ export default class CustomSelect extends Plugin {
             this.options.push({
                 'value': value,
                 'label': optionEl.innerText,
-                'selected': !!optionEl.selected
+                'selected': !!optionEl.selected,
+                'dataset': optionEl.dataset
             });
         }
     }
@@ -87,7 +89,7 @@ export default class CustomSelect extends Plugin {
         this.optionsContainer.textContent = '';
     }
     afterOptionRefresh() {
-
+        EventManager.publish('pluginmanager.startInitializeScope', [this.optionsContainer]);
     }
 
     refreshOptionElements() {
@@ -98,6 +100,9 @@ export default class CustomSelect extends Plugin {
             optionEl.classList.add('js-entity-select-option');
             optionEl.innerText = option.label;
             optionEl.dataset.jsEntitySelectOptionValue = option.value;
+            for(let [key,value] of Object.entries(option.dataset)) {
+                optionEl.dataset[key] = value;
+            }
             optionEl.addEventListener('click', this.onClickOption.bind(this), true);
             this.optionsContainer.appendChild(optionEl);
         }

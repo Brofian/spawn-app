@@ -1,0 +1,43 @@
+.pagination {
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+
+	.index-page,
+	.last-page,
+	.first-page {
+		cursor: pointer;
+		padding: 0 9px;
+		border: 1px solid $background-dark-highlight;
+		margin: 0 3px;
+
+		&:hover {
+			background: $background-dark-highlight;
+		}
+
+		&.disabled {
+			background: $background-dark-highlight;
+			cursor: initial;
+		}
+
+	}
+
+}
+
+.numbersPerPage {
+	margin-left: 2rem;
+	min-width: 3rem;
+	align-items: center;
+	display: flex;
+
+	label {
+		display: flex;
+		align-items: center;
+
+		span {
+			white-space: nowrap;
+			margin-right: 1rem;
+		}
+	}
+
+}

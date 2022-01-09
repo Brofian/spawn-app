@@ -54,7 +54,7 @@ class SeoUrlManager {
             ->select('COUNT(*) as count')
             ->from(SeoUrlTable::TABLE_NAME);
         if($ignoreLocked) {
-           $stmt->where('locked = 1');
+           $stmt->where('locked = 0');
         }
 
         return $stmt->executeQuery()->fetchAssociative()['count'];

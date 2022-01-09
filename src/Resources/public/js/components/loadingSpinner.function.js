@@ -9,6 +9,9 @@ export default class LoadingSpinner {
         let backdrop = document.createElement('div');
         backdrop.classList.add('loading-backdrop');
 
+        let targetHeight = Math.max(targetElement.clientHeight, targetElement.scrollHeight);
+        backdrop.style.minHeight = targetHeight + 'px';
+
         let spinner = document.createElement('div');
         spinner.classList.add('loading-spinner');
         backdrop.appendChild(spinner);

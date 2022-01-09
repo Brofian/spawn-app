@@ -7,35 +7,41 @@
     {% endfor %}
 {% endif %}
 
-{% set base_link = base_link ~ '&num=' ~ entriesPerPage %}
+{% set pag_base_link = base_link ~ '&num=' ~ entriesPerPage %}
+{% set num_base_link = base_link ~ '&page=1' %}
 
 <div class="pagination">
 
-    {% if page > 1 %}
-        <div class="first-page" data-backend-content-link="{{ base_link }}&page=1">
-            First |
-        </div>
-    {% endif %}
-
+    <div class="first-page {% if page <= 1 %}disabled{% endif %}"
+                           {% if page > 1  %}data-backend-content-link="{{ pag_base_link }}&page=1"{% endif %}>
+        First
+    </div>
 
     {% for i in 1..availablePages %}
-
-        {% if i == page %}
-            <div class="current-page">
+        {% if i >= (page-neighbours) and i <= (page+neighbours) %}
+            <div class="index-page {% if i == page %}disabled{% endif %}"
+                                   {% if i != page %}data-backend-content-link="{{ pag_base_link }}&page={{ i }}"{% endif %}>
                 {{ i }}
             </div>
-        {% elseif i >= (page-neighbours) and i <= (page+neighbours) %}
-            <div class="index-page" data-backend-content-link="{{ base_link }}&page={{ i }}">
-                {{ i }} |
-            </div>
         {% endif %}
-
     {% endfor %}
 
-    {% if page < availablePages %}
-        <div class="last-page" data-backend-content-link="{{ base_link }}&page={{ availablePages }}">
-            Last |
-        </div>
-    {% endif %}
+    <div class="last-page {% if page >= availablePages %}disabled{% endif %}"
+                          {% if page < availablePages  %}data-backend-content-link="{{ pag_base_link }}&page={{ availablePages }}"{% endif %}>
+        Last
+    </div>
 
+</div>
+
+{% set possibleNumbers = [10,20,50,100] %}
+<div class="numbersPerPage">
+    <label>
+        <span>Rows per page</span>
+
+        <select style="width: 50px">
+            {% for num in possibleNumbers %}
+                <option {% if entriesPerPage == num %}selected{% endif %} data-backend-content-link="{{ num_base_link }}&num={{ num }}">{{ num }}</option>
+            {% endfor %}
+        </select>
+    </label>
 </div>

@@ -27,6 +27,7 @@
 @import "component/flash-hint";
 @import "component/inline-flag";
 @import "component/button-list";
+@import "component/pagination";
 
 /* Backend - Elements */
 @import "element/link";
@@ -39,3 +40,6 @@
 @import "element/header";
 @import "element/login";
 @import "element/custom-select";
+
+/* Backend - Pages */
+@import "page/seo_url_config_overview";
