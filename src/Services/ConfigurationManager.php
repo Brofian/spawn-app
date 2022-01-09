@@ -2,16 +2,8 @@
 
 namespace spawnApp\Services;
 
-use bin\spawn\IO;
-use Exception;
 use spawnApp\Database\ConfigurationTable\ConfigurationEntity;
 use spawnApp\Database\ConfigurationTable\ConfigurationRepository;
-use spawnApp\Database\ModuleTable\ModuleEntity;
-use spawnApp\Services\Commands\ListModulesCommand;
-use spawnApp\Services\Exceptions\MissingRequiredConfigurationFieldException;
-use spawnCore\Custom\Gadgets\UUID;
-use spawnCore\Custom\Gadgets\XMLContentModel;
-use spawnCore\Custom\Gadgets\XMLReader;
 use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Entity\EntityCollection;
 

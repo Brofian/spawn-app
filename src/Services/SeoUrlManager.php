@@ -5,6 +5,7 @@ namespace spawnApp\Services;
 use Doctrine\DBAL\Exception;
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
+use spawnApp\Database\SeoUrlTable\SeoUrlTable;
 use spawnCore\Custom\Gadgets\ClassInspector;
 use spawnCore\Custom\Gadgets\MethodInspector;
 use spawnCore\Custom\Gadgets\UUID;
@@ -17,6 +18,8 @@ use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
 use spawnCore\Database\Entity\EntityCollection;
 use spawnCore\Database\Entity\InvalidRepositoryInteractionException;
 use spawnCore\Database\Entity\RepositoryException;
+use spawnCore\Database\Helpers\DatabaseConnection;
+use spawnCore\Database\Helpers\DatabaseHelper;
 use spawnCore\ServiceSystem\Service;
 use spawnCore\ServiceSystem\ServiceContainer;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
@@ -35,11 +38,26 @@ class SeoUrlManager {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
     }
 
-    public function getSeoUrls(int $limit = 0, int $offset = 0): EntityCollection {
-        if($limit !== 0) {
-            return $this->seoUrlRepository->search(new Criteria(), $limit, $offset);
+    public function getSeoUrls(bool $ignoreLocked = false, int $limit = 9999, int $offset = 0): EntityCollection {
+        $criteria = new Criteria();
+        if($ignoreLocked) {
+            $criteria->addFilter(new EqualsFilter('locked', 0));
         }
-        return $this->seoUrlRepository->search(new Criteria());
+
+        return $this->seoUrlRepository->search($criteria, $limit, $offset);
+    }
+
+    public function getNumberAvailableSeoUrls(bool $ignoreLocked = false): int {
+        $queryBuilder = DatabaseConnection::getConnection()->createQueryBuilder();
+
+        $stmt = $queryBuilder
+            ->select('COUNT(*) as count')
+            ->from(SeoUrlTable::TABLE_NAME);
+        if($ignoreLocked) {
+           $stmt->where('locked = 1');
+        }
+
+        return $stmt->executeQuery()->fetchAssociative()['count'];
     }
 
     /**

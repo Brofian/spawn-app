@@ -4,8 +4,10 @@ namespace spawnCore\NavigationSystem;
 
 use spawnApp\Database\SeoUrlTable\SeoUrlEntity;
 use spawnApp\Database\SeoUrlTable\SeoUrlRepository;
+use spawnApp\Services\ConfigurationManager;
 use spawnCore\Cron\CronStates;
 use spawnCore\Custom\Gadgets\CUriConverter;
+use spawnCore\Custom\Gadgets\UUID;
 use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Criteria\Filters\AndFilter;
 use spawnCore\Database\Criteria\Filters\EqualsFilter;
@@ -15,24 +17,39 @@ use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class Navigator
 {
-    const FALLBACK_SERVICE = 'system.fallback.404';
-    const FALLBACK_ACTION = 'error404Action';
-
+    public const FALLBACK_CONFIG = 'config_system_fallback_method';
+    protected string $fallbackService = 'system.fallback.404';
+    protected string $fallbackAction = 'error404Action';
 
     protected ServiceContainer $serviceContainer;
+    protected SeoUrlRepository $seoUrlRepository;
+
 
     public function __construct()
     {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
+        $this->seoUrlRepository = $this->serviceContainer->getServiceInstance('system.repository.seo_urls');
+
+        
+        //load fallback service and action
+        /** @var ConfigurationManager $configurationManager */
+        $configurationManager = $this->serviceContainer->getServiceInstance('system.service.configuration_manager');
+        $fallbackActionID = $configurationManager->getConfiguration(self::FALLBACK_CONFIG);
+        if($fallbackActionID) {
+            $seoUrlEntity = $this->seoUrlRepository->search(new Criteria(new EqualsFilter('id', UUID::hexToBytes($fallbackActionID))))->first();
+            if($seoUrlEntity instanceof SeoUrlEntity) {
+                $this->fallbackAction = $seoUrlEntity->getAction();
+                $this->fallbackService = $seoUrlEntity->getController();
+            }
+        }
     }
 
 
     public function route(string $controller, string $action, ?Service &$controllerCls, ?string &$actionStr): void
     {
-
         if ($controller == "" || $action == "") {
-            $controllerCls = $this->serviceContainer->getService(self::FALLBACK_SERVICE);
-            $actionStr = self::FALLBACK_ACTION;
+            $controllerCls = $this->serviceContainer->getService($this->fallbackService);
+            $actionStr = $this->fallbackAction;
             return;
         }
 
@@ -40,8 +57,8 @@ class Navigator
         $controllerCls = $this->serviceContainer->getService($controller);
         if (!$controllerCls) {
             //controller does not exist
-            $controllerCls = $this->serviceContainer->getService(self::FALLBACK_SERVICE);
-            $actionStr = self::FALLBACK_ACTION;
+            $controllerCls = $this->serviceContainer->getService($this->fallbackService);
+            $actionStr = $this->fallbackAction;
             return;
         }
 
@@ -53,8 +70,8 @@ class Navigator
 
         if (!method_exists($controllerCls->getClass(), $actionStr)) {
             //action does not exist
-            $controllerCls = $this->serviceContainer->getService(self::FALLBACK_SERVICE);
-            $actionStr = self::FALLBACK_ACTION;
+            $controllerCls = $this->serviceContainer->getService($this->fallbackService);
+            $actionStr = $this->fallbackAction;
             return;
         }
 
@@ -71,9 +88,8 @@ class Navigator
         }
         //$original = "/[whatever]"
 
-        /** @var SeoUrlRepository $seoUrlRepository */
-        $seoUrlRepository = $this->serviceContainer->getServiceInstance('system.repository.seo_urls');
-        $rewrite_urls = $seoUrlRepository->search(
+
+        $rewrite_urls = $this->seoUrlRepository->search(
             new Criteria(new EqualsFilter('active', true))
         );
 
@@ -94,7 +110,7 @@ class Navigator
             }
         }
 
-        return self::getFormattedLink('system.fallback.404', 'error404');
+        return self::getFormattedLink($this->fallbackService, $this->fallbackAction);
     }
 
     public static function getFormattedLink(string $controller, string $action): string
@@ -106,12 +122,10 @@ class Navigator
     {
 
         if ($controller == null || $action == null) {
-            return self::getSeoLinkByParameters(self::FALLBACK_SERVICE, self::FALLBACK_ACTION);
+            return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
         }
 
-        /** @var SeoUrlRepository $seoUrlRepository */
-        $seoUrlRepository = $this->serviceContainer->getServiceInstance('system.repository.seo_urls');
-        $seoUrlCollection = $seoUrlRepository->search(
+        $seoUrlCollection = $this->seoUrlRepository->search(
             new Criteria(
                 new AndFilter(
                     new EqualsFilter('controller', $controller),
@@ -128,7 +142,7 @@ class Navigator
             $cUrl = $seoUrl->getCUrl();
             return CUriConverter::cUriToUri($cUrl, $parameters);
         } else {
-            return self::getSeoLinkByParameters(self::FALLBACK_SERVICE, self::FALLBACK_ACTION);
+            return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
         }
     }
 

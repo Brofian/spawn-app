@@ -2,6 +2,22 @@
 
 <configuration>
 
+    <collection folder="system">
+
+        <entityselectfield>
+            <name>config_system_fallback_method</name>
+            <repository>system.repository.seo_urls</repository>
+            <search>
+                <column>controller</column>
+                <column>action</column>
+            </search>
+            <identifier>id</identifier>
+            <identifier_getter>getId</identifier_getter>
+            <label>getLabel</label>
+        </entityselectfield>
+
+    </collection>
+
     <collection folder="debug">
 
         <textfield>

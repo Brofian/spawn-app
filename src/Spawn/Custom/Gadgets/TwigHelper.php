@@ -188,6 +188,13 @@ class TwigHelper
         return $this;
     }
 
+    public function assignBulk(array $values): self {
+        foreach($values as $key => $value) {
+            $this->assign($key, $value);
+        }
+        return $this;
+    }
+
     public function setOutput($value): self
     {
         if (is_string($value)) {

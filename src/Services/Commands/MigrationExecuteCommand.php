@@ -13,6 +13,7 @@ use spawnCore\Custom\Throwables\WrongEntityForRepositoryException;
 use spawnCore\Database\Criteria\Criteria;
 use spawnCore\Database\Entity\EntityCollection;
 use spawnCore\Database\Helpers\DatabaseHelper;
+use spawnCore\ServiceSystem\Service;
 use spawnCore\ServiceSystem\ServiceContainerProvider;
 
 class MigrationExecuteCommand extends AbstractCommand {
@@ -75,7 +76,7 @@ class MigrationExecuteCommand extends AbstractCommand {
         foreach($migrationServices as $migrationService) {
             /** @var AbstractMigration $class */
             $class = $migrationService->getClass();
-            $migrations[] = [$class::getUnixTimestamp(),$class];
+            $migrations[] = [$class::getUnixTimestamp(),$class, $migrationService];
         }
 
         return $migrations;
@@ -130,8 +131,10 @@ class MigrationExecuteCommand extends AbstractCommand {
 
             $count = 0;
             try {
+                /** @var Service $service */
+                $service = $migration[2];
                 /** @var AbstractMigration $m */
-                $m = new $migrationClass();
+                $m = $service->getInstance();
                 $m->run($this->databaseHelper);
 
                 $newMigrations[] = $migration;

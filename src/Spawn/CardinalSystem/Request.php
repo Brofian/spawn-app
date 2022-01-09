@@ -49,9 +49,26 @@ class Request extends Mutable
     protected function enrichGetValueBag(): void
     {
         $this->get = new AssociativeCollection();
-        foreach ($_GET as $key => $value) {
-            $this->get->set($key, $value);
+
+        // If the $_GET variable is set, use it directly.
+        // But if the server redirect removes the get parameters, use the request URI instead
+        if(!empty($_GET)) {
+            foreach ($_GET as $key => $value) {
+                $this->get->set($key, $value);
+            }
         }
+        else {
+            $requestUri = $_SERVER['REQUEST_URI'];
+            $getParameterStart = strpos($requestUri, '?');
+            if($getParameterStart !== false) {
+                $parameterString = substr($requestUri, $getParameterStart+1);
+                parse_str($parameterString, $getParameters);
+                foreach ($getParameters as $key => $value) {
+                    $this->get->set($key, $value);
+                }
+            }
+        }
+
     }
 
     protected function enrichPostValueBag(): void
@@ -83,7 +100,15 @@ class Request extends Mutable
 
     protected function enrichRequestPath(): void
     {
-        $this->requestPath = $_SERVER['REQUEST_URI'] ?? '/';
+        //remove getParameter
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $getParameterStart = strpos($requestUri, '?');
+        if($getParameterStart !== false) {
+            $requestUri = substr($requestUri, 0, $getParameterStart);
+        }
+
+        //set requestPath
+        $this->requestPath = $requestUri ?? '/';
     }
 
     protected function enrichRequestUri()

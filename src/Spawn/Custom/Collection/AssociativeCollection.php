@@ -42,7 +42,12 @@ class AssociativeCollection extends AbstractCollectionBase
         }
     }
 
-    public function get($key)
+    /**
+     * @param string|int $key
+     * @param mixed $default
+     * @return mixed|null
+     */
+    public function get($key, $default = null)
     {
         if (isset($this->collection[$key])) {
             return $this->collection[$key];
@@ -52,7 +57,16 @@ class AssociativeCollection extends AbstractCollectionBase
             return $this->collection[$this->keys[$key]];
         }
 
-        return null;
+        return $default;
+    }
+
+    /**
+     * @param string|int $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        return isset($this->collection[$key]) || isset($this->keys[$key]);
     }
 
     public function last()

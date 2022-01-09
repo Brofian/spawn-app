@@ -56,7 +56,7 @@ class MigrationCreateCommand extends AbstractCommand {
 
         }
         else {
-            IO::printLine("Für welches Modul möchtest du die Migration erstellen?", IO::BLUE_TEXT);
+            IO::printLine("In which module should the migration be created?", IO::BLUE_TEXT);
 
             $counter = 0;
             $modules = [];
@@ -68,7 +68,7 @@ class MigrationCreateCommand extends AbstractCommand {
                 $counter++;
             }
 
-            $moduleId = IO::readLine("Bitte gib eine gültige ID an: ", function($answer) use ($counter) {
+            $moduleId = IO::readLine("Insert a valid ID: ", function($answer) use ($counter) {
                 return (is_numeric($answer) && (int)$answer < $counter && (int)$answer >= 0);
             }, 'The given ID is invalid!', 1);
 
@@ -118,8 +118,8 @@ class MigrationCreateCommand extends AbstractCommand {
 
 namespace ".$slug."\\Database\\Migrations;
 
-use spawn\system\Core\Base\Helper\DatabaseHelper;
-use spawn\system\Core\base\AbstractMigration;
+use spawnCore\Custom\FoundationStorage\AbstractMigration;
+use spawnCore\Database\Helpers\DatabaseHelper;
 
 class ".$className." extends AbstractMigration {
     
@@ -129,7 +129,7 @@ class ".$className." extends AbstractMigration {
         return ".$timestamp.";
     }
 
-    function run(DatabaseHelper \$dbHelper)
+    public function run(DatabaseHelper \$dbHelper)
     {
         //TODO: Add your Migration code here
     }

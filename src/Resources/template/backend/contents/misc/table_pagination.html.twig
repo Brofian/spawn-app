@@ -1,0 +1,41 @@
+{% set neighbours = 2 %}
+
+{% set base_link = tableUrl~'?c' %}
+{% if getParameters %}
+    {% for key, param in getParameters %}
+        {% set base_link = base_link~'&'~key~'='~param %}
+    {% endfor %}
+{% endif %}
+
+{% set base_link = base_link ~ '&num=' ~ entriesPerPage %}
+
+<div class="pagination">
+
+    {% if page > 1 %}
+        <div class="first-page" data-backend-content-link="{{ base_link }}&page=1">
+            First |
+        </div>
+    {% endif %}
+
+
+    {% for i in 1..availablePages %}
+
+        {% if i == page %}
+            <div class="current-page">
+                {{ i }}
+            </div>
+        {% elseif i >= (page-neighbours) and i <= (page+neighbours) %}
+            <div class="index-page" data-backend-content-link="{{ base_link }}&page={{ i }}">
+                {{ i }} |
+            </div>
+        {% endif %}
+
+    {% endfor %}
+
+    {% if page < availablePages %}
+        <div class="last-page" data-backend-content-link="{{ base_link }}&page={{ availablePages }}">
+            Last |
+        </div>
+    {% endif %}
+
+</div>

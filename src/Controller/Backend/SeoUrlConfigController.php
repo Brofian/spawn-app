@@ -11,6 +11,9 @@ use spawnCore\Custom\FoundationStorage\AbstractBackendController;
 use spawnCore\Custom\Response\AbstractResponse;
 use spawnCore\Custom\Response\JsonResponse;
 use spawnCore\Custom\Response\TwigResponse;
+use spawnCore\Custom\Throwables\DatabaseConnectionException;
+use spawnCore\Database\Criteria\Filters\InvalidFilterValueException;
+use spawnCore\Database\Entity\RepositoryException;
 
 class SeoUrlConfigController extends AbstractBackendController {
 
@@ -33,8 +36,8 @@ class SeoUrlConfigController extends AbstractBackendController {
     {
         return [
             'configuration' => [
-                'title' => "config", //Kategory title
-                'color' => "#00ff00", //Kategory color
+                'title' => "config",
+                'color' => "#00ff00",
                 'actions' => [
                     [
                         'controller' => '%self.key%',
@@ -52,10 +55,24 @@ class SeoUrlConfigController extends AbstractBackendController {
      * @return AbstractResponse
      */
     public function seoUrlOverviewAction(): AbstractResponse {
-        $seoUrls = $this->seoUrlManager->getSeoUrls();
+        $get = $this->request->getGet();
 
-        $this->twig->assign('seo_urls', $seoUrls);
-        $this->twig->assign('content_file', 'backend/contents/seo_url_config/overview/content.html.twig');
+        $numberOfEntriesPerPage = intval($get->get('num', 20) ?? 1);
+        $page = intval($get->get('page', 1) ?? 1);
+        $ignoreLocked = !$get->has('showLocked');
+        $totalNumberOfEntries = intval($this->seoUrlManager->getNumberAvailableSeoUrls($ignoreLocked) ?? 1);
+        $availablePages = (int)ceil($totalNumberOfEntries / $numberOfEntriesPerPage);
+        $seoUrls = $this->seoUrlManager->getSeoUrls($ignoreLocked, $numberOfEntriesPerPage, ($page-1)*$numberOfEntriesPerPage);
+
+        $this->twig->assignBulk([
+            'table_info' => [
+                'page' => $page,
+                'entriesPerPage' => $numberOfEntriesPerPage,
+                'availablePages' => $availablePages
+            ],
+            'seo_urls' => $seoUrls,
+            'content_file' => 'backend/contents/seo_url_config/overview/content.html.twig'
+        ]);
 
         return new TwigResponse('backend/index.html.twig');
     }
@@ -66,9 +83,11 @@ class SeoUrlConfigController extends AbstractBackendController {
      * @param string|null $ctrl
      * @param string|null $method
      * @return AbstractResponse
+     * @throws DatabaseConnectionException
+     * @throws InvalidFilterValueException
+     * @throws RepositoryException
      */
     public function seoUrlEditAction(string $ctrl, string $method): AbstractResponse {
-
         $seoUrl = $this->seoUrlManager->getSeoUrl($ctrl, $method);
 
         $this->twig->assign('seo_url', $seoUrl);

@@ -15,13 +15,24 @@
     </thead>
 
     <tbody>
-
         {% for seo_url in seo_urls %}
 
             {% include 'backend/contents/seo_url_config/overview/overview_table/overview_table_row.html.twig' %}
 
         {% endfor %}
-
     </tbody>
 
 </table>
+
+<div class="section">
+    {% include 'backend/contents/misc/table_pagination.html.twig' with {
+        page: table_info.page,
+        availablePages: table_info.availablePages,
+        entriesPerPage: table_info.entriesPerPage,
+        tableUrl: seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction'),
+        getParameters: {
+            'showLocked': 1,
+            'test': 'abc'
+        }
+    } only %}
+</div>
