@@ -95,7 +95,6 @@ export default class EntitySelect extends CustomSelect {
     getCurrentValue() {
         this.currentValue = this._element.dataset.entitySelectValue;
         this.currentLabel = this._element.dataset.entitySelectLabel;
-        console.log('set currentvalue to ' + this.currentValue);
     }
 
 }

@@ -100,9 +100,12 @@ export default class CustomSelect extends Plugin {
             optionEl.classList.add('js-entity-select-option');
             optionEl.innerText = option.label;
             optionEl.dataset.jsEntitySelectOptionValue = option.value;
-            for(let [key,value] of Object.entries(option.dataset)) {
-                optionEl.dataset[key] = value;
+            if(typeof option.dataset === "object") {
+                for(let [key,value] of Object.entries(option.dataset)) {
+                    optionEl.dataset[key] = value;
+                }
             }
+
             optionEl.addEventListener('click', this.onClickOption.bind(this), true);
             this.optionsContainer.appendChild(optionEl);
         }
