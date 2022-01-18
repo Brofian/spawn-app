@@ -20,7 +20,6 @@ class ModuleTable extends AbstractTable {
             new UuidColumn('id', null),
             new StringColumn('slug', false),
             new StringColumn('path', false),
-            new StringColumn('namespace', false),
             new BooleanColumn('active', false),
             new JsonColumn('information'),
             new JsonColumn('resourceConfig'),

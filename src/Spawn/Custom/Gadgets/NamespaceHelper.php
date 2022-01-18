@@ -24,6 +24,9 @@ class NamespaceHelper {
                 $hasChanged = false;
                 $slugsToAdd = [];
                 foreach($slugs as $slug) {
+                    if(!isset($slugToModule[$slug])) {
+                        continue;
+                    }
                     $module = $slugToModule[$slug];
                     $using = $module->getResourceConfigValue('using');
                     if(is_array($using)) {
