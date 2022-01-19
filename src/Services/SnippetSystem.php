@@ -19,7 +19,7 @@ class SnippetSystem {
 
     protected SnippetRepository $snippetRepository;
     protected LanguageRepository $languageRepository;
-    protected array $availableLanguages = [];
+    protected ?array $availableLanguages = null;
 
 
     public function __construct(
@@ -29,10 +29,13 @@ class SnippetSystem {
     {
         $this->snippetRepository = $snippetRepository;
         $this->languageRepository = $languageRepository;
-        $this->loadAvailableLanguages();
     }
 
     protected function loadAvailableLanguages(): void {
+        if(is_array($this->availableLanguages)) {
+            return;
+        }
+
         $languageEntities = $this->languageRepository->search(new Criteria());
         /** @var LanguageEntity $languageEntity */
         foreach($languageEntities as $languageEntity) {
@@ -42,6 +45,7 @@ class SnippetSystem {
 
 
     public function updateSnippetEntries(): array {
+        $this->loadAvailableLanguages();
         $result = [
             'added' => 0
         ];
@@ -78,6 +82,7 @@ class SnippetSystem {
     }
 
     public function loadSnippetsFromDatabase(): array {
+        $this->loadAvailableLanguages();
         $snippetEntities = $this->snippetRepository->search(new Criteria());
         $snippets = [];
         /** @var SnippetEntity $snippetEntity */
@@ -89,6 +94,7 @@ class SnippetSystem {
     }
 
     public function loadSnippetsFromModules(): array {
+        $this->loadAvailableLanguages();
         $snippetArraysFromFiles = [];
 
         /** @var ModuleEntity $module */

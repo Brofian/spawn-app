@@ -12,13 +12,13 @@ abstract class AbstractCollectionBase implements Iterator, Countable
     protected array $collection = array();
     protected int $position;
 
-    public function current()
+
+    public function current(): mixed
     {
         return $this->getByIndex($this->position);
     }
 
     protected abstract function getByIndex(int $index);
-
 
     /*
      *
@@ -26,24 +26,25 @@ abstract class AbstractCollectionBase implements Iterator, Countable
      *
      */
 
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
-    public function key()
+
+    public function key(): mixed
     {
         return $this->getCurrentKey();
     }
 
     protected abstract function getCurrentKey();
 
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->collection[$this->getCurrentKey()]);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
@@ -55,7 +56,7 @@ abstract class AbstractCollectionBase implements Iterator, Countable
      *
      */
 
-    public function count()
+    public function count(): int
     {
         return count($this->collection);
     }

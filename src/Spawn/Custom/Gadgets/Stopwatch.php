@@ -9,7 +9,7 @@ class Stopwatch
 
     public static function start(): void
     {
-        self::$startingTime = microtime(true) * 1000;
+        self::$startingTime = floor(microtime(true) * 1000);
     }
 
     public static function end(int $precision = 5): string
