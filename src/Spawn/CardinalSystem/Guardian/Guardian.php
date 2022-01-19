@@ -18,7 +18,18 @@ class Guardian {
         }
 
         $this->exception = $exception;
-        Logger::writeToErrorLog($exception->getTraceAsString(), $exception->getMessage());
+        Logger::writeToErrorLog($this->getFullTrace($exception), $exception->getMessage());
+    }
+
+    protected function getFullTrace(Exception $exception): string {
+        $trace = $exception->getTraceAsString();
+        while ($exception->getPrevious() instanceof Exception || $exception->getPrevious() instanceof Error) {
+            $exception = $exception->getPrevious();
+            $trace .= PHP_EOL . PHP_EOL . 'Previous Exception "'.$exception->getMessage().'"'.PHP_EOL;
+            $trace .= $exception->getTraceAsString();
+        }
+
+        return $trace;
     }
 
     public function getHandleResponse(): string {
@@ -35,7 +46,11 @@ class Guardian {
         return '<b>Oops, something went wrong!</b> If this problem consists, please contact the page owner';
     }
 
-    protected function createPrivateResponse(Exception $e): string {
+    /**
+     * @param Exception|Error $e
+     * @return string
+     */
+    protected function createPrivateResponse($e): string {
         $message = $e->getMessage() ?? 'No error-message provided!';
         $trace = $e->getTrace() ?? [];
 
@@ -49,7 +64,7 @@ class Guardian {
         }
         $response .= '</ul>';
 
-        if($e->getPrevious() instanceof Exception) {
+        if($e->getPrevious() instanceof Exception || $e->getPrevious() instanceof Error) {
             $response .= '<br><hr><br>';
             $response .= $this->createPrivateResponse($e->getPrevious());
         }

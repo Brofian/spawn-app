@@ -20,11 +20,11 @@
 {% endblock %}
 
 {% block meta_javascript %}
-    <script src="{{ cache('SpawnApp') }}/js/index.js"></script>
+    <script src="{{ cache('SpawnBackend') }}js/index.js"></script>
 {% endblock %}
 
 {% block meta_css %}
-    <link rel="stylesheet" type="text/css" href="{{ cache('SpawnApp') }}/css/all{% if environment == 'dev' %}.min{% endif %}.css">
+    <link rel="stylesheet" type="text/css" href="{{ cache('SpawnBackend') }}css/all{% if environment == 'dev' %}.min{% endif %}.css">
 {% endblock %}
 
 {% block meta_robots %}

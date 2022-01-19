@@ -76,7 +76,7 @@ class FileCrawler
             //skip relative folders and cache
             if (in_array($content, $this->ignored_dirs)) continue;
             //skip invisible folders
-            if (substr($content, 0, 1) == '.') continue;
+            if (str_starts_with($content, '.')) continue;
 
             //extend path with current content element
             $path = $current . '\\' . $content;

@@ -23,13 +23,15 @@ class NpmInstallCommand extends AbstractCommand  {
     public function execute(array $parameters): int  {
 
         try {
+            // download nodejs, npm
             IO::execInDir('composer run-script download-nodejs', ROOT);
 
             self::addNodeJSToPath();
 
-            //npx is installed as part of npm, which is installed as part of nodejs
-            IO::execInDir('npm install -g --force npx', ROOT);
-            IO::execInDir("npm install --force", ROOT . "/src/npm");
+            //npx is installed by npm, which is installed as part of nodejs
+            IO::execInDir('npm install npx', ROOT . "/src/npm");
+            IO::execInDir("npm install ", ROOT . "/src/npm", true, $result);
+
         }
         catch (Exception $e) {
             return $e->getCode();
