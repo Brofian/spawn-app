@@ -11,9 +11,10 @@
 
             {% for sidebar_action in sidebar_category.actions %}
 
-                <li class="sidebar_category_accordion_entry"
-                    data-backend-content-link="{{ seo_url(sidebar_action.controller, sidebar_action.action) }}">
-                {{ ('backend.sidebar.branch.title.'~sidebar_action.title)|translate }}
+                <li class="sidebar_category_accordion_entry">
+                    <a href="{{ seo_url(sidebar_action.controller, sidebar_action.action) }}">
+                        {{ ('backend.sidebar.branch.title.'~sidebar_action.title)|translate }}
+                    </a>
                 </li>
 
             {% endfor %}

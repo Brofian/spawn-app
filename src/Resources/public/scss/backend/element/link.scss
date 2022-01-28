@@ -1,14 +1,27 @@
 a:link,
 a:visited {
 	text-decoration: none;
-	color: $primary;
+	color: $white;
 }
-
 a:active,
 a:hover {
-	color: darken($primary, 10%);
+	color: $white;
 }
 
-.clickable {
-	cursor: pointer;
+
+a.link {
+	&:link,
+	&:visited {
+		text-decoration: none;
+		color: $primary;
+	}
+
+	&:active,
+	&:hover {
+		color: darken($primary, 10%);
+	}
+
+	&.clickable {
+		cursor: pointer;
+	}
 }

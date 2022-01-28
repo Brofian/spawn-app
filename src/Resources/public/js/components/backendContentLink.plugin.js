@@ -31,14 +31,20 @@ export default class BackendContentLinkPlugin extends Plugin {
 
     onSidebarLinkClick(targetSelector, addEntryToUri, event) {
 
-        let url = this._element.dataset[this.backendLinkUrlData];
+        let url = this._element.href;
+        if(!url) {
+            url = this._element.dataset[this.backendLinkUrlData];
+        }
 
-        window.history.pushState('', '', url);
+        if(addEntryToUri) {
+            window.history.pushState('', '', url);
+        }
 
         if(targetSelector && url) {
             AjaxDataReplace.loadAndReplaceContent(url, targetSelector);
         }
 
+        event.preventDefault();
     }
 
 

@@ -8,6 +8,7 @@ namespace spawnCore\CardinalSystem;
  */
 
 
+use spawnCore\Custom\Gadgets\HeaderHelper;
 use spawnCore\Custom\Gadgets\ResourceCollector;
 use spawnCore\Custom\Gadgets\ScssHelper;
 use spawnCore\Custom\Gadgets\TwigHelper;
@@ -25,6 +26,7 @@ class Response
     protected string $html = '';
     protected TwigHelper $twigHelper;
     protected ScssHelper $scssHelper;
+    protected HeaderHelper $headerHelper;
     protected EntityCollection $moduleCollection;
     protected AbstractResponse $responseObject;
 
@@ -34,6 +36,7 @@ class Response
         $this->twigHelper = $serviceContainer->getServiceInstance('system.twig.helper');
         $this->scssHelper = $serviceContainer->getServiceInstance('system.scss.helper');
         $this->moduleCollection = $serviceContainer->getServiceInstance('system.modules.collection');
+        $this->headerHelper = $serviceContainer->getServiceInstance('system.header.helper');
 
         $this->fillBaseContextData();
     }
@@ -79,14 +82,14 @@ class Response
      */
     public function finish(): string
     {
-
         if (isset($this->responseObject)) {
+            $this->headerHelper->setHeader('Cache-control: ' . $this->responseObject->getCacheStatus()->getCacheControlValue(), true);
+
             return $this->responseObject->getResponse();
         }
 
         /* Render twig */
         return $this->twigHelper->finish();
     }
-
 
 }

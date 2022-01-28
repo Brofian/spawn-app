@@ -37,6 +37,7 @@ class ScssHelper
 
 
         foreach($namespaces as $namespace => $moduleList) {
+            $this->setBaseVariable("asset-path", '/cache/'.ModuleNamespacer::hashNamespace($namespace));
             $baseFile = $this->baseFolder . '/' . $namespace . '_index.scss';
 
             if(file_exists($baseFile)) {

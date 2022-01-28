@@ -33,12 +33,12 @@
     <td>
         {% set editLink = seo_url('system.backend.seo_url_config', 'seoUrlEditAction', [seo_url.controller, seo_url.action]) %}
 
-        <span
-            class="btn btn-square-red {% if seo_url.locked %}disabled{% endif %}"
-            {% if not seo_url.locked %}data-backend-content-link="{{ editLink }}"{% endif %}
-        >
-            {{ 'edit'|icon() }}
-        </span>
+        <a {% if not seo_url.locked %}href="{{ editLink }}"{% endif %}>
+            <span class="btn btn-square-red {% if seo_url.locked %}disabled{% endif %}">
+                {{ 'edit'|icon() }}
+            </span>
+        </a>
+
 
 
     </td>

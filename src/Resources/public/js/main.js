@@ -10,7 +10,7 @@ import EntitySelect from "./components/entitySelect.plugin";
 
 
 PluginManager.register('accordion.plugin', AccordionPlugin, '.js-accordion');
-PluginManager.register('backend_content_link.plugin', BackendContentLinkPlugin, '[data-backend-content-link]');
+PluginManager.register('backend_content_link.plugin', BackendContentLinkPlugin, '[data-backend-content-link], a[href]');
 PluginManager.register('backend_resizeable_columns.plugin', ResizeableColumnsPlugin, 'table.js-resizable-columns');
 PluginManager.register('ajax_form.plugin', AjaxForm, '[data-ajax-form]');
 PluginManager.register('seo_url_preview.plugin', SeoUrlPreviewPlugin, '[data-seo-url-editor]');

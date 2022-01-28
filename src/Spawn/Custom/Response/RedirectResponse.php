@@ -14,7 +14,7 @@ class RedirectResponse extends AbstractResponse
 
     public function __construct(string $controller, string $method, array $parameters = [])
     {
-        parent::__construct('');
+        parent::__construct('', new CacheControlState(true, true));
 
         /** @var Navigator $routingHelper */
         $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');

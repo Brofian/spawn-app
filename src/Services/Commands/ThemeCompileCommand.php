@@ -66,8 +66,6 @@ class ThemeCompileCommand extends AbstractCommand {
         IO::printWarning("> compiling SCSS");
 
         $scssHelper = new ScssHelper();
-        $scssHelper->setBaseVariable("assetsPath", MAIN_ADDRESS.'/'.CACHE_DIR.'/public/assets');
-        $scssHelper->setBaseVariable("defaultAssetsPath", MAIN_ADDRESS.'/'.CACHE_DIR.'/public/assets');
         $scssHelper->createCss();
 
         IO::printSuccess("> - successfully compiled SCSS");

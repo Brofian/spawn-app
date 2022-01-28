@@ -9,7 +9,7 @@ namespace spawnCore\CardinalSystem\ModuleNetwork;
 class ModuleNamespacer
 {
 
-    public const GLOBAL_NAMESPACE_RAW = "global";
+    public static $generatedNamespaces = [];
 
     /**
      * @param $rawNamespace
@@ -17,7 +17,12 @@ class ModuleNamespacer
      */
     public static function hashNamespace($rawNamespace)
     {
-        return hash("md5", $rawNamespace);
+        if(isset(self::$generatedNamespaces[$rawNamespace])) {
+            return self::$generatedNamespaces[$rawNamespace];
+        }
+        self::$generatedNamespaces[$rawNamespace] = hash("md5", $rawNamespace);
+
+        return self::$generatedNamespaces[$rawNamespace];
     }
 
 }

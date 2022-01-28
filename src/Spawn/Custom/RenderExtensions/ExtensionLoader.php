@@ -49,9 +49,6 @@ class ExtensionLoader
         /*
          * Functions
          */
-        $assetFunction = new AssetFunctionExtension();
-        $assetFunction->addToTwig($twig);
-
         $cacheFunction = new CacheFunctionExtension();
         $cacheFunction->addToTwig($twig);
 

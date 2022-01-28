@@ -8,7 +8,7 @@ use spawnCore\Custom\Response\Exceptions\JsonConvertionException;
 class JsonResponse extends AbstractResponse
 {
 
-    public function __construct(array $responseArray)
+    public function __construct(array $responseArray, ?CacheControlState $cache = null)
     {
         try {
             $jsonResponse = json_encode($responseArray);
@@ -16,7 +16,7 @@ class JsonResponse extends AbstractResponse
             $jsonResponse = (string)(new JsonConvertionException($responseArray));
         }
 
-        parent::__construct($jsonResponse);
+        parent::__construct($jsonResponse, $cache);
     }
 
 }

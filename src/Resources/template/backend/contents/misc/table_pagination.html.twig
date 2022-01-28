@@ -12,24 +12,28 @@
 
 <div class="pagination">
 
-    <div class="first-page {% if page <= 1 %}disabled{% endif %}"
-                           {% if page > 1  %}data-backend-content-link="{{ pag_base_link }}&page=1"{% endif %}>
-        First
+    <div class="first-page {% if page <= 1 %}disabled{% endif %}">
+        <a {% if page > 1  %}href="{{ pag_base_link }}&page=1"{% endif %}>
+            First
+        </a>
     </div>
 
     {% for i in 1..availablePages %}
         {% if i >= (page-neighbours) and i <= (page+neighbours) %}
-            <div class="index-page {% if i == page %}disabled{% endif %}"
-                                   {% if i != page %}data-backend-content-link="{{ pag_base_link }}&page={{ i }}"{% endif %}>
-                {{ i }}
+            <div class="index-page {% if i == page %}disabled{% endif %}">
+                <a {% if i != page %}href="{{ pag_base_link }}&page={{ i }}"{% endif %}>
+                    {{ i }}
+                </a>
             </div>
         {% endif %}
     {% endfor %}
 
-    <div class="last-page {% if page >= availablePages %}disabled{% endif %}"
-                          {% if page < availablePages  %}data-backend-content-link="{{ pag_base_link }}&page={{ availablePages }}"{% endif %}>
-        Last
-    </div>
+
+    <a {% if page < availablePages  %}href="{{ pag_base_link }}&page={{ availablePages }}"{% endif %}>
+        <div class="last-page {% if page >= availablePages %}disabled{% endif %}">
+            Last
+        </div>
+    </a>
 
 </div>
 

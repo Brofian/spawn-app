@@ -37,10 +37,10 @@ class HeaderHelper
      * @param bool $replaceExisting
      * @throws HeadersSendByException
      */
-    public function setHeader(string $header, int $responseCode = 200, bool $replaceExisting = false)
+    public function setHeader(string $header, bool $replaceExisting = false)
     {
         try {
-            header($header, $replaceExisting, $responseCode);
+            header($header, $replaceExisting);
         } catch (Exception $exception) {
             throw new HeadersSendByException();
         }

@@ -3,6 +3,8 @@
 namespace spawnCore\Custom\RenderExtensions\Twig;
 
 
+use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
+use spawnCore\Custom\Gadgets\NamespaceHelper;
 use spawnCore\Custom\RenderExtensions\Twig\Abstracts\FilterExtension;
 
 class IconFilterExtension extends FilterExtension
@@ -21,9 +23,9 @@ class IconFilterExtension extends FilterExtension
      */
     protected function getFilterFunction(): callable
     {
-        return function ($icon, $namespace = 'SpawnApp', $additionalClasses = '') {
+        return function ($icon, $namespace = 'SpawnBackend', $additionalClasses = '') {
 
-            $iconPath = ROOT . '/public/pack/' . $namespace . '/icons/' . $icon . '.svg';
+            $iconPath = ROOT . '/public/cache/' . ModuleNamespacer::hashNamespace($namespace) . '/assets/icons/' . $icon . '.svg';
 
             if (!file_exists($iconPath)) {
                 if (MODE == 'dev') return "Icon \"" . $iconPath . "\" not found!";

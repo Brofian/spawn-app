@@ -13,9 +13,9 @@ class TwigResponse extends AbstractResponse
     protected string $renderFilePath = 'base.html.twig';
     protected ?array $twigData = null;
 
-    public function __construct(string $renderFilePath, ?array $twigData = null)
+    public function __construct(string $renderFilePath, ?array $twigData = null, ?CacheControlState $cache = null)
     {
-        parent::__construct('');
+        parent::__construct('', $cache);
         $this->twig = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.twig.helper');
         $this->renderFilePath = $renderFilePath;
         $this->twigData = $twigData;

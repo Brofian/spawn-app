@@ -4,9 +4,11 @@
         {% block headline_previous %}
             <div class="headline-previous col-3">
                 {% if previous %}
-                    <span data-backend-content-link="{{ previous }}">
-                        <<<
-                    </span>
+                    <a href="{{ previous }}">
+                        <span>
+                            <<<
+                        </span>
+                    </a>
                 {% endif %}
             </div>
         {% endblock %}

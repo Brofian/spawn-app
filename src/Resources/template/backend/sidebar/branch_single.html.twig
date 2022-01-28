@@ -5,8 +5,9 @@
     {% set seo = seo_url(sidebar_action.controller, sidebar_action.action) %}
 {% endif %}
 
-<div class="sidebar_branch_single"
-     data-backend-content-link="{{ seo }}">
-    {{ ('backend.sidebar.branch.title.'~sidebar_category.title)|translate }}
+<div class="sidebar_branch_single">
+    <a href="{{ seo }}">
+        {{ ('backend.sidebar.branch.title.'~sidebar_category.title)|translate }}
+    </a>
 </div>
 

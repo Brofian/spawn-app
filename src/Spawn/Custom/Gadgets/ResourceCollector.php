@@ -6,12 +6,13 @@ namespace spawnCore\Custom\Gadgets;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use spawnApp\Database\ModuleTable\ModuleEntity;
+use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use spawnCore\Database\Entity\EntityCollection;
 
 class ResourceCollector
 {
 
-    const PUBLIC_ASSET_PATH = ROOT . '/public/pack/';
+    const PUBLIC_ASSET_PATH = ROOT . '/public/cache';
     const RESOURCE_CACHE_PATH = ROOT . '/var/cache/resources/modules';
 
 
@@ -93,9 +94,10 @@ class ResourceCollector
          * Assets
          */
         $assetsFolder = $absoluteModuleResourcePath . '/public/assets';
-        $assetsTargetFolder = self::PUBLIC_ASSET_PATH . '/' . $module->getSlug();
+        $assetsTargetFolder = self::PUBLIC_ASSET_PATH . '/' . ModuleNamespacer::hashNamespace($module->getNamespace()) . '/assets/';
         self::copyFolderRecursive($assetsFolder, $assetsTargetFolder);
     }
+
 
 
     public static function copyFolderRecursive(string $source, string $dest)
