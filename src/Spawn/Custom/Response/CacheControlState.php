@@ -24,10 +24,19 @@ class CacheControlState {
         int $maxLifetime = 600
     )
     {
-        $this->isReusable = $isReusable;
-        $this->needsRevalidation = $needsRevalidation;
-        $this->isPrivateData = $isPrivateData;
-        $this->maxLifetime = $maxLifetime;
+        if(MODE === 'dev') {
+            //disable all caching
+            $this->isReusable = false;
+            $this->needsRevalidation = true;
+            $this->isPrivateData = true;
+            $this->maxLifetime = 60;
+        }
+        else {
+            $this->isReusable = $isReusable;
+            $this->needsRevalidation = $needsRevalidation;
+            $this->isPrivateData = $isPrivateData;
+            $this->maxLifetime = $maxLifetime;
+        }
     }
 
 
