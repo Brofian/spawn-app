@@ -9,6 +9,7 @@ use ScssPhp\ScssPhp\Exception\CompilerException;
 use ScssPhp\ScssPhp\OutputStyle;
 use spawnApp\Services\Commands\ListModulesCommand;
 use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
+use spawnCore\Database\Entity\EntityCollection;
 
 class ScssHelper
 {
@@ -30,13 +31,16 @@ class ScssHelper
         return file_exists($this->cacheFilePath);
     }
 
-    public function createCss()
+    public function createCss(?string $selectedNamespace = null)
     {
         $moduleCollection = ListModulesCommand::getModuleList();
         $namespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleCollection);
 
-
         foreach($namespaces as $namespace => $moduleList) {
+            if($selectedNamespace && $selectedNamespace !== $namespace) {
+                continue;
+            }
+
             $this->setBaseVariable("asset-path", '/cache/'.ModuleNamespacer::hashNamespace($namespace));
             $baseFile = $this->baseFolder . '/' . $namespace . '_index.scss';
 

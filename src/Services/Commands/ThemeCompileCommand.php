@@ -7,6 +7,7 @@ namespace spawnApp\Services\Commands;
 use bin\spawn\IO;
 use Exception;
 use spawnApp\Database\ModuleTable\ModuleEntity;
+use spawnApp\Services\Exceptions\InvalidModuleSlugException;
 use spawnCore\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use spawnCore\Custom\FoundationStorage\AbstractCommand;
 use spawnCore\Custom\Gadgets\NamespaceHelper;
@@ -19,6 +20,8 @@ class ThemeCompileCommand extends AbstractCommand {
     public const WEBPACK_CONFIG_FILE = ROOT .'/src/npm/webpack.config.js';
     public const MODULE_FILES_CACHE = ROOT . '/var/cache/resources/modules/js';
     public const OUTPUT_PATH = ROOT . '/public/cache';
+
+    protected array $parameters = [];
 
     public static function getCommand(): string
     {
@@ -35,6 +38,7 @@ class ThemeCompileCommand extends AbstractCommand {
         return [
             'js' => ['j', 'javascript'],
             'scss' => ['s', 'scss'],
+            'namespace' => ['n', 'namespace']
         ];
     }
 
@@ -44,11 +48,10 @@ class ThemeCompileCommand extends AbstractCommand {
      */
     public function execute(array $parameters): int
     {
-        $moduleCollection = ListModulesCommand::getModuleList();
-
+        $this->parameters = $parameters;
         $compileAll = !($parameters['js'] || $parameters['scss']);
 
-        $this->gatherFiles($moduleCollection);
+        $this->gatherFiles(ListModulesCommand::getModuleList());
 
         if($parameters['scss'] || $compileAll) {
             $this->compileScss();
@@ -66,7 +69,7 @@ class ThemeCompileCommand extends AbstractCommand {
         IO::printWarning("> compiling SCSS");
 
         $scssHelper = new ScssHelper();
-        $scssHelper->createCss();
+        $scssHelper->createCss($this->parameters['namespace']);
 
         IO::printSuccess("> - successfully compiled SCSS");
     }
@@ -88,8 +91,11 @@ class ThemeCompileCommand extends AbstractCommand {
 
         $output = '';
         foreach($namespaces as $namespace => $moduleList) {
-            $entryFile = self::MODULE_FILES_CACHE . '/'.$namespace.'_index.js';
+            if($this->parameters['namespace'] && $this->parameters['namespace']  !== $namespace) {
+                continue;
+            }
 
+            $entryFile = self::MODULE_FILES_CACHE . '/'.$namespace.'_index.js';
 
             if (file_exists($entryFile)) {
                 $outputPath = self::OUTPUT_PATH . '/' . ModuleNamespacer::hashNamespace($namespace) . '/js';

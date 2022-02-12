@@ -79,4 +79,5 @@ class Collection extends AbstractCollectionBase
         return $this->position;
     }
 
+
 }
