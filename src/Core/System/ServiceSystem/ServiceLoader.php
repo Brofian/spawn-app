@@ -14,7 +14,7 @@ class ServiceLoader
     public function loadServices(EntityCollection $moduleCollection): ServiceContainer
     {
 
-        if (ServiceCache::doesServiceCacheExist() && MODE != 'dev') {
+        if (MODE !== 'dev' && ServiceCache::doesServiceCacheExist()) {
             return ServiceCache::readServiceCache();
         }
 

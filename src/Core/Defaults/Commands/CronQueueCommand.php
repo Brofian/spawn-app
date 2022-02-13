@@ -1,6 +1,6 @@
 <?php
 
-namespace SpawnCore\Defaults\Services\Commands;
+namespace SpawnCore\Defaults\Commands;
 
 use SpawnCore\System\Cron\CronManager;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;

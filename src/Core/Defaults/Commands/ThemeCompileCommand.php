@@ -1,6 +1,6 @@
 <?php
 
-namespace SpawnCore\Defaults\Services\Commands;
+namespace SpawnCore\Defaults\Commands;
 
 
 
@@ -10,6 +10,7 @@ use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnBackend\Exceptions\InvalidModuleSlugException;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
+use SpawnCore\System\Custom\Gadgets\JavascriptHelper;
 use SpawnCore\System\Custom\Gadgets\NamespaceHelper;
 use SpawnCore\System\Custom\Gadgets\ResourceCollector;
 use SpawnCore\System\Custom\Gadgets\ScssHelper;
@@ -47,7 +48,15 @@ class ThemeCompileCommand extends AbstractCommand {
         $this->parameters = $parameters;
         $compileAll = !($parameters['js'] || $parameters['scss']);
 
-        $this->gatherFiles(ListModulesCommand::getModuleList());
+
+        $moduleList = ListModulesCommand::getModuleList();
+        if($parameters['namespace'] && !$this->isNamespaceLimitationValid($moduleList, $parameters['namespace'])) {
+            $availableNamespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleList);
+            IO::printError('The namespace "'.$parameters['namespace'].'" does not exist! Please use one of these options: ' . PHP_EOL . '- ' . implode(PHP_EOL.'- ', array_keys($availableNamespaces)));
+            return 1;
+        }
+
+        $this->gatherFiles($moduleList);
 
         if($parameters['scss'] || $compileAll) {
             $this->compileScss();
@@ -58,6 +67,16 @@ class ThemeCompileCommand extends AbstractCommand {
         }
 
         return 0;
+    }
+
+    protected function isNamespaceLimitationValid(EntityCollection $moduleCollection, string $namespace): bool {
+        /** @var ModuleEntity $moduleEntity */
+        foreach($moduleCollection as $moduleEntity) {
+           if($moduleEntity->getNamespace() === $namespace) {
+               return true;
+           }
+        }
+        return false;
     }
 
 
@@ -77,7 +96,8 @@ class ThemeCompileCommand extends AbstractCommand {
         //compile javascript
         IO::printWarning("> compiling JavaScript");
 
-
+        $jsHelper = new JavascriptHelper();
+        $jsHelper->compileAll($this->parameters['namespace']);
 
         IO::printSuccess("> - successfully compiled JavaScript");
     }

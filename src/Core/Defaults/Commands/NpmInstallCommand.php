@@ -1,6 +1,6 @@
 <?php
 
-namespace SpawnCore\Defaults\Services\Commands;
+namespace SpawnCore\Defaults\Commands;
 
 use bin\spawn\IO;
 use Exception;

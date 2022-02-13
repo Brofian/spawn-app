@@ -9,7 +9,7 @@ use SpawnCore\Defaults\Database\LanguageTable\LanguageRepository;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\Defaults\Database\SnippetTable\SnippetEntity;
 use SpawnCore\Defaults\Database\SnippetTable\SnippetRepository;
-use SpawnCore\Defaults\Services\Commands\ListModulesCommand;
+use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\Defaults\Exceptions\AddedSnippetForMissingLanguageException;
 use SpawnCore\System\Custom\Gadgets\FileEditor;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;

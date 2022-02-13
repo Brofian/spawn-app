@@ -8,14 +8,14 @@ use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\Exception\CompilerException;
 use ScssPhp\ScssPhp\Exception\SassException;
 use ScssPhp\ScssPhp\OutputStyle;
-use SpawnCore\Defaults\Services\Commands\ListModulesCommand;
+use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use SpawnCore\System\Database\Entity\EntityCollection;
 
 class ScssHelper
 {
 
-    const SCSS_FILES_PATH = ROOT . '/vendor/scssphp/scssphp/scss.inc.php';
+    public const SCSS_FILES_PATH = ROOT . '/vendor/scssphp/scssphp/scss.inc.php';
     public string $cacheFilePath = ROOT . '/public/cache';
     public string $baseFolder = ROOT . CACHE_DIR . '/resources/modules/scss';
     private bool $alwaysReload = false;
@@ -23,7 +23,7 @@ class ScssHelper
 
     public function __construct()
     {
-        $this->alwaysReload = (MODE == 'dev');
+        $this->alwaysReload = (MODE === 'dev');
         require_once self::SCSS_FILES_PATH;
     }
 
@@ -55,12 +55,12 @@ class ScssHelper
                 //create output file
                 /** @var FileEditor $fileWriter */
                 $fileWriter = new FileEditor();
-                $fileWriter->createFolder($targetFolder);
-                $fileWriter->createFile($targetFolder.'/all.css', $css);
-                $fileWriter->createFile($targetFolder.'/all.min.css', $cssMinified);
-            }
+                $fileWriter::createFolder($targetFolder);
+                $fileWriter::createFile($targetFolder.'/all.css', $css->getCss());
+                $fileWriter::createFile($targetFolder.'/all.min.css', $cssMinified->getCss());
 
-            IO::printLine(IO::TAB . '- ' . $namespace, '', 1);
+                IO::printLine(IO::TAB . '- ' . $namespace, '', 1);
+            }
 
         }
 
@@ -89,7 +89,7 @@ class ScssHelper
         } catch (SassException $e) {
             $css = "";
 
-            if (MODE == 'dev') {
+            if (MODE === 'dev') {
                 Debugger::ddump($e);
             }
         }
@@ -98,7 +98,7 @@ class ScssHelper
         return $css;
     }
 
-    private function registerFunctions(Compiler &$scss)
+    private function registerFunctions(Compiler $scss)
     {
         //register custom scss functions
         $scss->registerFunction(
@@ -123,8 +123,7 @@ class ScssHelper
                 $path = $args[0][1];
                 $fullpath = ROOT . 'src/Resources/public/assets/' . $path;
 
-                $url = "url('" . $fullpath . "')";
-                return $url;
+                return "url('" . $fullpath . "')";
             }
         );
 

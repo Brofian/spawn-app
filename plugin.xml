@@ -4,7 +4,7 @@
 
     <resources>
         <namespace>SpawnBackend</namespace>
-        <path>/src/Resources</path>
+        <path>/src/Backend/Resources</path>
         <weight>1</weight>
         <using>
             <namespace>exampleABC</namespace>
@@ -18,17 +18,8 @@
     </info>
 
     <services>
-
-        <import file="/src/Spawn/spawn_services.xml"/>
-
-        <import file="/src/Controller/controller.xml"/>
-
-        <import file="/src/Services/services.xml"/>
-
-        <import file="/src/Extensions/extensions.xml"/>
-
-        <import file="/src/Database/database.xml"/>
-
+        <import file="/src/Core/_core_services.xml"/>
+        <import file="/src/Backend/_backend_services.xml"/>
     </services>
 
 

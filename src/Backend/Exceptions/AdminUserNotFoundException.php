@@ -1,6 +1,6 @@
 <?php
 
-namespace SpawnBackend\Controller\Backend\Exceptions;
+namespace SpawnBackend\Exceptions;
 
 
 use SpawnCore\System\Custom\Throwables\AbstractException;

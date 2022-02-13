@@ -4,7 +4,7 @@ namespace SpawnBackend\Services;
 
 use DateTime;
 use Doctrine\DBAL\Exception;
-use SpawnBackend\Controller\Backend\Exceptions\AdminUserNotFoundException;
+use SpawnBackend\Exceptions\AdminUserNotFoundException;
 use SpawnBackend\Database\AdministratorTable\AdministratorEntity;
 use SpawnBackend\Database\AdministratorTable\AdministratorRepository;
 use SpawnCore\System\CardinalSystem\Request;

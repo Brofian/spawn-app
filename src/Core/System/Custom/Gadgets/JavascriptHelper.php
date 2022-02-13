@@ -5,8 +5,8 @@ namespace SpawnCore\System\Custom\Gadgets;
 use bin\spawn\IO;
 use Exception;
 use RuntimeException;
-use SpawnCore\Defaults\Services\Commands\ListModulesCommand;
-use SpawnCore\Defaults\Services\Commands\NpmInstallCommand;
+use SpawnCore\Defaults\Commands\ListModulesCommand;
+use SpawnCore\Defaults\Commands\NpmInstallCommand;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 
 class JavascriptHelper

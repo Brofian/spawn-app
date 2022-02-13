@@ -39,15 +39,13 @@ class FileEditor
     /**
      * @param $path
      * @param string $content
-     * @return bool
+     * @return int|bool
      */
-    public static function createFile($path, $content = ''): bool
+    public static function createFile($path, $content = '')
     {
         self::createFolder(dirname(URIHelper::pathifie($path, "/", false)));
-
         try {
-            file_put_contents($path, $content);
-            return true;
+            return file_put_contents($path, $content);
         } catch (Exception $e) {
             return false;
         }
