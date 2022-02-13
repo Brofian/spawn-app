@@ -5,7 +5,6 @@ namespace SpawnCore\System\Database\Entity;
 
 use Doctrine\DBAL\Exception;
 use PDO;
-use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;

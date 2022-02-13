@@ -5,7 +5,6 @@ namespace SpawnCore\Defaults\Commands;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
-use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;

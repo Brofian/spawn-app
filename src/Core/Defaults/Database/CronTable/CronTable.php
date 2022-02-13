@@ -2,12 +2,12 @@
 
 namespace SpawnCore\Defaults\Database\CronTable;
 
+use SpawnCore\System\Cron\CronStates;
+use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\CreatedAtColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\StringColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
-use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
-use SpawnCore\System\Cron\CronStates;
 
 class CronTable extends AbstractTable {
 

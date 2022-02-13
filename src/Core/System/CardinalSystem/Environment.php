@@ -3,7 +3,6 @@
 namespace SpawnCore\System\CardinalSystem;
 
 use SpawnCore\System\CardinalSystem\Guardian\Guardian;
-use SpawnCore\System\Custom\Gadgets\Logger;
 use Throwable;
 
 /*

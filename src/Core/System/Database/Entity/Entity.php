@@ -3,7 +3,6 @@
 namespace SpawnCore\System\Database\Entity;
 
 
-use Cassandra\Date;
 use DateTime;
 use Exception;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;

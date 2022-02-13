@@ -4,9 +4,9 @@ namespace SpawnCore\Defaults\Database\SeoUrlTable;
 
 use DateTime;
 use Exception;
+use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Entity\Entity;
 use SpawnCore\System\Database\Entity\TableRepository;
-use SpawnCore\System\Custom\Gadgets\UUID;
 
 class SeoUrlRepository extends TableRepository {
 

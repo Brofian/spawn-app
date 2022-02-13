@@ -5,12 +5,10 @@ namespace SpawnCore\System\Custom\Gadgets;
 
 use bin\spawn\IO;
 use ScssPhp\ScssPhp\Compiler;
-use ScssPhp\ScssPhp\Exception\CompilerException;
 use ScssPhp\ScssPhp\Exception\SassException;
 use ScssPhp\ScssPhp\OutputStyle;
 use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
-use SpawnCore\System\Database\Entity\EntityCollection;
 
 class ScssHelper
 {

@@ -7,8 +7,6 @@ namespace SpawnCore\Defaults\Commands;
 use bin\spawn\IO;
 use Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
-use SpawnBackend\Exceptions\InvalidModuleSlugException;
-use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\Gadgets\JavascriptHelper;
 use SpawnCore\System\Custom\Gadgets\NamespaceHelper;

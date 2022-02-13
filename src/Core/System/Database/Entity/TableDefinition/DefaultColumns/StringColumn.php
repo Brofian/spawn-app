@@ -7,7 +7,6 @@ use PDO;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\Constants\ColumnTypes;
 use SpawnCore\System\Database\Entity\TableDefinition\ForeignKey;
-use SpawnCore\System\Database\Entity\TableDefinition\InvalidUniqueColumnCombinationException;
 
 class StringColumn extends AbstractColumn {
 

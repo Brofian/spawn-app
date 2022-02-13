@@ -4,7 +4,6 @@ namespace SpawnCore\System\Custom\RenderExtensions\Twig;
 
 
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
-use SpawnCore\System\Custom\Gadgets\NamespaceHelper;
 use SpawnCore\System\Custom\RenderExtensions\Twig\Abstracts\FilterExtension;
 
 class IconFilterExtension extends FilterExtension

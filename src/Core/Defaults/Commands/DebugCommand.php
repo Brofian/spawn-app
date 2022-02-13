@@ -3,15 +3,8 @@
 namespace SpawnCore\Defaults\Commands;
 
 
-use bin\spawn\IO;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
-use SpawnCore\System\Database\Criteria\Criteria;
-use SpawnCore\System\Database\Criteria\Filters\AndFilter;
-use SpawnCore\System\Database\Criteria\Filters\BetweenFilter;
-use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
-use SpawnCore\System\Database\Criteria\Filters\LikeFilter;
-use SpawnCore\System\Database\Criteria\Filters\OrFilter;
 
 class DebugCommand extends AbstractCommand  {
 

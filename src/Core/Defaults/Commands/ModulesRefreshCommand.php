@@ -19,8 +19,6 @@ use SpawnCore\System\Database\Criteria\Filters\InvalidFilterValueException;
 use SpawnCore\System\Database\Entity\InvalidRepositoryInteractionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
-use SpawnCore\System\ServiceSystem\ServiceContainer;
-use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class ModulesRefreshCommand extends AbstractCommand {
 

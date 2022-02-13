@@ -8,7 +8,6 @@ use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Database\Entity\EntityCollection;
-use SpawnCore\System\Database\Helpers\DatabaseHelper;
 
 class ListModulesCommand extends AbstractCommand {
 

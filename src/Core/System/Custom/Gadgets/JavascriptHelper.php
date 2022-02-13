@@ -3,7 +3,6 @@
 namespace SpawnCore\System\Custom\Gadgets;
 
 use bin\spawn\IO;
-use Exception;
 use RuntimeException;
 use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\Defaults\Commands\NpmInstallCommand;

@@ -4,10 +4,10 @@ namespace SpawnCore\Defaults\Database\CronTable;
 
 use DateTime;
 use Exception;
+use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Entity\Entity;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableRepository;
-use SpawnCore\System\Custom\Gadgets\UUID;
 
 class CronRepository extends TableRepository {
 
