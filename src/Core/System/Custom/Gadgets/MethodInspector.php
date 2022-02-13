@@ -76,7 +76,7 @@ class MethodInspector extends Mutable
     {
         $lines = explode(PHP_EOL, $phpDoc);
         //trim spaces, asterisk and slashes
-        $lines = array_map(function ($line) {
+        $lines = array_map(static function ($line) {
             $line = ltrim($line, ' */');
             return rtrim($line);
         }, $lines);
@@ -86,7 +86,7 @@ class MethodInspector extends Mutable
         $docData = [];
 
         foreach ($lines as $line) {
-            if (substr($line, 0, 1) !== '@') {
+            if (strpos($line, '@') !== 0) {
                 continue;
             }
             $line = ltrim($line, '@');
@@ -95,8 +95,12 @@ class MethodInspector extends Mutable
 
             switch ($first) {
                 case 'param':
-                    if (count($elements) > 1) $docData['param'][$elements[1]] = $elements[0];
-                    else $docData['param'][$elements[0]] = 'mixed';
+                    if (count($elements) > 1) {
+                        $docData['param'][$elements[1]] = $elements[0];
+                    }
+                    else {
+                        $docData['param'][$elements[0]] = 'mixed';
+                    }
                     break;
                 case 'throws':
                     $docData['throws'] = $elements[0];

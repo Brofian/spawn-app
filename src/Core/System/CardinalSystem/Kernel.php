@@ -2,11 +2,14 @@
 
 namespace SpawnCore\System\CardinalSystem;
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\HeadersSendByException;
 use SpawnCore\System\Custom\Throwables\NoActionFoundInControllerException;
 use SpawnCore\System\Custom\Throwables\NoControllerFoundException;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainer;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 use SpawnCore\System\ServiceSystem\ServiceTags;
@@ -21,6 +24,11 @@ class Kernel
     protected Response $response;
     protected EntityCollection $moduleCollection;
 
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     public function __construct()
     {
 

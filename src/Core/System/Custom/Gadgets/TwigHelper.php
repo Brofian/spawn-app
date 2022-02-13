@@ -8,8 +8,10 @@ use Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\RenderExtensions\ExtensionLoader;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\TwigRenderException;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -20,7 +22,7 @@ use Twig\Loader\FilesystemLoader;
 
 class TwigHelper
 {
-    const CACHE_FOLDER_PATH = ROOT . '/var/cache/private/twig';
+    public const CACHE_FOLDER_PATH = ROOT . '/var/cache/private/twig';
 
     protected string $targetFile = 'base.html.twig';
     protected array $templateDirs = array();
@@ -30,26 +32,36 @@ class TwigHelper
     protected bool $isDevEnvironment = false;
 
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function __construct()
     {
         $this->context = new AssociativeCollection();
-        $this->isDevEnvironment = (MODE == 'dev');
+        $this->isDevEnvironment = (MODE === 'dev');
         $this->loadTwig();
     }
 
-    protected function loadTwig()
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
+    protected function loadTwig(): void
     {
         $moduleCollection = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.modules.collection');
         $this->loadTemplateDirFromModuleCollection($moduleCollection);
 
         $loader = new FilesystemLoader($this->templateDirs);
         $twig = new Environment($loader, [
-            'debug' => (MODE == "dev"),
+            'debug' => (MODE === "dev"),
             'cache' => self::CACHE_FOLDER_PATH,
         ]); //<- Twig environment
 
 
-        if (is_object($twig) == false) {
+        if (!is_object($twig)) {
             Debugger::ddump("Couldn´t load Twig");
         }
 
@@ -59,7 +71,7 @@ class TwigHelper
         $this->twig = $twig;
     }
 
-    public function loadTemplateDirFromModuleCollection(EntityCollection $moduleCollection)
+    public function loadTemplateDirFromModuleCollection(EntityCollection $moduleCollection): void
     {
         /** @var ModuleEntity[] $moduleList */
         $moduleList = $moduleCollection->getArray();
@@ -92,7 +104,9 @@ class TwigHelper
         try {
             return $this->render($filePath, $this->context->getArray());
         } catch (Exception $loaderError) {
-            if ($this->isDevEnvironment) throw $loaderError;
+            if ($this->isDevEnvironment) {
+                throw $loaderError;
+            }
             return "";
         }
 
@@ -108,7 +122,7 @@ class TwigHelper
         try {
             return $this->twig->render($file, $data);
         } catch (Exception $e) {
-            if (MODE == 'dev') {
+            if (MODE === 'dev') {
                 return $e->getMessage();
             }
             return (string)(new TwigRenderException($file))->getMessage();
@@ -126,38 +140,23 @@ class TwigHelper
         try {
             return $this->render($filePath, $context);
         } catch (Exception $loaderError) {
-            if ($this->isDevEnvironment) throw $loaderError;
+            if ($this->isDevEnvironment) {
+                throw $loaderError;
+            }
             return "";
         }
     }
 
-    /**
-     * @return string
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws LoaderError
-     */
     public function finish(): string
     {
         return $this->startRendering();
     }
 
-    /**
-     * Executes the twig rendering
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
     private function startRendering(): string
     {
 
         //check customoutput
-        if ($this->customoutput !== null) {
-            return $this->customoutput;
-        }
-
-        return $this->render($this->targetFile, $this->context->getArray());
+        return $this->customoutput ?? $this->render($this->targetFile, $this->context->getArray());
     }
 
     public function setRenderFile(string $file): self
@@ -184,7 +183,7 @@ class TwigHelper
         if (is_string($value)) {
             $this->customoutput = $value;
         } else {
-            $this->customoutput = json_encode($value);
+            $this->customoutput = json_encode($value, JSON_THROW_ON_ERROR);
         }
 
         return $this;

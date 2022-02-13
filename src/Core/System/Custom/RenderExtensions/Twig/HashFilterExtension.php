@@ -21,7 +21,7 @@ class HashFilterExtension extends FilterExtension
      */
     protected function getFilterFunction(): callable
     {
-        return function ($string, $hashtype = "md5") {
+        return static function ($string, $hashtype = "md5") {
             return hash($hashtype, $string);
         };
     }

@@ -110,8 +110,8 @@ class ConfigurationSystem {
 
                 //compare
                 $isEqual = (
-                    $configuration['type'] == $existing->getType() &&
-                    $configuration['folder'] == $existing->getFolder() &&
+                    $configuration['type'] === $existing->getType() &&
+                    $configuration['folder'] === $existing->getFolder() &&
                     compareArraysRecursive($configuration['definition'], $existing->getDefinition(true))
                 );
                 if(!$isEqual) {
@@ -292,7 +292,7 @@ class ConfigurationSystem {
         $fieldData['definition']['default'] = $defaultElement ? $defaultElement->getValue() : '';
 
         $multipleElement = $field->getChildrenByType('multiple')->first();
-        $fieldData['definition']['multiple'] = $multipleElement ? ($multipleElement->getValue() == self::TRUE_VALUE) : false;
+        $fieldData['definition']['multiple'] = $multipleElement ? ($multipleElement->getValue() === self::TRUE_VALUE) : false;
 
         /** @var XMLContentModel $optionsElement */
         $optionsElement = $field->getChildrenByType('options')->first();
@@ -311,7 +311,7 @@ class ConfigurationSystem {
 
     protected function getBoolFieldData(XMLContentModel $field, array &$fieldData): void {
         $defaultElement = $field->getChildrenByType('default')->first();
-        $fieldData['definition']['default'] =  ($defaultElement && $defaultElement->getValue() == self::TRUE_VALUE) ? 1 : 0;
+        $fieldData['definition']['default'] =  ($defaultElement && $defaultElement->getValue() === self::TRUE_VALUE) ? 1 : 0;
     }
 
 
@@ -337,7 +337,7 @@ class ConfigurationSystem {
             if($columns->count() < 1) {
                 throw new MissingRequiredConfigurationFieldException('search -> option', $field->getType());
             }
-            $fieldData['definition']['search'] = array_map(function(XMLContentModel $item) {
+            $fieldData['definition']['search'] = array_map(static function(XMLContentModel $item) {
                 return $item->getValue();
             }, $columns->getArray());
 

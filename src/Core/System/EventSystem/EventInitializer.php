@@ -2,12 +2,16 @@
 
 namespace SpawnCore\System\EventSystem;
 
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\ServiceSystem\ServiceContainer;
 
 class EventInitializer
 {
 
-    public static function registerSubscriberFromServices(ServiceContainer $serviceContainer)
+    /**
+     * @throws SubscribeToNotAnEventException
+     */
+    public static function registerSubscriberFromServices(ServiceContainer $serviceContainer): void
     {
         $eventEmitter = EventEmitter::get();
         $subscriberServices = $serviceContainer->getServicesByTag('event.subscriber');
@@ -15,7 +19,7 @@ class EventInitializer
         foreach ($subscriberServices as $subscriberService) {
             $subscriberClass = $subscriberService->getClass();
 
-            if (in_array(EventSubscriberInterface::class, class_implements($subscriberClass))
+            if (in_array(EventSubscriberInterface::class, class_implements($subscriberClass), true)
             ) {
                 /** @var EventSubscriberInterface $subscriberClass */
                 $subscriptions = $subscriberClass::getSubscribedEvents();

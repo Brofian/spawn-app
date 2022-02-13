@@ -25,9 +25,15 @@ class ForeignKey {
         $this->onUpdateCascade = $onUpdateCascade;
         $this->onDeleteCascade = $onDeleteCascade;
 
-        if(is_string($foreignColumnName))       $this->foreignColumnNames = [$foreignColumnName];
-        elseif(is_array($foreignColumnName))    $this->foreignColumnNames =  $foreignColumnName;
-        else                                    throw new InvalidForeignKeyConstraintException('Invalid column definition type. Expected string or array, got ' . get_debug_type($foreignColumnName));
+        if(is_string($foreignColumnName)) {
+            $this->foreignColumnNames = [$foreignColumnName];
+        }
+        elseif(is_array($foreignColumnName)) {
+            $this->foreignColumnNames = $foreignColumnName;
+        }
+        else {
+            throw new InvalidForeignKeyConstraintException('Invalid column definition type. Expected string or array, got ' . get_debug_type($foreignColumnName));
+        }
     }
 
     public function getForeignTableName(): string {

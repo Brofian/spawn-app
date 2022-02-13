@@ -22,13 +22,16 @@ class IconFilterExtension extends FilterExtension
      */
     protected function getFilterFunction(): callable
     {
-        return function ($icon, $namespace = 'SpawnBackend', $additionalClasses = '') {
+        return static function ($icon, $namespace = 'SpawnBackend', $additionalClasses = '') {
 
             $iconPath = ROOT . '/public/cache/' . ModuleNamespacer::hashNamespace($namespace) . '/assets/icons/' . $icon . '.svg';
 
             if (!file_exists($iconPath)) {
-                if (MODE == 'dev') return "Icon \"" . $iconPath . "\" not found!";
-                else                return "Missing icon";
+                if (MODE === 'dev') {
+                    return "Icon \"" . $iconPath . "\" not found!";
+                }
+
+                return "Missing icon";
             }
 
             $svgFile = file_get_contents($iconPath);

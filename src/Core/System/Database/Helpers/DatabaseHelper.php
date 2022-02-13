@@ -14,11 +14,10 @@ class DatabaseHelper
     private string $password = '';
     private string $database = '';
     private string $port = '';
-    private string $dbUrl = '';
     private DatabaseConnection $connection;
 
     /**
-     * DatabaseHelper constructor.
+     * @throws DatabaseConnectionException
      */
     public function __construct()
     {
@@ -31,7 +30,8 @@ class DatabaseHelper
     /**
      * @throws DatabaseConnectionException
      */
-    protected function checkConnection() {
+    protected function checkConnection(): void
+    {
         try {
             $connection = $this->getConnection()::getConnection();
             if(!$connection->isConnected()) {
@@ -45,7 +45,7 @@ class DatabaseHelper
     }
 
 
-    protected function loadDBConfig()
+    protected function loadDBConfig(): void
     {
         $this->host = DB_HOST;
         $this->username = DB_USERNAME;
@@ -55,7 +55,7 @@ class DatabaseHelper
     }
 
 
-    protected function createConnection()
+    protected function createConnection(): void
     {
         $this->connection = new DatabaseConnection();
     }
@@ -73,10 +73,10 @@ class DatabaseHelper
      * @return bool
      * @throws Exception
      */
-    public function doesTableExist(string $tablename)
+    public function doesTableExist(string $tablename): bool
     {
         $results = $this->query("SHOW TABLES LIKE '$tablename'");
-        return sizeof($results) != 0;
+        return count($results) !== 0;
     }
 
     /**
@@ -88,13 +88,13 @@ class DatabaseHelper
     public function query($sql, bool $preventFetchAll = false)
     {
         try {
-            $result = $this->connection::getConnection()->query($sql);
+            $result = $this->connection::getConnection()->executeQuery($sql);
         } catch (\Exception $e) {
             return false;
         }
 
         if (!$preventFetchAll && $result) {
-            return $result->fetchAll();
+            return $result->fetchAllAssociative();
         }
 
         return $result;

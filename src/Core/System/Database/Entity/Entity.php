@@ -6,13 +6,14 @@ namespace SpawnCore\System\Database\Entity;
 use DateTime;
 use Exception;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
+use SpawnCore\System\Database\Entity\EntityTraits\EntityIDTrait;
 use SpawnCore\System\Database\Entity\EntityTraits\EntityPayloadTrait;
 
 abstract class Entity extends Mutable
 {
     use EntityPayloadTrait;
 
-    public abstract function getRepositoryClass(): string;
+    abstract public function getRepositoryClass(): string;
 
     abstract public function toArray(): array;
 
@@ -44,7 +45,7 @@ abstract class Entity extends Mutable
         }
 
         try {
-            return json_decode($array, true);
+            return json_decode($array, true, 512, JSON_THROW_ON_ERROR);
         } catch (Exception $e) {
             return [$array];
         }

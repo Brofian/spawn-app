@@ -16,7 +16,7 @@ abstract class AbstractMigration
      * @param DatabaseHelper $dbHelper
      * @return mixed
      */
-    abstract function run(DatabaseHelper $dbHelper);
+    abstract public function run(DatabaseHelper $dbHelper);
 
 
 }

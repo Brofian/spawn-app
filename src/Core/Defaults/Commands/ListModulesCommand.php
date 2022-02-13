@@ -4,10 +4,13 @@ namespace SpawnCore\Defaults\Commands;
 
 
 use bin\spawn\IO;
+use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
 
 class ListModulesCommand extends AbstractCommand {
 
@@ -31,17 +34,24 @@ class ListModulesCommand extends AbstractCommand {
     }
 
     /**
-     * @inheritDoc
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
      */
     public function execute(array $parameters): int
     {
-        $refresh = !!$parameters['refresh'];
+        $refresh = (bool)$parameters['refresh'];
         $moduleList = self::getModuleList($refresh);
         $this->outputModuleCollectionAsTable($moduleList);
 
         return 0;
     }
 
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     public static function getModuleList(bool $forceReloadFromFiles = false): EntityCollection {
         if(!self::$moduleList || $forceReloadFromFiles) {
             self::$moduleList = (new ModuleLoader())->loadModules($forceReloadFromFiles);

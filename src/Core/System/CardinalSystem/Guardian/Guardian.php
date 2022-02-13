@@ -36,9 +36,8 @@ class Guardian {
         if(MODE === 'dev') {
             return $this->createPrivateResponse($this->exception);
         }
-        else {
-            return $this->createPublicResponse();
-        }
+
+        return $this->createPublicResponse();
     }
 
 

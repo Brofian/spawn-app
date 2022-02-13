@@ -22,12 +22,12 @@ class FileCrawler
     /** @var callable $checkFunction */
     public $checkFunction;
     /** @var array $results */
-    private $results = array();
+    private array $results = array();
     /** @var int */
-    private $maxDepth = 999;
+    private int $maxDepth = 999;
 
     /** @var array */
-    private $ignored_dirs = [
+    private array $ignored_dirs = [
         '.',
         '..'
     ];
@@ -36,7 +36,7 @@ class FileCrawler
     /**
      * @param string $dirname
      */
-    public function addIgnoredDirName(string $dirname)
+    public function addIgnoredDirName(string $dirname): void
     {
         $this->ignored_dirs[] = $dirname;
     }
@@ -52,7 +52,9 @@ class FileCrawler
     {
         require_once(__DIR__ . "/../Gadgets/URIHelper.php");
 
-        if (is_callable($checkFunction) == false) return [];
+        if (is_callable($checkFunction) === false) {
+            return [];
+        }
         $this->checkFunction = $checkFunction;
 
         $this->maxDepth = $maxDepth;
@@ -74,9 +76,13 @@ class FileCrawler
 
         foreach ($currentContents as $content) {
             //skip relative folders and cache
-            if (in_array($content, $this->ignored_dirs)) continue;
+            if (in_array($content, $this->ignored_dirs, true)) {
+                continue;
+            }
             //skip invisible folders
-            if (str_starts_with($content, '.')) continue;
+            if (str_starts_with($content, '.')) {
+                continue;
+            }
 
             //extend path with current content element
             $path = $current . '\\' . $content;
@@ -91,7 +97,7 @@ class FileCrawler
                 $function = $this->checkFunction;
                 $function($fileContent, $ergs, $content, $path, $relativePath);
 
-            } else if (is_dir($path) && ($depth < $this->maxDepth || $this->maxDepth == -1)) {
+            } else if (($depth < $this->maxDepth || $this->maxDepth === -1) && is_dir($path)) {
                 //if class is another dir, scan it
                 $this->scanDirs($path, $ergs, $depth + 1, $relativePath . $content . '/');
             }

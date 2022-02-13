@@ -36,7 +36,7 @@ abstract class AbstractException extends Exception
         $this->data['trace'] = $debugBacktrace;
     }
 
-    protected final function generateMessage(array $vars): string
+    final protected function generateMessage(array $vars): string
     {
         if (IS_TERMINAL) {
             return $this->generateTerminalMessage($vars);
@@ -49,7 +49,7 @@ abstract class AbstractException extends Exception
         return $template;
     }
 
-    protected final function generateTerminalMessage(array $vars): string
+    final protected function generateTerminalMessage(array $vars): string
     {
         $template = $this->getMessageTemplate();
         foreach ($vars as $key => $value) {

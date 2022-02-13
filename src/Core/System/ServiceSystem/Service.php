@@ -17,7 +17,8 @@ class Service extends Mutable
     protected ?bool $abstract = null;
     //static services generate only one instance. This same instance is then shared whenever it is called
     protected ?bool $static = null;
-    protected $instance = null;
+    /** @var mixed */
+    protected $instance;
     //this service can decorate another. When the other service is called, it will be replaced by this automatically
     protected ?string $decorates = null;
     //if set, this service uses the arguments of its parent before of its own
@@ -32,17 +33,31 @@ class Service extends Mutable
 
     private ?ServiceContainer $serviceContainer;
 
-    public static function __fromArray(array $serviceArray, ServiceContainer $serviceContainer): self
+    public static function fromArray(array $serviceArray): self
     {
         $service = new self();
 
-        if ($serviceArray["id"]) $service->setId($serviceArray["id"]);
-        if ($serviceArray["class"]) $service->setClass($serviceArray["class"]);
-        if ($serviceArray["tags"]) $service->setTags($serviceArray["tags"]);
-        if ($serviceArray["abstract"]) $service->setAbstract($serviceArray["abstract"]);
-        if ($serviceArray["decorates"]) $service->setDecorates($serviceArray["decorates"]);
-        if ($serviceArray["parent"]) $service->setParent($serviceArray["parent"]);
-        if ($serviceArray["arguments"]) $service->setArguments($serviceArray["arguments"]);
+        if ($serviceArray["id"]) {
+            $service->setId($serviceArray["id"]);
+        }
+        if ($serviceArray["class"]) {
+            $service->setClass($serviceArray["class"]);
+        }
+        if ($serviceArray["tags"]) {
+            $service->setTags($serviceArray["tags"]);
+        }
+        if ($serviceArray["abstract"]) {
+            $service->setAbstract($serviceArray["abstract"]);
+        }
+        if ($serviceArray["decorates"]) {
+            $service->setDecorates($serviceArray["decorates"]);
+        }
+        if ($serviceArray["parent"]) {
+            $service->setParent($serviceArray["parent"]);
+        }
+        if ($serviceArray["arguments"]) {
+            $service->setArguments($serviceArray["arguments"]);
+        }
 
         return $service;
     }
@@ -60,7 +75,7 @@ class Service extends Mutable
         }
 
         //if this is a static service, that was called before, just return the existing instance
-        if ($this->isStatic() && $this->instance) {
+        if ($this->instance && $this->isStatic()) {
             return $this->instance;
         }
 
@@ -104,7 +119,10 @@ class Service extends Mutable
 
         if ($this->getParent() !== null) {
             //if this service has a parent, include the parents arguments first
-            $arguments = $this->serviceContainer->getService($this->parent)->getCallArguments();
+            $parentService = $this->serviceContainer->getService($this->parent);
+            if($parentService) {
+                $arguments = $parentService->getCallArguments();
+            }
         }
 
         foreach ($this->arguments as $argument) {
@@ -134,8 +152,6 @@ class Service extends Mutable
         switch ($argType) {
             case "service":
                 return $this->serviceContainer->getServiceInstance($argValue);
-            case "value":
-                return $argValue;
             default:
                 return $argValue;
         }
@@ -143,11 +159,7 @@ class Service extends Mutable
 
     public function getId(): ?string
     {
-        if ($this->id === null) {
-            return $this->class;
-        }
-
-        return $this->id;
+        return $this->id ?? $this->class;
     }
 
     public function setId(string $id): self
@@ -180,7 +192,7 @@ class Service extends Mutable
 
     public function hasTag(string $tag): bool
     {
-        return in_array($tag, $this->tags);
+        return in_array($tag, $this->tags, true);
     }
 
     public function getArguments(): ?array
@@ -194,7 +206,7 @@ class Service extends Mutable
         return $this;
     }
 
-    public function addArgument(string $type, string $value)
+    public function addArgument(string $type, string $value): void
     {
         $this->arguments[] = [
             'type' => $type,
@@ -204,11 +216,7 @@ class Service extends Mutable
 
     public function getClass(): ?string
     {
-        if ($this->class === null) {
-            return $this->id;
-        }
-
-        return $this->class;
+        return $this->class ?? $this->id;
     }
 
     public function setClass(string $class): self

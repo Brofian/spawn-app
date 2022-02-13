@@ -20,7 +20,7 @@ class Environment
         $this->kernel = new Kernel();
     }
 
-    public function handle()
+    public function handle(): ?string
     {
         try {
             $this->kernel->handle();

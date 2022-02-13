@@ -18,7 +18,7 @@ abstract class AbstractBackendController extends AbstractController
         $this->twig->setRenderFile('backend/index.html.twig');
     }
 
-    public final function gatherSidebarLinks(): array
+    final public function gatherSidebarLinks(): array
     {
         $backendControllerServices = $this->container->getServicesByTag('backend.controller');
 
@@ -31,6 +31,7 @@ abstract class AbstractBackendController extends AbstractController
 
             //replace %self.key% with the service key
             replaceStringInArrayRecursive('%self.key%', $serviceKey, $classSidebarMethods);
+
 
             $sidebarStructure = array_merge_recursive(
                 $sidebarStructure,

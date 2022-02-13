@@ -7,7 +7,7 @@ use SpawnCore\System\Custom\Gadgets\FileEditor;
 class ServiceCache
 {
 
-    const CACHE_FILE_PATH = ROOT . '/var/cache/private/generated/services/services.php';
+    public const CACHE_FILE_PATH = ROOT . '/var/cache/private/generated/services/services.php';
 
     public static function saveServiceCache(ServiceContainer $serviceContainer): void
     {
@@ -38,10 +38,11 @@ class ServiceCache
 
         if (self::doesServiceCacheExist()) {
 
+            /** @noinspection PhpIncludeInspection */
             $serviceArrays = include(self::CACHE_FILE_PATH);
 
             foreach ($serviceArrays as $serviceArray) {
-                $serviceContainer->addService(Service::__fromArray($serviceArray, $serviceContainer));
+                $serviceContainer->addService(Service::fromArray($serviceArray, $serviceContainer));
             }
 
         }

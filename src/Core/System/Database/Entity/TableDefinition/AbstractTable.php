@@ -5,6 +5,7 @@ namespace SpawnCore\System\Database\Entity\TableDefinition;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Schema\Table;
@@ -24,11 +25,17 @@ abstract class AbstractTable {
     /**
      * @return AbstractColumn[]
      */
-    abstract function getTableColumns(): array;
+    abstract public function getTableColumns(): array;
 
-    abstract function getTableName(): string;
+    abstract public function getTableName(): string;
 
-    public final function upsertTable() {
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws InvalidForeignKeyConstraintException
+     */
+    final public function upsertTable(): bool
+    {
 
         try {
             $connection = DatabaseConnection::getConnection();
@@ -49,7 +56,8 @@ abstract class AbstractTable {
             }
 
 
-            $schemaDiffSql = $oldSchema->getMigrateToSql($schema, $connection->getDatabasePlatform());
+            $schemaDiff = Comparator::compareSchemas($oldSchema, $schema);
+            $schemaDiffSql = $schemaDiff->toSql($connection->getDatabasePlatform());
             //$schemaDiffSql = array with all necessary sql queries
 
 
@@ -60,16 +68,21 @@ abstract class AbstractTable {
 
             IO::printLine(IO::TAB.":: Updated table \"$tableName\" in $steps Steps!", IO::GREEN_TEXT);
         }
-        catch(Exception|DatabaseConnectionException $e) {
+        catch(Exception|DatabaseConnectionException|\Exception $e) {
             IO::printLine(IO::TAB.":: Error! Could not create or update table \"$tableName\"!", IO::RED_TEXT);
             throw $e;
         }
 
-
         return false;
     }
 
-    protected final function updateTable(Schema $schema) {
+    /**
+     * @throws Exception
+     * @throws SchemaException
+     * @throws \Exception
+     */
+    final protected function updateTable(Schema $schema): void
+    {
         try {
             $table = $schema->getTable($this->toDatabaseTableName($this->getTableName()));
 
@@ -101,7 +114,7 @@ abstract class AbstractTable {
             foreach($currentColumns as $currentColumn) {
                 $currentColumnName = $currentColumn->getName();
 
-                if(!in_array($currentColumnName, $columnNames)) {
+                if(!in_array($currentColumnName, $columnNames, true)) {
                     IO::printLine(IO::TAB.IO::TAB.':: Removing Column '. $currentColumnName, IO::YELLOW_TEXT, 1);
 
                     $this->dropColumnFromTable($table, $currentColumn);
@@ -112,11 +125,18 @@ abstract class AbstractTable {
             throw $schemaException;
         } catch (Exception $e) {
             throw $e;
+        } catch (\Exception $e) {
+            throw $e;
         }
 
     }
 
-    protected final function createTable(Schema $schema) {
+    /**
+     * @throws InvalidForeignKeyConstraintException
+     * @throws SchemaException
+     */
+    final protected function createTable(Schema $schema): void
+    {
         try {
             $schema->createTable($this->getTableName());
             $newTable = $schema->getTable($this->getTableName());
@@ -131,7 +151,12 @@ abstract class AbstractTable {
         }
     }
 
-    protected final function dropColumnFromTable(Table $table, Column $column) {
+    /**
+     * @throws Exception
+     * @throws SchemaException
+     */
+    final protected function dropColumnFromTable(Table $table, Column $column): void
+    {
         $currentColumnName = $column->getName();
 
         try {
@@ -148,7 +173,7 @@ abstract class AbstractTable {
             }
 
             //drop primary key and primary key index
-            if(in_array($currentColumnName, array_keys($table->getPrimaryKeyColumns()))) {
+            if(array_key_exists($currentColumnName, $table->getPrimaryKeyColumns())) {
                 $table->dropPrimaryKey();
             }
 
@@ -164,13 +189,18 @@ abstract class AbstractTable {
     }
 
 
-    protected final function createColumnInTable(Schema $schema, Table $table, AbstractColumn $column) {
+    /**
+     * @throws InvalidForeignKeyConstraintException
+     * @throws SchemaException
+     */
+    final protected function createColumnInTable(Schema $schema, Table $table, AbstractColumn $column): void
+    {
         try {
             $columnName = $this->toDatabaseColumnName($column->getName());
 
             $table->addColumn($columnName, $column->getType(), $column->getOptions());
 
-            if($column->isPrimaryKey() && $table->hasPrimaryKey() == false) {
+            if($column->isPrimaryKey() && !$table->hasPrimaryKey()) {
                 IO::printLine(IO::TAB.IO::TAB.IO::TAB.':: Adding Primary Key for '. $columnName, IO::YELLOW_TEXT, 2);
                 $table->setPrimaryKey([$columnName]);
             }
@@ -183,26 +213,29 @@ abstract class AbstractTable {
                 IO::printLine(IO::TAB.IO::TAB.IO::TAB.':: Adding Foreign Key Constraint for '. $columnName, IO::YELLOW_TEXT, 2);
 
                 $foreignKeyConstraintData = $column->getForeignKeyConstraint();
-                $remoteTableName = $foreignKeyConstraintData->getForeignTableName();
-                $remoteColumnNames = $foreignKeyConstraintData->getForeignColumnNames();
-                $foreignKeyOptions = $foreignKeyConstraintData->getOptions();
+                if($foreignKeyConstraintData !== null) {
 
-                if($schema->hasTable($remoteTableName)) {
-                    $remoteTable = $schema->getTable($remoteTableName);
+                    $remoteTableName = $foreignKeyConstraintData->getForeignTableName();
+                    $remoteColumnNames = $foreignKeyConstraintData->getForeignColumnNames();
+                    $foreignKeyOptions = $foreignKeyConstraintData->getOptions();
 
-                    foreach($remoteColumnNames as $remoteColumnName) {
-                        if(!$remoteTable->hasColumn($remoteColumnName)) {
-                            throw new InvalidForeignKeyConstraintException("Tried adding a foreign key to non existent column \"$remoteColumnName\" of table \"$remoteTableName\" ");
+                    if($schema->hasTable($remoteTableName)) {
+                        $remoteTable = $schema->getTable($remoteTableName);
+
+                        foreach($remoteColumnNames as $remoteColumnName) {
+                            if(!$remoteTable->hasColumn($remoteColumnName)) {
+                                throw new InvalidForeignKeyConstraintException("Tried adding a foreign key to non existent column \"$remoteColumnName\" of table \"$remoteTableName\" ");
+                            }
                         }
-                    }
 
-                    $table->addForeignKeyConstraint(
-                        $remoteTable,
-                        [$columnName],
-                        $remoteColumnNames,
-                        $foreignKeyOptions,
-                        $this->toForeignKey($table->getName(), $columnName)
-                    );
+                        $table->addForeignKeyConstraint(
+                            $remoteTable,
+                            [$columnName],
+                            $remoteColumnNames,
+                            $foreignKeyOptions,
+                            $this->toForeignKey($table->getName(), $columnName)
+                        );
+                    }
                 }
             }
         }
@@ -213,8 +246,12 @@ abstract class AbstractTable {
 
     }
 
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     protected function compareColumnWithDefinition(Table $table, Column $columnActive, AbstractColumn $columnDefinition): bool {
-        $isEqual = false;
 
         try {
             $platform = DatabaseConnection::getConnection()->getDriver()->getDatabasePlatform();
@@ -223,13 +260,13 @@ abstract class AbstractTable {
 
             $isEqual = (
                 //type
-                $declaredTypeForDriver == $currentTypeForDriver  &&
+                $declaredTypeForDriver === $currentTypeForDriver  &&
                 //is unique
-                !!$columnDefinition->isUnique() == $table->hasIndex($this->toUniqueIndex($table->getName(), $columnActive->getName())) &&
+                $columnDefinition->isUnique() === $table->hasIndex($this->toUniqueIndex($table->getName(), $columnActive->getName())) &&
                 //default value
-                $columnDefinition->getDefault() == $columnActive->getDefault() &&
+                $columnDefinition->getDefault() === $columnActive->getDefault() &&
                 //is primary key
-                !!$columnDefinition->isPrimaryKey() == in_array($columnActive->getName(), array_keys($table->getPrimaryKeyColumns()))
+                $columnDefinition->isPrimaryKey() === array_key_exists($columnActive->getName(), $table->getPrimaryKeyColumns())
             );
 
             if($isEqual) {
@@ -241,7 +278,7 @@ abstract class AbstractTable {
                     if(isset($optionsGetterSetter[$option])) {
                         $getter = $optionsGetterSetter[$option][0];
 
-                        $optionEquals = $columnActive->$getter() == $desiredValue;
+                        $optionEquals = $columnActive->$getter() === $desiredValue;
 
                         if(!$optionEquals) {
                             $isEqual = false;

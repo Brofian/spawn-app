@@ -48,7 +48,9 @@ class ServiceLoader
 
         /** @var XMLContentModel $servicesTag */
         $servicesTag = $pluginXML->getChildrenByType("services")->first();
-        if (!$servicesTag) return [];
+        if (!$servicesTag) {
+            return [];
+        }
 
         /** @var XMLContentModel[] $serviceTags */
         $serviceTags = $servicesTag->getChildrenByType("service");

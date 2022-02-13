@@ -10,6 +10,9 @@ class BetweenFilter extends AbstractFilter {
     /** @var mixed */
     protected $max;
 
+    /**
+     * @throws InvalidFilterValueException
+     */
     public function __construct(string $column, $min, $max)
     {
         if(!is_string($min) && !is_numeric($min)) {

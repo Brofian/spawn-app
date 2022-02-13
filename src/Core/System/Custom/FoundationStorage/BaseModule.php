@@ -8,11 +8,11 @@ abstract class BaseModule
     /**
      * @return mixed
      */
-    public abstract function install();
+    abstract public function install();
 
     /**
      * @return mixed
      */
-    public abstract function uninstall();
+    abstract public function uninstall();
 
 }

@@ -12,7 +12,7 @@ class Slugifier
 
     public static function isSystemSlug(string $slug): bool
     {
-        return in_array($slug, self::SYSTEM_SLUGS);
+        return in_array($slug, self::SYSTEM_SLUGS, true);
     }
 
     /**

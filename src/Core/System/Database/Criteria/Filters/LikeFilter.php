@@ -8,6 +8,9 @@ class LikeFilter extends AbstractFilter {
     /** @var mixed $value */
     protected $value;
 
+    /**
+     * @throws InvalidFilterValueException
+     */
     public function __construct(string $column, $value)
     {
         if(!is_string($value)) {

@@ -2,11 +2,15 @@
 
 namespace SpawnCore\System\CardinalSystem;
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\JsonResponse;
 use SpawnCore\System\Custom\Response\SimpleResponse;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\NoActionFoundInControllerException;
 use SpawnCore\System\Custom\Throwables\NoControllerFoundException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\EventSystem\EventEmitter;
 use SpawnCore\System\EventSystem\Events\RequestRoutedEvent;
 use SpawnCore\System\NavigationSystem\Navigator;
@@ -22,14 +26,24 @@ class RequestHandler
     protected ?string $actionMethod;
     protected array $cUrlValues;
 
+
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     */
     public function __construct()
     {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
     }
 
     /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
      * @throws NoActionFoundInControllerException
      * @throws NoControllerFoundException
+     * @throws RepositoryException
      */
     public function handleRequest(): void
     {
@@ -41,8 +55,11 @@ class RequestHandler
     /**
      * @throws NoActionFoundInControllerException
      * @throws NoControllerFoundException
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
      */
-    protected function findRouting()
+    protected function findRouting(): void
     {
         /** @var Navigator $routingHelper */
         $routingHelper = $this->serviceContainer->getServiceInstance('system.routing.helper');
@@ -72,7 +89,7 @@ class RequestHandler
         }
     }
 
-    protected function callControllerMethod()
+    protected function callControllerMethod(): void
     {
         $controllerInstance = $this->controllerService->getInstance();
         $actionMethod = $this->actionMethod;
@@ -97,7 +114,9 @@ class RequestHandler
 
         if (is_string($responseObject) || is_numeric($responseObject)) {
             return new SimpleResponse((string)$responseObject);
-        } else if (is_array($responseObject)) {
+        }
+
+        if (is_array($responseObject)) {
             return new JsonResponse($responseObject);
         }
 

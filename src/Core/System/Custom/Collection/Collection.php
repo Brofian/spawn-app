@@ -8,12 +8,12 @@ class Collection extends AbstractCollectionBase
     protected array $collection = array();
     protected int $position = 0;
 
-    public function add($value)
+    public function add($value): void
     {
         $this->collection[] = $value;
     }
 
-    public function overwrite(array $collection)
+    public function overwrite(array $collection): void
     {
         $this->collection = $collection;
     }
@@ -25,7 +25,7 @@ class Collection extends AbstractCollectionBase
      *
      */
 
-    public function set(int $key, $value)
+    public function set(int $key, $value): void
     {
         if (isset($this->collection[$key])) {
             $this->collection[$key] = $value;
@@ -34,12 +34,12 @@ class Collection extends AbstractCollectionBase
         }
     }
 
-    public function sort(callable $sortingMethod)
+    public function sort(callable $sortingMethod): void
     {
         uasort($this->collection, $sortingMethod);
     }
 
-    public function filter(callable $filterMethod)
+    public function filter(callable $filterMethod): void
     {
         $this->collection = array_filter($this->collection, $filterMethod);
     }
@@ -51,11 +51,7 @@ class Collection extends AbstractCollectionBase
 
     public function get(int $key)
     {
-        if (isset($this->collection[$key])) {
-            return $this->collection[$key];
-        }
-
-        return null;
+        return $this->collection[$key] ?? null;
     }
 
     public function last()

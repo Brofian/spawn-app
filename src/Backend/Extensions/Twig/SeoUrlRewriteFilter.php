@@ -19,7 +19,7 @@ class SeoUrlRewriteFilter extends FunctionExtension {
 
     protected function getFunctionFunction(): callable
     {
-        return function ($controller = null, $action = null, array $parameters = []) {
+        return static function ($controller = null, $action = null, array $parameters = []) {
 
             if(!preg_match('/^.*Action$/m', $action)) {
                 $action .= 'Action';
@@ -29,9 +29,7 @@ class SeoUrlRewriteFilter extends FunctionExtension {
             $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
 
-            $seoLink = $routingHelper->getSeoLinkByParameters($controller, $action, $parameters);
-
-            return $seoLink;
+            return $routingHelper->getSeoLinkByParameters($controller, $action, $parameters);
         };
     }
 

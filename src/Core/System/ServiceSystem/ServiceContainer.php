@@ -33,14 +33,38 @@ class ServiceContainer
 
         $service = new Service();
         $service->setId($id);
-        if ($class) $service->setClass($class);
-        if ($moduleId) $service->setModuleId($moduleId);
-        if ($tags) $service->setTags($tags);
-        if ($abstract) $service->setAbstract($abstract);
-        if ($static) $service->setStatic($static);
-        if ($decorates) $service->setDecorates($decorates);
-        if ($parent) $service->setParent($parent);
-        if ($instance) $service->setInstance($instance);
+        if ($class) {
+            $service->setClass($class);
+        }
+        if ($moduleId) {
+            $service->setModuleId($moduleId);
+        }
+        if ($tags) {
+            $service->setTags($tags);
+        }
+        if ($abstract) {
+            $service->setAbstract($abstract);
+        }
+        if ($static) {
+            {
+                $service->setStatic($static);
+            }
+        }
+        if ($decorates) {
+            {
+                $service->setDecorates($decorates);
+            }
+        }
+        if ($parent) {
+            {
+                $service->setParent($parent);
+            }
+        }
+        if ($instance) {
+            {
+                $service->setInstance($instance);
+            }
+        }
 
         $this->services[$service->getId()] = $service->setServiceContainer($this);
     }
@@ -73,11 +97,7 @@ class ServiceContainer
         }
 
         //check if this service is registered
-        if (isset($this->services[$key])) {
-            return $this->services[$key];
-        } else {
-            return null;
-        }
+        return $this->services[$key] ?? null;
     }
 
     /** @return Service[] */

@@ -5,6 +5,7 @@
 	position: relative;
 	min-height: 2rem;
 
+	//noinspection CssUnusedSymbol
 	.js-entity-select-label {
 		padding: 0.5rem 1rem;
 		cursor: pointer;
@@ -15,7 +16,7 @@
 	&.opened {
 		.js-entity-select-options {
 			display: block;
-			box-shadow: 0px 2px 3px 1px #262626;
+			box-shadow: 0 2px 3px 1px #262626;
 		}
 	}
 
@@ -31,6 +32,7 @@
 
 		}
 
+		//noinspection CssUnusedSymbol
 		.js-entity-select-option {
 			display: block;
 			padding: 0.2rem 1rem;

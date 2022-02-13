@@ -17,7 +17,6 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AlwaysFilter;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
-use SpawnCore\System\Database\Criteria\Filters\InvalidFilterValueException;
 use SpawnCore\System\Database\Criteria\Filters\LikeFilter;
 use SpawnCore\System\Database\Criteria\Filters\OrFilter;
 use SpawnCore\System\Database\Entity\EntityCollection;
@@ -90,7 +89,6 @@ class SystemConfigController extends AbstractBackendController {
      * @route /backend/config/folder/{}
      * @locked
      * @return AbstractResponse
-     * @throws InvalidFilterValueException
      */
     public function folderAction(string $folderName): AbstractResponse {
 
@@ -117,7 +115,7 @@ class SystemConfigController extends AbstractBackendController {
                     $identifierColumn = $definition['identifier'];
                     $labelGetter = $definition['label'];
 
-                    $value = ($identifierColumn == 'id') ? UUID::hexToBytes($configurationField->getValue()) : $configurationField->getValue();
+                    $value = ($identifierColumn === 'id') ? UUID::hexToBytes($configurationField->getValue()) : $configurationField->getValue();
 
                     $repository = ServiceContainerProvider::getServiceContainer()->get($repositoryID);
                     $el = $repository->search(new Criteria(new EqualsFilter($identifierColumn, $value)))->first();
@@ -204,7 +202,7 @@ class SystemConfigController extends AbstractBackendController {
             $criteria = new Criteria();
             $search = $this->request->getPost()->get('search') ?? '';
             $search = trim(urldecode($search));
-            if(strlen($search) > 2 && !empty($entitySearchColumns)) {
+            if(!empty($entitySearchColumns) && strlen($search) > 2) {
                 $searchFilter = new OrFilter(new AlwaysFilter(false));
                 foreach($entitySearchColumns as $entitySearchColumn) {
                     $searchFilter->addFilter(new LikeFilter($entitySearchColumn, "%$search%"));

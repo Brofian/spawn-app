@@ -22,8 +22,8 @@ class DumpFunctionExtension extends FunctionExtension
      */
     protected function getFunctionFunction(): callable
     {
-        return function ($context, $var = "nothingtoseehere") {
-            if ($var == "nothingtoseehere") {
+        return static function ($context, $var = "nothingtoseehere") {
+            if ($var === "nothingtoseehere") {
                 dump($context);
             } else {
                 dump($var);

@@ -31,10 +31,7 @@ class ConfigurationManager {
      * @return mixed
      */
     public function getConfiguration(string $name, $default = null) {
-        if(isset($this->configurations[$name])) {
-            return $this->configurations[$name];
-        }
-        return $default;
+        return $this->configurations[$name] ?? $default;
     }
 
     /**

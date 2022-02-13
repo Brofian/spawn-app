@@ -2,25 +2,33 @@
 
 namespace SpawnCore\System\Custom\Gadgets;
 
+use Exception;
+
 class Random
 {
 
-    public static function randomHex(int $max = PHP_INT_MAX)
+    public static function randomHex(int $max = PHP_INT_MAX): string
     {
         $rValue = self::randomInt($max);
         return dechex($rValue);
     }
 
-    public static function randomInt(int $max = PHP_INT_MAX)
+    public static function randomInt(int $max = PHP_INT_MAX): int
     {
-        return rand(0, PHP_INT_MAX);
+        try {
+            return random_int(0, $max);
+        } catch (Exception $e) {}
+
+        return 0;
     }
 
-    public static function randomBin(int $length = 32)
+    public static function randomBin(int $length = 32): int
     {
         $rValue = 0;
         for ($i = 0; $i < $length; $i++) {
-            $rValue += rand(0, 1);
+            try {
+                $rValue += random_int(0, 1);
+            } catch (Exception $e) {}
             $rValue <<= 1;
         }
 

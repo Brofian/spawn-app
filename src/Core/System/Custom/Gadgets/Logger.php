@@ -2,23 +2,25 @@
 
 namespace SpawnCore\System\Custom\Gadgets;
 
+use RuntimeException;
+
 class Logger
 {
 
-    const logdir = ROOT . '/var/.log/';
-    const accesslog = 'access-log.txt';
-    const errorlog = 'error-log.txt';
-    const devlog = 'dev-log.txt';
+    public const logdir = ROOT . '/var/.log/';
+    public const accesslog = 'access-log.txt';
+    public const errorlog = 'error-log.txt';
+    public const devlog = 'dev-log.txt';
 
 
     /**
      * @param string $text
      * @param string $title
      */
-    public static function writeToAccessLog(string $text, string $title = '')
+    public static function writeToAccessLog(string $text, string $title = ''): void
     {
         $string = self::getCurrentTime();
-        if ($title != '') {
+        if ($title !== '') {
             $string .= $title;
             $string .= PHP_EOL;
         }
@@ -26,28 +28,23 @@ class Logger
         $string .= PHP_EOL;
 
         $log = self::logdir . self::accesslog;
-        if (!is_file($log)) {
-            mkdir(self::logdir);
+        if (!is_file($log) && !mkdir($concurrentDirectory = self::logdir) && !is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
         file_put_contents($log, $string, FILE_APPEND);
     }
 
-    /**
-     * @return string
-     */
-    public static function getCurrentTime()
+
+    public static function getCurrentTime(): string
     {
         return '[' . date('Y-m-d h:i:s') . '] ';
     }
 
-    /**
-     * @param string $text
-     * @param string $title
-     */
-    public static function writeToErrorLog(string $text, string $title = '')
+
+    public static function writeToErrorLog(string $text, string $title = ''): void
     {
         $string = self::getCurrentTime();
-        if ($title != '') {
+        if ($title !== '') {
             $string .= $title;
         }
         $string .= PHP_EOL;
@@ -58,14 +55,11 @@ class Logger
         file_put_contents($log, $string, FILE_APPEND);
     }
 
-    /**
-     * @param string $text
-     * @param string $title
-     */
-    public static function writeToDevlog(string $text, string $title = '')
+
+    public static function writeToDevlog(string $text, string $title = ''): void
     {
         $string = self::getCurrentTime();
-        if ($title != '') {
+        if ($title !== '') {
             $string .= $title;
             $string .= PHP_EOL;
         }
@@ -73,26 +67,22 @@ class Logger
         $string .= PHP_EOL;
 
         $log = self::logdir . self::devlog;
-        if (!is_file($log)) {
-            mkdir(self::logdir);
+        if (!is_file($log) && !mkdir($concurrentDirectory = self::logdir) && !is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
         file_put_contents($log, $string, FILE_APPEND);
     }
 
-    /**
-     * @return bool
-     */
-    public function clearAccessLog()
+
+    public function clearAccessLog(): bool
     {
         $log = self::logdir . self::accesslog;
         file_put_contents($log, '');
         return true;
     }
 
-    /**
-     * @return bool
-     */
-    public function clearErrorLog()
+
+    public function clearErrorLog(): bool
     {
         $log = self::logdir . self::errorlog;
         file_put_contents($log, '');

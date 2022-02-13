@@ -21,7 +21,7 @@ class PreviewFilterExtension extends FilterExtension
      */
     protected function getFilterFunction(): callable
     {
-        return function ($text, int $length) {
+        return static function ($text, int $length) {
 
             $trimmedText = trim(substr($text, 0, $length));
 

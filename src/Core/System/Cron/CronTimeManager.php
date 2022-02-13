@@ -61,7 +61,7 @@ class CronTimeManager {
                     break;
                 case self::METHOD_MATCH:
                     //if the method is interval, check if the current time is this interval
-                    if($timeValue != $cronTiming['divider']) {
+                    if($timeValue !== $cronTiming['divider']) {
                         return false;
                     }
                     break;
@@ -79,7 +79,7 @@ class CronTimeManager {
     protected function interpretCronPattern(string $cronPattern): array {
 
         $parts = explode(' ', $cronPattern);
-        if(count($parts) != 5) {
+        if(count($parts) !== 5) {
             throw new InvalidCronPatternException($cronPattern);
         }
 
@@ -105,12 +105,13 @@ class CronTimeManager {
 
 
     protected function interpretTimeDefinition(string $timeDefinition, int $min, int $max): ?array {
-        if($timeDefinition === '*') {
+        if ($timeDefinition === '*') {
             return [
                 'method' => self::METHOD_ALLOW_ALL
             ];
         }
-        elseif(preg_match('/^(\d+)-(\d+)$/m', $timeDefinition, $matches)) {
+
+        if(preg_match('/^(\d+)-(\d+)$/m', $timeDefinition, $matches)) {
             if($matches[1] >= $min && $matches[1] <= $max && $matches[2] >= $min && $matches[2] <= $max) {
                 return [
                     'method' => self::METHOD_TIMESPAN,
@@ -119,8 +120,7 @@ class CronTimeManager {
                 ];
             }
 
-        }
-        elseif(preg_match('/^\*\/(\d+)$/m', $timeDefinition, $matches)) {
+        } elseif(preg_match('/^\*\/(\d+)$/m', $timeDefinition, $matches)) {
             if($matches[1] >= $min && $matches[1] <= $max) {
                 return [
                     'method' => self::METHOD_INTERVAL,

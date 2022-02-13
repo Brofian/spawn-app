@@ -3,8 +3,11 @@
 namespace SpawnCore\Defaults\Commands;
 
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
@@ -35,6 +38,11 @@ class SpawnBuildCommand extends AbstractCommand  {
         return [];
     }
 
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     public function execute(array $parameters): int  {
         $container = ServiceContainerProvider::getServiceContainer();
 

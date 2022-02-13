@@ -9,7 +9,7 @@ abstract class AbstractCommand
 
     abstract public static function getShortDescription(): string;
 
-    public final static function createParameterArray(array $arguments): array
+    final public static function createParameterArray(array $arguments): array
     {
         $parameters = static::getParameters();
         $values = [];

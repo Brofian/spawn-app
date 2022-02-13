@@ -14,7 +14,6 @@ use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
-use SpawnCore\System\Database\Criteria\Filters\InvalidFilterValueException;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\InvalidRepositoryInteractionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
@@ -29,6 +28,11 @@ class SeoUrlManager {
     protected SeoUrlRepository $seoUrlRepository;
     protected ServiceContainer $serviceContainer;
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     */
     public function __construct(
         SeoUrlRepository $seoUrlRepository
     )
@@ -72,10 +76,10 @@ class SeoUrlManager {
      * @param string $method
      * @return SeoUrlEntity|null
      * @throws DatabaseConnectionException
-     * @throws InvalidFilterValueException
      * @throws RepositoryException
      */
-    public function getSeoUrl(string $controller, string $method) {
+    public function getSeoUrl(string $controller, string $method): ?SeoUrlEntity
+    {
         return $this->seoUrlRepository->search(
             new Criteria(new AndFilter(
                 new EqualsFilter('controller', $controller),
@@ -105,7 +109,8 @@ class SeoUrlManager {
      * @throws WrongEntityForRepositoryException
      * @throws InvalidRepositoryInteractionException
      */
-    public function refreshSeoUrlEntries(bool $removeStaleEntries = true) {
+    public function refreshSeoUrlEntries(bool $removeStaleEntries = true): array
+    {
         /** @var EntityCollection $registeredSeoUrls */
         $registeredSeoUrls = $this->getSeoUrls();
         /** @var ClassInspector[string] $availableControllers */

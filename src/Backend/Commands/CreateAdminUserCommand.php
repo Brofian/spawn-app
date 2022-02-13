@@ -7,6 +7,7 @@ use Doctrine\DBAL\Exception;
 use SpawnBackend\Database\AdministratorTable\AdministratorEntity;
 use SpawnBackend\Database\AdministratorTable\AdministratorRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
@@ -35,18 +36,18 @@ class CreateAdminUserCommand extends AbstractCommand {
     }
 
     /**
-     * @param array $parameters
-     * @return int
      * @throws WrongEntityForRepositoryException
      * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws \SpawnCore\System\Database\Entity\RepositoryException
      */
     public function execute(array $parameters): int
     {
         //get username
-        if($parameters['username'] && strlen($parameters['username']) > 0) {   $username = $parameters['username'];    }
+        if($parameters['username'] && $parameters['username'] !== '') {   $username = $parameters['username'];    }
         else {
-            $username = IO::readLine('Username: ', function ($answer) {
-                return strlen($answer) > 0;
+            $username = IO::readLine('Username: ', static function ($answer) {
+                return $answer !== '';
             }, 'The username has to be at least one character long', 3);
 
             if($username === false) {
@@ -56,10 +57,10 @@ class CreateAdminUserCommand extends AbstractCommand {
         }
 
         //get password
-        if($parameters['password'] && strlen($parameters['password']) > 0) {    $password = $parameters['password'];    }
+        if($parameters['password'] && $parameters['password'] !== '') {    $password = $parameters['password'];    }
         else {
-            $password = IO::readLine('Password: ', function($answer) {
-                return strlen($answer) > 0;
+            $password = IO::readLine('Password: ', static function($answer) {
+                return $answer !== '';
             }, 'The password has to be at least one character long!', 3);
 
             if($password === false) {
@@ -71,7 +72,7 @@ class CreateAdminUserCommand extends AbstractCommand {
         //get email
         if($parameters['email'] && preg_match(self::EMAIL_PATTERN, $parameters['email'])) {    $email = $parameters['email'];    }
         else {
-            $email = IO::readLine('Email: ', function($answer) {
+            $email = IO::readLine('Email: ', static function($answer) {
                 return preg_match(self::EMAIL_PATTERN, $answer);
             }, 'This is not a valid email pattern!', 3);
 

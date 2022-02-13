@@ -6,6 +6,7 @@ use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
+use SpawnCore\Defaults\Exceptions\AddedSnippetForMissingLanguageException;
 use SpawnCore\Defaults\Services\ConfigurationSystem;
 use SpawnCore\Defaults\Services\SeoUrlManager;
 use SpawnCore\Defaults\Services\SnippetSystem;
@@ -15,7 +16,6 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
-use SpawnCore\System\Database\Criteria\Filters\InvalidFilterValueException;
 use SpawnCore\System\Database\Entity\InvalidRepositoryInteractionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
@@ -65,9 +65,8 @@ class ModulesRefreshCommand extends AbstractCommand {
     }
 
     /**
-     * @param array $parameters
-     * @return int
      * @throws Exception
+     * @throws AddedSnippetForMissingLanguageException
      */
     public function execute(array $parameters): int
     {
@@ -75,15 +74,15 @@ class ModulesRefreshCommand extends AbstractCommand {
 
         try {
             if($parameters['modules'] || $refreshAll) {
-                $this->refreshModules(!!$parameters['delete']);
+                $this->refreshModules((bool)$parameters['delete']);
             }
 
             if($parameters['actions'] || $refreshAll) {
-                $this->refreshActions(!!$parameters['delete']);
+                $this->refreshActions((bool)$parameters['delete']);
             }
 
             if($parameters['configurations'] || $refreshAll) {
-                $this->refreshConfig(!!$parameters['delete']);
+                $this->refreshConfig((bool)$parameters['delete']);
             }
 
             if($parameters['snippets'] || $refreshAll) {
@@ -94,7 +93,6 @@ class ModulesRefreshCommand extends AbstractCommand {
             WrongEntityForRepositoryException |
             DatabaseConnectionException |
             InvalidRepositoryInteractionException |
-            InvalidFilterValueException |
             RepositoryException
             $e)
         {
@@ -111,7 +109,6 @@ class ModulesRefreshCommand extends AbstractCommand {
      * @throws DatabaseConnectionException
      * @throws InvalidRepositoryInteractionException
      * @throws RepositoryException
-     * @throws InvalidFilterValueException
      */
     protected function refreshModules(bool $deleteMissing = false): void {
         IO::printWarning('> Refreshing Modules');
@@ -128,7 +125,7 @@ class ModulesRefreshCommand extends AbstractCommand {
         $newModules = [];
         /** @var ModuleEntity $availableModule */
         foreach($moduleCollection->getArray() as $availableModule) {
-            if(!in_array($availableModule->getPath(), $registeredPaths)) {
+            if(!in_array($availableModule->getPath(), $registeredPaths, true)) {
                 $newModules[] = $availableModule;
             }
         }
@@ -179,6 +176,13 @@ class ModulesRefreshCommand extends AbstractCommand {
     }
 
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws InvalidRepositoryInteractionException
+     * @throws RepositoryException
+     * @throws WrongEntityForRepositoryException
+     */
     protected function refreshConfig(bool $removeStaleConfigurations = false): void {
         IO::printWarning('> Adding new available configurations' . ($removeStaleConfigurations ? ' and removing stale ones' : ''));
 
@@ -193,6 +197,13 @@ class ModulesRefreshCommand extends AbstractCommand {
     }
 
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     * @throws WrongEntityForRepositoryException
+     * @throws AddedSnippetForMissingLanguageException
+     */
     protected function refreshSnippets(): void {
         IO::printWarning('> Adding new available snippets');
 

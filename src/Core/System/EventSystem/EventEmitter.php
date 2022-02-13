@@ -3,6 +3,10 @@
 namespace SpawnCore\System\EventSystem;
 
 
+use Doctrine\DBAL\Exception;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class EventEmitter
@@ -14,7 +18,7 @@ class EventEmitter
     public static function get(): EventEmitter
     {
         if (!isset(self::$instance)) {
-            self::$instance = new EventEmitter();
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -25,7 +29,7 @@ class EventEmitter
      * @param string $action
      * @throws SubscribeToNotAnEventException
      */
-    public function subscribe(string $eventClass, string $serviceId, string $action)
+    public function subscribe(string $eventClass, string $serviceId, string $action): void
     {
         if (!is_subclass_of($eventClass, Event::class)) {
             throw new SubscribeToNotAnEventException($eventClass);
@@ -34,7 +38,7 @@ class EventEmitter
         $serviceAlreadyRegistered = isset($this->eventListeners[$eventClass][$serviceId]);
 
         if (!$serviceAlreadyRegistered ||
-            ($serviceAlreadyRegistered && !in_array($action, $this->eventListeners[$eventClass][$serviceId]))) {
+            ($serviceAlreadyRegistered && !in_array($action, $this->eventListeners[$eventClass][$serviceId], true))) {
             $this->eventListeners[$eventClass][$serviceId] = [];
         }
 
@@ -43,14 +47,18 @@ class EventEmitter
 
     /**
      * @param Event $event
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
      */
-    public function publish(Event $event)
+    public function publish(Event $event): void
     {
         $eventClass = get_class($event);
         $serviceContainer = ServiceContainerProvider::getServiceContainer();
 
         foreach ($this->eventListeners as $listenerEventClass => $whatever) {
-            if (!is_subclass_of($eventClass, $listenerEventClass) && !$eventClass == $listenerEventClass) {
+            if (!is_subclass_of($eventClass, $listenerEventClass) && $eventClass !== $listenerEventClass) {
                 continue;
             }
 

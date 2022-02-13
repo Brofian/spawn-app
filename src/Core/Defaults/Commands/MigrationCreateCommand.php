@@ -4,9 +4,12 @@ namespace SpawnCore\Defaults\Commands;
 
 
 use bin\spawn\IO;
+use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\Gadgets\FileEditor;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 
 class MigrationCreateCommand extends AbstractCommand {
 
@@ -30,7 +33,9 @@ class MigrationCreateCommand extends AbstractCommand {
     }
 
     /**
-     * @inheritDoc
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
      */
     public function execute(array $parameters): int
     {
@@ -42,7 +47,7 @@ class MigrationCreateCommand extends AbstractCommand {
             $selectedModule = null;
             /** @var ModuleEntity $module */
             foreach($moduleCollection->getArray() as $module) {
-                if($module->getSlug() == $moduleSelector || $module->getId() == $moduleSelector) {
+                if($module->getSlug() === $moduleSelector || $module->getId() === $moduleSelector) {
                     $selectedModule = $module;
                     break;
                 }
@@ -68,7 +73,7 @@ class MigrationCreateCommand extends AbstractCommand {
                 $counter++;
             }
 
-            $moduleId = IO::readLine("Insert a valid ID: ", function($answer) use ($counter) {
+            $moduleId = IO::readLine("Insert a valid ID: ", static function($answer) use ($counter) {
                 return (is_numeric($answer) && (int)$answer < $counter && (int)$answer >= 0);
             }, 'The given ID is invalid!', 1);
 
@@ -90,7 +95,7 @@ class MigrationCreateCommand extends AbstractCommand {
             }
         }
         else {
-            $name = IO::readLine("How should the migration be called? ", function ($answer) {
+            $name = IO::readLine("How should the migration be called? ", static function ($answer) {
                 return (
                     strlen($answer) > 3 &&
                     strpos($answer, '/') === false

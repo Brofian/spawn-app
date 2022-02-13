@@ -2,6 +2,7 @@
 
 namespace SpawnCore\System\ServiceSystem;
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
 use SpawnCore\System\Custom\Gadgets\CookieHelper;
 use SpawnCore\System\Custom\Gadgets\CSRFTokenAssistant;
@@ -15,7 +16,10 @@ use SpawnCore\System\Custom\Gadgets\StringConverter;
 use SpawnCore\System\Custom\Gadgets\TwigHelper;
 use SpawnCore\System\Custom\Gadgets\ValueBag;
 use SpawnCore\System\Custom\Gadgets\XMLReader;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\EventSystem\EventInitializer;
@@ -24,7 +28,7 @@ use SpawnCore\System\NavigationSystem\Navigator;
 class ServiceContainerProvider
 {
 
-    const CORE_SERVICE_LIST = [
+    public const CORE_SERVICE_LIST = [
         'system.cookie.helper' => [
             ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
             ServiceProperties::_STATIC => true,
@@ -107,6 +111,12 @@ class ServiceContainerProvider
 
     protected static ServiceContainer $serviceContainer;
 
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     */
     public static function getServiceContainer(): ServiceContainer
     {
         if (!isset(self::$serviceContainer)) {

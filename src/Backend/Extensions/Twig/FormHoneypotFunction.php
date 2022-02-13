@@ -15,7 +15,7 @@ class FormHoneypotFunction extends FunctionExtension {
 
     protected function getFunctionFunction(): callable
     {
-        return function(string $fakePurpose) {
+        return static function(string $fakePurpose) {
             return '<input type="text" class="d-none" name="'.$fakePurpose.'" />';
         };
     }

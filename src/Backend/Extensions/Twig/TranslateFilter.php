@@ -16,7 +16,7 @@ class TranslateFilter extends FilterExtension {
 
     protected function getFilterFunction(): callable
     {
-        return (function(string $path, ?string $language = null) {
+        return (static function(string $path, ?string $language = null) {
             $container = ServiceContainerProvider::getServiceContainer();
             /** @var SnippetManager $snippetManager */
             $snippetManager = $container->getServiceInstance('system.service.snippet_manager');

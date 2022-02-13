@@ -23,7 +23,7 @@ class CacheFunctionExtension extends FunctionExtension
      */
     protected function getFunctionFunction(): callable
     {
-        return function ($namespace) {
+        return static function ($namespace) {
 
             $namespace = ModuleNamespacer::hashNamespace($namespace);
 

@@ -8,14 +8,17 @@ namespace SpawnCore\System\CardinalSystem;
  */
 
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\Gadgets\HeaderHelper;
 use SpawnCore\System\Custom\Gadgets\ResourceCollector;
 use SpawnCore\System\Custom\Gadgets\ScssHelper;
 use SpawnCore\System\Custom\Gadgets\TwigHelper;
 use SpawnCore\System\Custom\Gadgets\URIHelper;
 use SpawnCore\System\Custom\Response\AbstractResponse;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\HeadersSendByException;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -31,6 +34,11 @@ class Response
     protected EntityCollection $moduleCollection;
     protected AbstractResponse $responseObject;
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     */
     public function __construct()
     {
         $serviceContainer = ServiceContainerProvider::getServiceContainer();
@@ -42,7 +50,7 @@ class Response
         $this->fillBaseContextData();
     }
 
-    protected function fillBaseContextData()
+    protected function fillBaseContextData(): void
     {
         $this->twigHelper->assign("environment", MODE);
         $this->scssHelper->setBaseVariable("assetsPath", URIHelper::createPath([
@@ -51,17 +59,22 @@ class Response
     }
 
 
-    public function prepareFiles()
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
+    public function prepareFiles(): void
     {
 
         //gather resources from the modules
-        if (ResourceCollector::isGatheringNeeded() || MODE == 'dev') {
+        if (MODE === 'dev' || ResourceCollector::isGatheringNeeded()) {
             $resourceCollector = new ResourceCollector();
             $resourceCollector->gatherModuleData($this->moduleCollection);
         }
 
         /* Render Scss */
-        if (!$this->scssHelper->cacheExists() || MODE == 'dev') {
+        if (MODE === 'dev' || !$this->scssHelper->cacheExists()) {
             $this->scssHelper->createCss();
         }
 
@@ -70,7 +83,7 @@ class Response
     /**
      * @param AbstractResponse $responseObject
      */
-    public function setResponseObject(AbstractResponse $responseObject)
+    public function setResponseObject(AbstractResponse $responseObject): void
     {
         $this->responseObject = $responseObject;
     }

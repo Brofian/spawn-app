@@ -11,6 +11,7 @@ use SpawnCore\System\CardinalSystem\Request;
 use SpawnCore\System\Custom\Gadgets\SessionHelper;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;
@@ -47,10 +48,16 @@ class AdminLoginManager implements EventSubscriberInterface
     }
 
 
-    public function onRequestRoutedEvent(RequestRoutedEvent $event) {
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     */
+    public function onRequestRoutedEvent(RequestRoutedEvent $event): void {
         $isBackend = $event->getControllerService()->hasTag(ServiceTags::BACKEND_CONTROLLER);
         $isLoginMethod = $event->getMethod() === self::BACKEND_LOGIN_ACTION;
-        $isLoggedIn = self::isAdminLoggedIn();
+        $isLoggedIn = $this->isAdminLoggedIn();
 
         //dd($isLoggedIn, 'isLoggedIn');
 
@@ -100,6 +107,12 @@ class AdminLoginManager implements EventSubscriberInterface
     }
 
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     */
     public function isAdminLoggedIn(): bool
     {
         /** @var Request $request */
@@ -123,6 +136,12 @@ class AdminLoginManager implements EventSubscriberInterface
         $request->set('admin-user', $admin);
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     */
     public static function getAdminUserFromRequest(Request $request = null): ?AdministratorEntity {
         if($request === null) {
             /** @var Request $request */
@@ -178,11 +197,18 @@ class AdminLoginManager implements EventSubscriberInterface
      * @throws Exception
      * @throws WrongEntityForRepositoryException
      * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
      */
     public function logoutAdmin(): void {
         $adminEntity = self::getAdminUserFromRequest();
 
         $this->sessionHelper->destroySession();
+
+
+        if($adminEntity === null) {
+            return;
+        }
         $adminEntity->setLoginExpiration(null);
         $adminEntity->setLoginHash(null);
 

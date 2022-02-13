@@ -22,7 +22,7 @@ class CSRFTokenAssistant
     public function createToken(string $purpose): string
     {
         $microtime = microtime(true);
-        $token = $this->generateToken($purpose . (string)$microtime);
+        $token = $this->generateToken($purpose . $microtime);
 
         $tokens = $this->sessionHelper->get(self::TOKEN_ROOT, []);
         $tokens[$purpose][$token] = $microtime;

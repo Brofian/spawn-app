@@ -9,9 +9,11 @@ use SpawnCore\Defaults\Database\MigrationTable\MigrationRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\FoundationStorage\AbstractMigration;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\ServiceSystem\Service;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
@@ -69,6 +71,12 @@ class MigrationExecuteCommand extends AbstractCommand {
         return 0;
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     */
     protected function gatherMigrations(EntityCollection $moduleCollection): array
     {
         $migrationServices = ServiceContainerProvider::getServiceContainer()->getServicesByTag('base.service.migration');
@@ -84,11 +92,15 @@ class MigrationExecuteCommand extends AbstractCommand {
 
     protected function sortGatheredMigrations(array &$migrations): void {
         //sort all migrations by their timestamp (0 -> lowest)
-        usort($migrations, function($a, $b) {
+        usort($migrations, static function($a, $b) {
             return ($a[0] < $b[0]) ? -1 : 1;
         });
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     protected function loadAlreadyExecutedMigrations(): array   {
         $executedMigrationEntities = $this->migrationRepository->search(new Criteria());
 
@@ -106,13 +118,12 @@ class MigrationExecuteCommand extends AbstractCommand {
         $migrationsToExecute = [];
 
         foreach($migrations as $migration) {
-            $migrationTimestamp = $migration[0];
-            $migrationClass = $migration[1];
+            [$migrationTimestamp, $migrationClass] = $migration;
 
             $migrationName = (string)$migrationClass;
             $migrationName .= '-'.$migrationTimestamp;
 
-            if (!in_array($migrationName, $alreadyExecutedMigrations)) {
+            if (!in_array($migrationName, $alreadyExecutedMigrations, true)) {
                 $migrationsToExecute[] = $migration;
             }
         }

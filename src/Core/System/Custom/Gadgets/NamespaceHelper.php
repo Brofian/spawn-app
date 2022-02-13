@@ -9,15 +9,15 @@ class NamespaceHelper {
 
     public static function getNamespacesFromModuleCollection(EntityCollection $moduleCollection): array {
         //gather available namespaces
-        list($slugToModule, $modulesInNamespaces) = self::gatherAvailableNamespaces($moduleCollection);
+        [$slugToModule, $modulesInNamespaces] = self::gatherAvailableNamespaces($moduleCollection);
 
         //assign modules to namespaces
-        self::assignModulesToNamespaceList($moduleCollection, $modulesInNamespaces, $slugToModule);
+        self::assignModulesToNamespaceList($modulesInNamespaces, $slugToModule);
 
         return $modulesInNamespaces;
     }
 
-    protected static function assignModulesToNamespaceList(EntityCollection $moduleCollection, array &$modulesInNamespaces, array $slugToModule): void {
+    protected static function assignModulesToNamespaceList(array &$modulesInNamespaces, array $slugToModule): void {
 
         foreach($modulesInNamespaces as $namespace => &$slugs) {
             do {
@@ -35,7 +35,7 @@ class NamespaceHelper {
                 }
 
                 foreach($slugsToAdd as $slugToAdd) {
-                    if(!in_array($slugToAdd, $slugs)) {
+                    if(!in_array($slugToAdd, $slugs, true)) {
                         $slugs[] = $slugToAdd;
                         $hasChanged = true;
                     }

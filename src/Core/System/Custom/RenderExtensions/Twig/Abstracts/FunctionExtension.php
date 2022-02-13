@@ -12,7 +12,7 @@ abstract class FunctionExtension
     /**
      * @param Environment $twig
      */
-    public function addToTwig(Environment &$twig)
+    public function addToTwig(Environment $twig): void
     {
         $function = new TwigFunction(
             $this->getFunctionName(),

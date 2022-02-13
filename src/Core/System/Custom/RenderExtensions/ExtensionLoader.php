@@ -3,6 +3,7 @@
 namespace SpawnCore\System\Custom\RenderExtensions;
 
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\RenderExtensions\Twig\Abstracts\FilterExtension;
 use SpawnCore\System\Custom\RenderExtensions\Twig\Abstracts\FunctionExtension;
 use SpawnCore\System\Custom\RenderExtensions\Twig\CacheFunctionExtension;
@@ -10,6 +11,8 @@ use SpawnCore\System\Custom\RenderExtensions\Twig\DumpFunctionExtension;
 use SpawnCore\System\Custom\RenderExtensions\Twig\HashFilterExtension;
 use SpawnCore\System\Custom\RenderExtensions\Twig\IconFilterExtension;
 use SpawnCore\System\Custom\RenderExtensions\Twig\PreviewFilterExtension;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 use SpawnCore\System\ServiceSystem\ServiceTags;
 use Twig\Environment;
@@ -18,10 +21,11 @@ class ExtensionLoader
 {
 
     /**
-     * @param Environment $twig
-     * @return bool
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
      */
-    public static function loadTwigExtensions(Environment &$twig)
+    public static function loadTwigExtensions(Environment $twig): bool
     {
 
         //add twig extensions from modules

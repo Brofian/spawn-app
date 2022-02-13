@@ -12,8 +12,8 @@ use SpawnCore\System\Database\Entity\EntityCollection;
 class ResourceCollector
 {
 
-    const PUBLIC_ASSET_PATH = ROOT . '/public/cache';
-    const RESOURCE_CACHE_PATH = ROOT . '/var/cache/resources/modules';
+    public const PUBLIC_ASSET_PATH = ROOT . '/public/cache';
+    public const RESOURCE_CACHE_PATH = ROOT . '/var/cache/resources/modules';
 
 
     /**
@@ -24,10 +24,8 @@ class ResourceCollector
         return true;
     }
 
-    /**
-     * @param EntityCollection $moduleCollection
-     */
-    public function gatherModuleData(EntityCollection $moduleCollection)
+
+    public function gatherModuleData(EntityCollection $moduleCollection): void
     {
         /** @var ModuleEntity $module */
         foreach ($moduleCollection->getArray() as $module) {
@@ -67,7 +65,7 @@ class ResourceCollector
     }
 
 
-    private function moveModuleData(ModuleEntity $module)
+    private function moveModuleData(ModuleEntity $module): void
     {
         $resourcePath = $module->getResourceConfigValue('path');
 
@@ -100,7 +98,7 @@ class ResourceCollector
 
 
 
-    public static function copyFolderRecursive(string $source, string $dest)
+    public static function copyFolderRecursive(string $source, string $dest): void
     {
 
         if (!file_exists($source)) {

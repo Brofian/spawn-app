@@ -12,7 +12,7 @@ abstract class FilterExtension
     /**
      * @param Environment $twig
      */
-    public function addToTwig(Environment &$twig)
+    public function addToTwig(Environment $twig): void
     {
         $filter = new TwigFilter(
             $this->getFilterName(),

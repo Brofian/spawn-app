@@ -11,7 +11,7 @@ export default class CustomSelect extends Plugin {
 
         this.initElement();
 
-        document.addEventListener('click', this.onClickPage.bind(this))
+        document.addEventListener('click', this.onClickPage.bind(this));
         this.labelContainer.addEventListener('click', this.onClickLabel.bind(this), true);
     }
 

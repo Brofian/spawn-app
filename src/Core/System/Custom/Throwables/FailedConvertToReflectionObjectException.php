@@ -15,7 +15,7 @@ class FailedConvertToReflectionObjectException extends AbstractException
             try {
                 $class = (string)$class;
             } catch (Exception $e) {
-                $class = json_encode($class);
+                $class = json_encode($class, JSON_THROW_ON_ERROR);
             }
         }
 
@@ -23,7 +23,7 @@ class FailedConvertToReflectionObjectException extends AbstractException
             try {
                 $class = (string)$class;
             } catch (Exception $e) {
-                $class = json_encode($class);
+                $class = json_encode($class, JSON_THROW_ON_ERROR);
             }
         }
 

@@ -9,9 +9,11 @@ class Debugger
      * dumps the variable and continue execution
      * @param $var
      */
-    public static function dump($var)
+    public static function dump($var): void
     {
-        if (MODE != 'dev') self::officialDump();
+        if (MODE !== 'dev') {
+            self::officialDump();
+        }
 
         self::writeBacktrace($var, debug_backtrace());
     }
@@ -19,7 +21,7 @@ class Debugger
     /**
      * The official version. This is shown, if the MODE is not set to "dev" in the config
      */
-    public static function officialDump()
+    public static function officialDump(): void
     {
         echo "Something went wrong!";
         die();
@@ -30,9 +32,11 @@ class Debugger
      * @param $var
      * @param $backtrace
      */
-    private static function writeBacktrace($var, $backtrace)
+    private static function writeBacktrace($var, $backtrace): void
     {
-        if (MODE != 'dev') self::officialDump();
+        if (MODE !== 'dev') {
+            self::officialDump();
+        }
 
         echo "  <div style='background: #FFAAAA; border: 2px solid black; padding:10px'>
                     At: <b>" . $backtrace[0]["file"] . ":" . $backtrace[0]["line"] . "</b>
@@ -45,9 +49,11 @@ class Debugger
      * dumps the variable and dies
      * @param $var
      */
-    public static function ddump($var)
+    public static function ddump($var): void
     {
-        if (MODE != 'dev') self::officialDump();
+        if (MODE !== 'dev') {
+            self::officialDump();
+        }
 
         self::writeBacktrace($var, debug_backtrace());
         die();
@@ -57,9 +63,11 @@ class Debugger
      * dumps the variable and dies, used for strings
      * @param string $var
      */
-    public static function sdump(string $var)
+    public static function sdump(string $var): void
     {
-        if (MODE != 'dev') self::officialDump();
+        if (MODE !== 'dev') {
+            self::officialDump();
+        }
 
         $backtrace = debug_backtrace();
 

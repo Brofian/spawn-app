@@ -28,7 +28,7 @@ export default class SeoUrlPreviewPlugin extends Plugin {
         let cUrl = this.input.value;
         cUrl = this.encodeInput(cUrl);
 
-        var count = (cUrl.match(/\/{}/g) || []).length;
+        let count = (cUrl.match(/\/{}/g) || []).length;
         for(let param of this.collectionData) {
             cUrl = cUrl.replace('/{}', '/'+this.dataToFlagHtml(param.name, param.required).outerHTML);
         }

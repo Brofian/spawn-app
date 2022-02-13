@@ -15,7 +15,7 @@ abstract class Mutable
         $this->set($name, $value, true);
     }
 
-    public function set(string $key, $value, bool $allowOverride = true)
+    public function set(string $key, $value, bool $allowOverride = true): void
     {
         if ($allowOverride || !isset($this->$key)) {
             $this->$key = $value;
@@ -26,9 +26,9 @@ abstract class Mutable
     {
         if ($this->has($key)) {
             return $this->$key;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public function has(string $key): bool

@@ -2,14 +2,17 @@
 
 namespace spawnCore\System\NavigationSystem;
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository;
 use SpawnCore\Defaults\Services\ConfigurationManager;
 use SpawnCore\System\Custom\Gadgets\CUriConverter;
 use SpawnCore\System\Custom\Gadgets\UUID;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\Service;
 use SpawnCore\System\ServiceSystem\ServiceContainer;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
@@ -24,6 +27,11 @@ class Navigator
     protected SeoUrlRepository $seoUrlRepository;
 
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
@@ -46,7 +54,7 @@ class Navigator
 
     public function route(string $controller, string $action, ?Service &$controllerCls, ?string &$actionStr): void
     {
-        if ($controller == "" || $action == "") {
+        if ($controller === "" || $action === "") {
             $controllerCls = $this->serviceContainer->getService($this->fallbackService);
             $actionStr = $this->fallbackAction;
             return;
@@ -73,16 +81,18 @@ class Navigator
             $actionStr = $this->fallbackAction;
             return;
         }
-
-        return;
     }
 
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     public function rewriteURL(string $original, array &$values): string
     {
 
         $original = trim($original, '/? #');
-        if ($original == '' || strlen($original)) {
+        if ($original === '' || $original !== '') {
             $original = '/' . $original;
         }
         //$original = "/[whatever]"
@@ -101,7 +111,7 @@ class Navigator
 
             if ($hasMatched) {
 
-                for ($i = 1; $i < count($matches); $i++) {
+                for ($i = 1, $iMax = count($matches); $i < $iMax; $i++) {
                     $values[] = $matches[$i];
                 }
 
@@ -117,10 +127,14 @@ class Navigator
         return "/?controller=$controller&action=$action";
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     public function getSeoLinkByParameters(?string $controller, ?string $action, array $parameters = []): string
     {
 
-        if ($controller == null || $action == null) {
+        if ($controller === null || $action === null) {
             return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
         }
 
@@ -140,9 +154,9 @@ class Navigator
         if ($seoUrl instanceof SeoUrlEntity) {
             $cUrl = $seoUrl->getCUrl();
             return CUriConverter::cUriToUri($cUrl, $parameters);
-        } else {
-            return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
         }
+
+        return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
     }
 
 

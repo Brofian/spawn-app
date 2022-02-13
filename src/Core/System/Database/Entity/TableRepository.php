@@ -58,7 +58,7 @@ abstract class TableRepository
         $query->where($criteria->generateCriteria());
 
         /** @var EntityCollection $entityCollection */
-        $entityCollection = new EntityCollection($this->getEntityClass());
+        $entityCollection = new EntityCollection(static::getEntityClass());
 
         try {
             $stmt = $conn->prepare($query->getSQL());
@@ -86,7 +86,8 @@ abstract class TableRepository
      * @throws InvalidRepositoryInteractionException
      * @throws RepositoryException
      */
-    public function delete(Criteria $criteria) {
+    public function delete(Criteria $criteria): bool
+    {
         if(empty($criteria->getFilters())) {
             throw new InvalidRepositoryInteractionException('Tried deleting from database without filter');
         }
@@ -117,7 +118,7 @@ abstract class TableRepository
      */
     public function arrayToEntity(array $values): Entity {
         /** @var Entity $entityClass */
-        $entityClass = $this->getEntityClass();
+        $entityClass = static::getEntityClass();
         return $entityClass::getEntityFromArray($values);
     }
 
@@ -130,12 +131,11 @@ abstract class TableRepository
     public function upsert(Entity $entity): bool {
         $this->verifyEntityClass($entity);
 
-        if($entity->getId() === null) {
+        if($entity->has('id') === null) {
             return $this->insert($entity);
         }
-        else {
-            return $this->update($entity);
-        }
+
+        return $this->update($entity);
     }
 
     /**
@@ -201,8 +201,9 @@ abstract class TableRepository
     /**
      * @throws WrongEntityForRepositoryException
      */
-    protected function verifyEntityClass(Entity $entity) {
-        $desiredEntityClass = $this->getEntityClass();
+    protected function verifyEntityClass(Entity $entity): void
+    {
+        $desiredEntityClass = static::getEntityClass();
         if(!($entity instanceof $desiredEntityClass)) {
             throw new WrongEntityForRepositoryException(get_class($entity), $desiredEntityClass, self::class);
         }

@@ -3,16 +3,26 @@
 namespace SpawnCore\System\Database\Helpers;
 
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\MigrationTable\MigrationTable;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleTable;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
+use SpawnCore\System\Database\Entity\TableDefinition\InvalidForeignKeyConstraintException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 use SpawnCore\System\ServiceSystem\ServiceTags;
 
 class DatabaseStructureHelper
 {
 
-    public static function createDatabaseStructure()
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws InvalidForeignKeyConstraintException
+     * @throws RepositoryException
+     */
+    public static function createDatabaseStructure(): void
     {
         $serviceContainer = ServiceContainerProvider::getServiceContainer();
 
@@ -27,7 +37,12 @@ class DatabaseStructureHelper
 
     }
 
-    public static function createBasicDatabaseStructure()
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws InvalidForeignKeyConstraintException
+     */
+    public static function createBasicDatabaseStructure(): void
     {
 
         //create migration table

@@ -69,8 +69,8 @@ class ModuleEntityDefinition extends Entity {
             'id' => $this->getId(),
             'slug' => $this->getSlug(),
             'path' => $this->getPath(),
-            'information' => json_encode($this->getInformations()),
-            'resourceConfig' => json_encode($this->getResourceConfig()),
+            'information' => json_encode($this->getInformations(), JSON_THROW_ON_ERROR),
+            'resourceConfig' => json_encode($this->getResourceConfig(), JSON_THROW_ON_ERROR),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
         ];
@@ -119,10 +119,7 @@ class ModuleEntityDefinition extends Entity {
      */
     public function getInformation(string $key, $default = null)
     {
-        if(isset($this->information[$key])) {
-            return $this->information[$key];
-        }
-        return $default;
+        return $this->information[$key] ?? $default;
     }
 
     /**
@@ -134,14 +131,14 @@ class ModuleEntityDefinition extends Entity {
             $this->information = $information;
         }
         else {
-            $this->information = json_decode($information, true);
+            $this->information = json_decode($information, true, 512, JSON_THROW_ON_ERROR);
         }
 
 
         return $this;
     }
 
-    public function getResourceConfig(bool $asArray = false): array
+    public function getResourceConfig(): array
     {
         return $this->resourceConfig;
     }
@@ -155,7 +152,7 @@ class ModuleEntityDefinition extends Entity {
             $this->resourceConfig = $resourceConfig;
         }
         else {
-            $this->resourceConfig = json_decode($resourceConfig, true);
+            $this->resourceConfig = json_decode($resourceConfig, true, 512, JSON_THROW_ON_ERROR);
         }
 
         return $this;
@@ -165,10 +162,7 @@ class ModuleEntityDefinition extends Entity {
      * @return mixed;
      */
     public function getResourceConfigValue(string $key, $default = null) {
-        if(isset($this->resourceConfig[$key])) {
-            return $this->resourceConfig[$key];
-        }
-        return $default;
+        return $this->resourceConfig[$key] ?? $default;
     }
 
 

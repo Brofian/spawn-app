@@ -47,6 +47,7 @@
 	padding: 2px 5px;
 	margin: 2px;
 
+	//noinspection CssUnusedSymbol
 	&.btn-square {
 		@include default_button(#3D94F6, #000000);
 

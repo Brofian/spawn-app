@@ -21,6 +21,7 @@ a.link {
 		color: darken($primary, 10%);
 	}
 
+	//noinspection CssUnusedSymbol
 	&.clickable {
 		cursor: pointer;
 	}

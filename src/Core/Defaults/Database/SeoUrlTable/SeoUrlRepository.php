@@ -26,7 +26,7 @@ class SeoUrlRepository extends TableRepository {
         $now = new DateTime();
 
         $values['id'] = UUID::randomBytes();
-        $values['parameters'] = json_encode($values['parameters']);
+        $values['parameters'] = json_encode($values['parameters'], JSON_THROW_ON_ERROR);
         $values['createdAt'] = $now;
         $values['updatedAt'] = $now;
 
@@ -39,7 +39,7 @@ class SeoUrlRepository extends TableRepository {
 
         //set the id after the insert command in case of an error
         $entity->setId(UUID::bytesToHex($insertedValues['id']));
-        $entity->setParameters(json_decode($insertedValues['parameters'], true));
+        $entity->setParameters(json_decode($insertedValues['parameters'], true, 512, JSON_THROW_ON_ERROR));
         $entity->setCreatedAt($insertedValues['createdAt']);
         $entity->setUpdatedAt($insertedValues['updatedAt']);
     }
@@ -54,7 +54,7 @@ class SeoUrlRepository extends TableRepository {
     protected function prepareValuesForUpdate(array $updateValues): array
     {
         $updateValues['id'] = UUID::hexToBytes($updateValues['id']);
-        $updateValues['parameters'] = json_encode($updateValues['parameters']);
+        $updateValues['parameters'] = json_encode($updateValues['parameters'], JSON_THROW_ON_ERROR);
         $updateValues['updatedAt'] = new DateTime();
 
         return $updateValues;
@@ -63,7 +63,7 @@ class SeoUrlRepository extends TableRepository {
     protected function adjustEntityAfterSuccessfulUpdate(Entity $entity, array $updatedValues): void {
         /** @var SeoUrlEntity $entity */
 
-        $entity->setParameters(json_decode($updatedValues['parameters'], true));
+        $entity->setParameters(json_decode($updatedValues['parameters'], true, 512, JSON_THROW_ON_ERROR));
         $entity->setUpdatedAt($updatedValues['updatedAt']);
     }
 

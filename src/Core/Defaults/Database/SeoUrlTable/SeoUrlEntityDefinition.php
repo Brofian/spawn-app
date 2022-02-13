@@ -145,7 +145,7 @@ class SeoUrlEntityDefinition extends Entity
 
     public function getJsonParameters(): string
     {
-        return json_encode($this->parameters);
+        return json_encode($this->parameters, JSON_THROW_ON_ERROR);
     }
 
     public function setParameters(array $parameters): void

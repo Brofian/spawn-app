@@ -26,11 +26,7 @@ class XMLContentModel
 
     public function getAttribute(string $key, $default = null): ?string
     {
-        if (isset($this->attributes[$key])) {
-            return $this->attributes[$key];
-        }
-
-        return $default;
+        return $this->attributes[$key] ?? $default;
     }
 
     public function getType(): ?string
@@ -42,7 +38,7 @@ class XMLContentModel
     {
         $childrenWithTag = new Collection();
         foreach ($this->getChildren() as $child) {
-            if ($child->type == $key) {
+            if ($child->type === $key) {
                 $childrenWithTag->add($child);
             }
         }
@@ -69,7 +65,7 @@ class XMLContentModel
         return $this;
     }
 
-    public function loadFromSimpleXMLElement(SimpleXMLElement $simpleXMLElement, string $filePath)
+    public function loadFromSimpleXMLElement(SimpleXMLElement $simpleXMLElement, string $filePath): void
     {
 
         foreach ($simpleXMLElement->attributes() as $attribute) {
@@ -81,7 +77,7 @@ class XMLContentModel
 
         foreach ($simpleXMLElement->children() as $key => $child) {
 
-            if ($key == 'import' && isset($child->attributes()["file"])) {
+            if ($key === 'import' && isset($child->attributes()["file"])) {
 
                 $relPath = $child->attributes()["file"];
 

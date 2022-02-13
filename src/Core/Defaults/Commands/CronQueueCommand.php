@@ -2,6 +2,7 @@
 
 namespace SpawnCore\Defaults\Commands;
 
+use Exception;
 use SpawnCore\System\Cron\CronManager;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
@@ -24,8 +25,7 @@ class CronQueueCommand extends AbstractCommand {
     }
 
     /**
-     * @inheritDoc
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(array $parameters): int
     {

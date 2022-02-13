@@ -4,11 +4,14 @@ namespace SpawnCore\System\Custom\Gadgets;
 
 
 use bin\spawn\IO;
+use Doctrine\DBAL\Exception;
 use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\Exception\SassException;
 use ScssPhp\ScssPhp\OutputStyle;
 use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 
 class ScssHelper
 {
@@ -16,12 +19,11 @@ class ScssHelper
     public const SCSS_FILES_PATH = ROOT . '/vendor/scssphp/scssphp/scss.inc.php';
     public string $cacheFilePath = ROOT . '/public/cache';
     public string $baseFolder = ROOT . CACHE_DIR . '/resources/modules/scss';
-    private bool $alwaysReload = false;
     private array $baseVariables = array();
 
     public function __construct()
     {
-        $this->alwaysReload = (MODE === 'dev');
+        /** @noinspection PhpIncludeInspection */
         require_once self::SCSS_FILES_PATH;
     }
 
@@ -30,7 +32,12 @@ class ScssHelper
         return file_exists($this->cacheFilePath);
     }
 
-    public function createCss(?string $selectedNamespace = null)
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
+    public function createCss(?string $selectedNamespace = null): void
     {
         $moduleCollection = ListModulesCommand::getModuleList();
         $namespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleCollection);
@@ -96,7 +103,7 @@ class ScssHelper
         return $css;
     }
 
-    private function registerFunctions(Compiler $scss)
+    private function registerFunctions(Compiler $scss): void
     {
         //register custom scss functions
         $scss->registerFunction(
@@ -127,7 +134,7 @@ class ScssHelper
 
     }
 
-    private function compileBaseVariables()
+    private function compileBaseVariables(): string
     {
         $result = "";
 
@@ -138,7 +145,7 @@ class ScssHelper
         return $result;
     }
 
-    public function setBaseVariable(string $name, string $value)
+    public function setBaseVariable(string $name, string $value): void
     {
         $this->baseVariables[$name] = $value;
     }

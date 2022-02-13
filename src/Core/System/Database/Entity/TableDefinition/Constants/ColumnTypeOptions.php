@@ -116,11 +116,7 @@ class ColumnTypeOptions {
     ];
 
     public static function getOptionsForType(string $type): array {
-        if(!isset(self::TYPE_OPTIONS[$type])) {
-            return [];
-        }
-
-        return self::TYPE_OPTIONS[$type];
+        return self::TYPE_OPTIONS[$type] ?? [];
     }
 
     public const OPTION_DEFAULTS = [

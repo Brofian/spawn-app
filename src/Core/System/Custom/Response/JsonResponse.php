@@ -11,7 +11,7 @@ class JsonResponse extends AbstractResponse
     public function __construct(array $responseArray, ?CacheControlState $cache = null)
     {
         try {
-            $jsonResponse = json_encode($responseArray);
+            $jsonResponse = json_encode($responseArray, JSON_THROW_ON_ERROR);
         } catch (Exception $e) {
             $jsonResponse = (string)(new JsonConvertionException($responseArray));
         }

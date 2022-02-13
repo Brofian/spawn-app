@@ -12,7 +12,7 @@ class OrFilter extends AbstractFilter {
         $this->addFilter($filter1, ...$filters);
     }
 
-    public function addFilter(AbstractFilter ...$filters)
+    public function addFilter(AbstractFilter ...$filters): void
     {
         foreach($filters as $filter) {
             $this->filters[] = $filter;

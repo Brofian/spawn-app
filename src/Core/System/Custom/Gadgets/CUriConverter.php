@@ -51,7 +51,7 @@ class CUriConverter
         preg_match_all($curi, $uri, $matches);
 
         $parameters = [];
-        for ($i = 1; $i < sizeof($matches); $i++) {
+        for ($i = 1, $iMax = count($matches); $i < $iMax; $i++) {
             $parameters[] = $matches[$i][0];
         }
 
@@ -65,9 +65,7 @@ class CUriConverter
         $pattern = "/{([^}]*)}/m";
         preg_match_all($pattern, $c_uri, $matches);
 
-        if (!isset($matches[1])) return [];
-
-        return $matches[1];
+        return $matches[1] ?? [];
     }
 
 

@@ -7,9 +7,12 @@ namespace SpawnCore\System\CardinalSystem;
  */
 
 
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
 use SpawnCore\System\Custom\Gadgets\Logger;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\NavigationSystem\Navigator;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
@@ -26,7 +29,11 @@ class Request extends Mutable
     protected string $requestMethod;
     protected bool $isHttps;
 
-
+    /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws RepositoryException
+     */
     public function __construct()
     {
         $this->enrichGetValueBag();
@@ -41,7 +48,7 @@ class Request extends Mutable
 
         $this->checkForRewriteUrl();
 
-        if (MODE == 'dev') {
+        if (MODE === 'dev') {
             $this->writeAccessLogEntry();
         }
     }
@@ -90,7 +97,7 @@ class Request extends Mutable
     protected function enrichIsHttps(): void
     {
         $serverHttps = $_SERVER['HTTPS'] ?? '';
-        $this->isHttps = ('on' == $serverHttps);
+        $this->isHttps = ('on' === $serverHttps);
     }
 
     protected function enrichRequestHostName(): void
@@ -111,7 +118,7 @@ class Request extends Mutable
         $this->requestPath = $requestUri ?? '/';
     }
 
-    protected function enrichRequestUri()
+    protected function enrichRequestUri(): void
     {
         $https = $this->isHttps ? 'https' : 'http';
         $hostname = $this->requestHostName;
@@ -120,15 +127,21 @@ class Request extends Mutable
         $this->requestURI = "{$https}://{$hostname}{$path}";
     }
 
-    protected function enrichRequestMethod()
+    protected function enrichRequestMethod(): void
     {
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
     }
 
-    protected function checkForRewriteUrl()
+
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
+    protected function checkForRewriteUrl(): void
     {
 
-        if ($this->get->get('controller') != null && $this->get->get('action') != null) {
+        if ($this->get->get('controller') !== null && $this->get->get('action') !== null) {
             return;
         }
 
@@ -152,7 +165,7 @@ class Request extends Mutable
     }
 
 
-    public function writeAccessLogEntry()
+    public function writeAccessLogEntry(): void
     {
         Logger::writeToAccessLog("Call to \"{$this->requestURI}\"");
     }

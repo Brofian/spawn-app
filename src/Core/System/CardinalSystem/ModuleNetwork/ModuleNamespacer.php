@@ -10,13 +10,13 @@ class ModuleNamespacer
 {
     public const FALLBACK_NAMESPACE = 'raw';
 
-    public static $generatedNamespaces = [];
+    public static array $generatedNamespaces = [];
 
     /**
      * @param $rawNamespace
      * @return string
      */
-    public static function hashNamespace($rawNamespace)
+    public static function hashNamespace($rawNamespace): string
     {
         if(isset(self::$generatedNamespaces[$rawNamespace])) {
             return self::$generatedNamespaces[$rawNamespace];

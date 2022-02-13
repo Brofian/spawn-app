@@ -14,9 +14,11 @@ class CookieHelper
     }
 
 
-    public function set(string $key, string $value, bool $overrideExisting = true, string $path = "/", int $expires = 0, bool $secure = false, bool $httpOnly = false, string $sameSite = "Strict")
+    public function set(string $key, string $value, bool $overrideExisting = true, string $path = "/", int $expires = 0, bool $secure = false, bool $httpOnly = false, string $sameSite = "Strict"): bool
     {
-        if (isset($this->cookies[$key]) && $overrideExisting == false) return false;
+        if (isset($this->cookies[$key]) && $overrideExisting === false) {
+            return false;
+        }
 
         $options = [
             "expires" => $expires,
@@ -41,10 +43,7 @@ class CookieHelper
      */
     public function get(string $key, bool $fallback = null)
     {
-        if (isset($this->cookies[$key])) {
-            return $this->cookies[$key];
-        }
-        return $fallback;
+        return $this->cookies[$key] ?? $fallback;
     }
 
     /**

@@ -4,7 +4,10 @@ namespace SpawnCore\Defaults\Commands;
 
 
 use bin\spawn\IO;
+use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\TableDefinition\InvalidForeignKeyConstraintException;
 use SpawnCore\System\Database\Helpers\DatabaseStructureHelper;
 
 class DatabaseSetupMinimalCommand extends AbstractCommand {
@@ -25,14 +28,16 @@ class DatabaseSetupMinimalCommand extends AbstractCommand {
     }
 
     /**
-     * @inheritDoc
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws InvalidForeignKeyConstraintException
      */
     public function execute(array $parameters): int
     {
         IO::printWarning("> Creating basic database...");
 
-        $dbStructureHelper = new DatabaseStructureHelper();
-        $dbStructureHelper->createBasicDatabaseStructure();
+
+        DatabaseStructureHelper::createBasicDatabaseStructure();
 
         IO::printSuccess('> Created basic database structure!');
         return 0;

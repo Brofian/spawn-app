@@ -113,7 +113,7 @@ class ConfigurationEntityDefinition extends Entity
         if($asArray) {
             return $this->definition;
         }
-        return json_encode($this->definition);
+        return json_encode($this->definition, JSON_THROW_ON_ERROR);
     }
 
     /**

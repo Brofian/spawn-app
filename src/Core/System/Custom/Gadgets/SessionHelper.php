@@ -4,7 +4,7 @@ namespace SpawnCore\System\Custom\Gadgets;
 
 class SessionHelper
 {
-    private array $session = array();
+    private array $session;
 
     public function __construct()
     {
@@ -14,7 +14,7 @@ class SessionHelper
 
     private function startSession(): bool
     {
-        if ($this->isSessionActive() == false) {
+        if ($this->isSessionActive() === false) {
             return session_start();
         }
         return false;
@@ -22,7 +22,7 @@ class SessionHelper
 
     private function isSessionActive(): bool
     {
-        return (session_status() == PHP_SESSION_ACTIVE);
+        return (session_status() === PHP_SESSION_ACTIVE);
     }
 
     public function __destruct()
@@ -34,7 +34,7 @@ class SessionHelper
 
     public function set(string $key, $value, bool $overrideExisting = true): bool
     {
-        if (isset($this->session[$key]) && $overrideExisting == false) {
+        if (isset($this->session[$key]) && $overrideExisting === false) {
             return false;
         }
 
@@ -50,7 +50,7 @@ class SessionHelper
      */
     public function get(string $key, $fallback = null)
     {
-        if ($this->isSessionActive() == false || isset($this->session[$key]) == false) {
+        if (!isset($this->session[$key]) || !$this->isSessionActive()) {
             return $fallback;
         }
         return $this->session[$key];

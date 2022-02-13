@@ -24,13 +24,15 @@ class Stopwatch
     {
         if ($milliseconds < 2000) { //2s
             return 'ms';
-        } else if ($milliseconds < 60000) { //1m
+        }
+
+        if ($milliseconds < 60000) { //1m
             $milliseconds /= 1000;
             return 's';
-        } else {
-            $milliseconds /= 60000;
-            return 'm';
         }
+
+        $milliseconds /= 60000;
+        return 'm';
     }
 
 }

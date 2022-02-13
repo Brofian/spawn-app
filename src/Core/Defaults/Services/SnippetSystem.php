@@ -145,7 +145,7 @@ class SnippetSystem {
 
 
     protected function interpretSnippetJson(string $json): array {
-        $data = json_decode($json, true);
+        $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
         $snippets = [];
         foreach($data as $language => $arrays) {

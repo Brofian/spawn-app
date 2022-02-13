@@ -3,10 +3,13 @@
 namespace SpawnCore\System\Custom\Gadgets;
 
 use bin\spawn\IO;
+use Doctrine\DBAL\Exception;
 use RuntimeException;
 use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\Defaults\Commands\NpmInstallCommand;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 
 class JavascriptHelper
 {
@@ -27,10 +30,15 @@ class JavascriptHelper
     }
 
 
+    /**
+     * @throws Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     public function compileAll(?string $namespaceLimitation = null): void {
         $this->prepareCompilation();
 
-        $configFilePath = self::WEBPACK_CONFIG_FILE;;
+        $configFilePath = self::WEBPACK_CONFIG_FILE;
         $webpackDir = dirname($configFilePath);
 
         $moduleCollection = ListModulesCommand::getModuleList();
@@ -61,7 +69,7 @@ class JavascriptHelper
 
             $output = IO::execInDir($command, $webpackDirectory, false, $result, $code);
 
-            if($code != 0) {
+            if($code !== 0) {
                 if(is_string($result)) {
                     $result = [$result];
                 }

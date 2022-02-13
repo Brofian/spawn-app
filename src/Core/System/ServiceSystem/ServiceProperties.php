@@ -30,8 +30,7 @@ class ServiceProperties
 
     public static function getPropertyList(): array
     {
-        $oClass = new ReflectionClass(static::class);
-        return $oClass->getConstants();
+        return (new ReflectionClass(static::class))->getConstants();
     }
 
     public static function getPropertySetterMethods(): array

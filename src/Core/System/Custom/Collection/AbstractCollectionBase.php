@@ -18,7 +18,7 @@ abstract class AbstractCollectionBase implements Iterator, Countable
         return $this->getByIndex($this->position);
     }
 
-    protected abstract function getByIndex(int $index);
+    abstract protected function getByIndex(int $index);
 
     /*
      *
@@ -37,7 +37,7 @@ abstract class AbstractCollectionBase implements Iterator, Countable
         return $this->getCurrentKey();
     }
 
-    protected abstract function getCurrentKey();
+    abstract protected function getCurrentKey();
 
     public function valid(): bool
     {

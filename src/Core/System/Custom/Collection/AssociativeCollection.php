@@ -15,9 +15,9 @@ class AssociativeCollection extends AbstractCollectionBase
      *
      */
 
-    public function set($key, $value)
+    public function set($key, $value): void
     {
-        $isNewEntry = (false == isset($this->collection[$key]));
+        $isNewEntry = !isset($this->collection[$key]);
         $this->collection[$key] = $value;
 
         if ($isNewEntry) {
@@ -25,7 +25,7 @@ class AssociativeCollection extends AbstractCollectionBase
         }
     }
 
-    protected function generateOrUpdateKeys()
+    protected function generateOrUpdateKeys(): void
     {
         $this->keys = [];
         foreach ($this->collection as $key => $item) {
@@ -35,11 +35,11 @@ class AssociativeCollection extends AbstractCollectionBase
 
     public function first()
     {
-        if ($this->count() == 0) {
+        if ($this->count() === 0) {
             return null;
-        } else {
-            return $this->get(0);
         }
+
+        return $this->get(0);
     }
 
     /**
@@ -64,7 +64,7 @@ class AssociativeCollection extends AbstractCollectionBase
      * @param string|int $key
      * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         return isset($this->collection[$key]) || isset($this->keys[$key]);
     }
@@ -73,20 +73,20 @@ class AssociativeCollection extends AbstractCollectionBase
     {
         $count = $this->count();
 
-        if ($count == 0) {
+        if ($count === 0) {
             return null;
-        } else {
-            return $this->get($count - 1);
         }
+
+        return $this->get($count - 1);
     }
 
-    public function sort(callable $sortingMethod)
+    public function sort(callable $sortingMethod): void
     {
         uasort($this->collection, $sortingMethod);
         $this->generateOrUpdateKeys();
     }
 
-    public function filter(callable $filterMethod)
+    public function filter(callable $filterMethod): void
     {
         $this->collection = array_filter($this->collection, $filterMethod);
         $this->generateOrUpdateKeys();
@@ -104,10 +104,6 @@ class AssociativeCollection extends AbstractCollectionBase
 
     protected function getCurrentKey()
     {
-        if (isset($this->keys[$this->position])) {
-            return $this->keys[$this->position];
-        }
-
-        return count($this->keys);
+        return $this->keys[$this->position] ?? count($this->keys);
     }
 }

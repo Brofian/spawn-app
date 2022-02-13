@@ -17,7 +17,7 @@ class CSRFTokenFunction extends FunctionExtension {
 
     protected function getFunctionFunction(): callable
     {
-        return function(string $purpose) {
+        return static function(string $purpose) {
             /** @var CSRFTokenAssistant $tokenAssistant */
             $tokenAssistant = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.csrf_token.helper');
             $token = $tokenAssistant->createToken($purpose);

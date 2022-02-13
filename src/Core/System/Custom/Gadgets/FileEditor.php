@@ -3,6 +3,7 @@
 namespace SpawnCore\System\Custom\Gadgets;
 
 use Exception;
+use RuntimeException;
 
 class FileEditor
 {
@@ -25,7 +26,7 @@ class FileEditor
      * @param $data
      * @return bool
      */
-    public static function insert($path, $data)
+    public static function insert($path, $data): bool
     {
         self::createFile($path);
         try {
@@ -55,11 +56,13 @@ class FileEditor
      * @param $path
      * @return bool
      */
-    public static function createFolder($path)
+    public static function createFolder($path): bool
     {
         if (!file_exists($path)) {
             try {
-                mkdir($path, 0777, true);
+                if (!mkdir($path, 0777, true) && !is_dir($path)) {
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
+                }
                 return true;
             } catch (Exception $e) {
                 return false;
@@ -73,7 +76,7 @@ class FileEditor
      * @param $data
      * @return bool
      */
-    public static function append($path, $data)
+    public static function append($path, $data): bool
     {
         self::createFolder(dirname($path));
         try {
@@ -89,7 +92,7 @@ class FileEditor
      * @param $path
      * @return bool
      */
-    public static function deleteFile($path)
+    public static function deleteFile($path): bool
     {
         if (file_exists($path)) {
             try {
@@ -101,12 +104,14 @@ class FileEditor
         return true;
     }
 
-    public static function deleteFolder($path, $deleteContents = false)
+    public static function deleteFolder($path, $deleteContents = false): bool
     {
         if (!file_exists($path)) {
             //dir doesnt exist
             return true;
-        } else if (!is_dir($path)) {
+        }
+
+        if (!is_dir($path)) {
             //path is not a directory
             return false;
         }
@@ -114,7 +119,9 @@ class FileEditor
         if (self::isDirEmpty($path)) {
             //delete empty dir
             return rmdir($path);
-        } else if ($deleteContents) {
+        }
+
+        if ($deleteContents) {
             //delete dir recursive
             rrmdir($path, false);
         }
@@ -122,9 +129,11 @@ class FileEditor
         return false;
     }
 
-    private static function isDirEmpty($path)
+    private static function isDirEmpty($path): bool
     {
-        if (!file_exists($path)) return true;
+        if (!file_exists($path)) {
+            return true;
+        }
         return count(scandir($path)) <= 0;
     }
 

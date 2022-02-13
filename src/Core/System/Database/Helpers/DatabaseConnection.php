@@ -18,11 +18,7 @@ class DatabaseConnection
      */
     public static function getConnection(): DBALConnection
     {
-        if (self::$connection == null) {
-            return self::createNewConnection();
-        }
-
-        return self::$connection;
+        return self::$connection ?? self::createNewConnection();
     }
 
     /**

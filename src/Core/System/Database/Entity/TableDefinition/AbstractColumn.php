@@ -39,11 +39,12 @@ abstract class AbstractColumn {
             return;
         }
 
-        if(is_string($columns)) {
+        if (is_string($columns)) {
             $this->uniqueColumnCombination = [$this->columnName, $columns];
             return;
         }
-        elseif(is_array($columns)) {
+
+        if(is_array($columns)) {
             $this->uniqueColumnCombination = $columns;
             return;
         }

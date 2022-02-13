@@ -52,15 +52,17 @@ class SeoUrlConfigController extends AbstractBackendController {
     /**
      * @route /backend/seo_config/overview
      * @locked
-     * @return AbstractResponse
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function seoUrlOverviewAction(): AbstractResponse {
         $get = $this->request->getGet();
 
-        $numberOfEntriesPerPage = intval($get->get('num', 20) ?? 1);
-        $page = max(intval($get->get('page', 1) ?? 1), 1);
+        $numberOfEntriesPerPage = (int)($get->get('num', 20) ?? 1);
+        $page = max((int)($get->get('page', 1) ?? 1), 1);
         $ignoreLocked = !($get->get('showLocked', 0));
-        $totalNumberOfEntries = intval($this->seoUrlManager->getNumberAvailableSeoUrls($ignoreLocked) ?? 1);
+        $totalNumberOfEntries = ($this->seoUrlManager->getNumberAvailableSeoUrls($ignoreLocked) ?? 1);
         $availablePages = (int)ceil($totalNumberOfEntries / $numberOfEntriesPerPage);
         $seoUrls = $this->seoUrlManager->getSeoUrls($ignoreLocked, $numberOfEntriesPerPage, ($page-1)*$numberOfEntriesPerPage);
 
@@ -85,7 +87,6 @@ class SeoUrlConfigController extends AbstractBackendController {
      * @param string|null $method
      * @return AbstractResponse
      * @throws DatabaseConnectionException
-     * @throws InvalidFilterValueException
      * @throws RepositoryException
      */
     public function seoUrlEditAction(string $ctrl, string $method): AbstractResponse {
@@ -154,7 +155,7 @@ class SeoUrlConfigController extends AbstractBackendController {
         $arrayKeys = array_keys($array);
 
         foreach($requiredFields as $requiredField) {
-            if(!in_array($requiredField, $arrayKeys)) {
+            if(!in_array($requiredField, $arrayKeys, true)) {
                 //if required field does not exist in array
                 $missingFields[] = $requiredField;
             }

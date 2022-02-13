@@ -37,8 +37,7 @@ class Criteria {
 
     public function generateCriteria(): string {
         if(!empty($this->filters)) {
-            $combinedFilter = new AndFilter(...$this->filters);
-            return $combinedFilter->getCondition();
+            return (new AndFilter(...$this->filters))->getCondition();
         }
         return '(1)';
     }

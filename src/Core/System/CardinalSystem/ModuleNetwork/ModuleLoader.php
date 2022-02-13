@@ -18,7 +18,7 @@ use SpawnCore\System\Database\Helpers\DatabaseHelper;
 class ModuleLoader
 {
 
-    const REL_XML_PATH = "/plugin.xml";
+    public const REL_XML_PATH = "/plugin.xml";
 
     protected array $moduleRootPaths = [
         ROOT . "/src/custom",
@@ -64,12 +64,10 @@ class ModuleLoader
 
     protected function readModulesFromCache(): EntityCollection
     {
-        $moduleCollection = new EntityCollection(ModuleEntity::class);
-
         //TODO: There is currently no module file cache
         //      if there will be one added, also implement the doesCacheExist function above
 
-        return $moduleCollection;
+        return new EntityCollection(ModuleEntity::class);
     }
 
     /**
@@ -80,8 +78,7 @@ class ModuleLoader
     protected function readModulesFromDB(): EntityCollection
     {
         //load modules from database
-        $moduleRepository = new ModuleRepository(new ModuleTable());
-        return $moduleRepository->search(new Criteria());
+        return (new ModuleRepository(new ModuleTable()))->search(new Criteria());
     }
 
     protected function readModulesFromFileSystem(): EntityCollection
@@ -89,12 +86,14 @@ class ModuleLoader
         $moduleCollection = new EntityCollection(ModuleEntity::class);
 
         foreach ($this->moduleRootPaths as $rootPath) {
-            if (!is_dir($rootPath)) continue;
+            if (!is_dir($rootPath)) {
+                continue;
+            }
             $namespaces = scandir($rootPath);
 
             foreach ($namespaces as $namespace) {
                 $namespacePath = "$rootPath/$namespace";
-                if (in_array($namespace, $this->ignoredDirs) || !is_dir($namespacePath)) {
+                if (in_array($namespace, $this->ignoredDirs, true) || !is_dir($namespacePath)) {
                     continue;
                 }
 
@@ -103,7 +102,7 @@ class ModuleLoader
 
                 foreach ($possibleModulesForNamespace as $possibleModule) {
                     $currentModulePath = "$namespacePath/$possibleModule";
-                    if (in_array($possibleModule, $this->ignoredDirs) || !is_dir($currentModulePath)) {
+                    if (in_array($possibleModule, $this->ignoredDirs, true) || !is_dir($currentModulePath)) {
                         continue;
                     }
 
@@ -137,8 +136,8 @@ class ModuleLoader
         ];
 
         $data = $this->getModuleDataFromXML($absolutePath . self::REL_XML_PATH);
-        $moduleData['information'] = json_encode($data['information']);
-        $moduleData['resourceConfig'] = json_encode($data['config']);
+        $moduleData['information'] = json_encode($data['information'], JSON_THROW_ON_ERROR);
+        $moduleData['resourceConfig'] = json_encode($data['config'], JSON_THROW_ON_ERROR);
 
         return ModuleEntity::getEntityFromArray($moduleData);
     }
@@ -151,7 +150,7 @@ class ModuleLoader
         ];
 
         /** @var XMLContentModel $moduleXML */
-        $moduleXML = (new XMLReader())->readFile($xmlPath);
+        $moduleXML = XMLReader::readFile($xmlPath);
 
         /*
          * Get module information
@@ -176,10 +175,10 @@ class ModuleLoader
                 $value = $configChild->getValue();
 
                 // special cases
-                if($configChild->getType() == 'namespace') {
+                if($configChild->getType() === 'namespace') {
                     $value = $value ?? ModuleNamespacer::FALLBACK_NAMESPACE;
                 }
-                elseif($configChild->getType() == 'using') {
+                elseif($configChild->getType() === 'using') {
                     $useNamespaces = [];
                     foreach($configChild->getChildren() as $child) {
                         $useNamespaces[] = $child->getValue();

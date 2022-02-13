@@ -6,7 +6,7 @@ class StringConverter
 {
 
 
-    public static function snakeToPascalCase($string)
+    public static function snakeToPascalCase($string): string
     {
         $string = strtolower($string);
 
@@ -18,12 +18,12 @@ class StringConverter
         return $string;
     }
 
-    public static function pascalToSnakeCase($string)
+    public static function pascalToSnakeCase($string): string
     {
         $letters = str_split($string);
         $string = "";
         foreach ($letters as $letter) {
-            if (ctype_lower($letter) || $string == "") {
+            if ($string === "" || ctype_lower($letter)) {
                 $string .= $letter;
             } else {
                 $string .= "-" . $letter;
