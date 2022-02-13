@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <import file="/Jobs/_cronjobs.xml"/>
+
+    <service id="system.core.cron.manager" class="SpawnCore\System\Cron\CronManager" static="true">
+        <argument type="service" value="system.repository.crons" />
+        <tag>base.service</tag>
+    </service>
+
+</services>
+

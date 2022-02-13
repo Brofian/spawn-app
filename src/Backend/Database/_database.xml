@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <import file="./Migrations/_migrations.xml"/>
+
+    <!-- Administrators -->
+    <service id="system.database.table.administrator" class="SpawnBackend\Database\AdministratorTable\AdministratorTable" static="true">
+        <tag>database.table</tag>
+    </service>
+
+    <service id="system.repository.administrator" class="SpawnBackend\Database\AdministratorTable\AdministratorRepository" static="true">
+        <argument type="service" value="system.database.table.administrator" />
+        <tag>base.service.static</tag>
+    </service>
+
+</services>

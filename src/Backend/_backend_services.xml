@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <import file="/Commands/_commands.xml"/>
+    <import file="/Controller/_controller.xml"/>
+    <import file="/Database/_database.xml"/>
+    <import file="/Extensions/_extensions.xml"/>
+    <import file="/Services/_services.xml"/>
+
+</services>

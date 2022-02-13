@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.command.create_admin_user" class="SpawnBackend\Commands\CreateAdminUserCommand">
+        <tag>console.command</tag>
+    </service>
+
+</services>
+

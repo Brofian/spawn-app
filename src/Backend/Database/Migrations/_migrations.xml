@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+
+<services>
+
+    <service id="SpawnBackend.migration.migration1" class="SpawnBackend\Database\Migrations\Migration1641495755CreateDefaultLanguages" static="true">
+        <tag>base.service.migration</tag>
+    </service>
+
+    <service id="SpawnBackend.migration.migration2" class="SpawnBackend\Database\Migrations\Migration1641729911SetDefaultConfigValues" static="true">
+        <argument type="service" value="system.repository.configuration" />
+        <argument type="service" value="system.repository.seo_urls" />
+        <tag>base.service.migration</tag>
+    </service>
+
+</services>

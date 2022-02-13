@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <!-- System Services -->
+    <import file="/System/Cron/_cron.xml"/>
+
+    <!-- Default Services  -->
+    <import file="/Defaults/Database/_database.xml"/>
+    <import file="/Defaults/Services/_services.xml"/>
+    <import file="/Defaults/Commands/_commands.xml"/>
+
+</services>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="spawn.app.twig.extension.filter.seo_url_rewrite" class="SpawnBackend\Extensions\Twig\SeoUrlRewriteFilter" static="true">
+        <tag>extension.twig</tag>
+    </service>
+
+    <service id="spawn.app.twig.extension.function.csrf_token" class="SpawnBackend\Extensions\Twig\CSRFTokenFunction" static="true">
+        <tag>extension.twig</tag>
+    </service>
+
+    <service id="spawn.app.twig.extension.function.form_honeypot" class="SpawnBackend\Extensions\Twig\FormHoneypotFunction" static="true">
+        <tag>extension.twig</tag>
+    </service>
+
+    <service id="spawn.app.twig.extension.filter.translate" class="SpawnBackend\Extensions\Twig\TranslateFilter" static="true">
+        <tag>extension.twig</tag>
+    </service>
+
+
+</services>

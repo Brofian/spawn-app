@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.service.admin_login_manager" class="SpawnBackend\Services\AdminLoginManager" static="true">
+        <argument type='service' value="system.repository.administrator"/>
+        <argument type='service' value="system.session.helper"/>
+        <tag>service</tag>
+        <tag>event.subscriber</tag>
+    </service>
+
+</services>
+
