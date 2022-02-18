@@ -4,6 +4,7 @@
 
     <!-- System Services -->
     <import file="/System/Cron/_cron.xml"/>
+    <import file="/System/Custom/Gadgets/_gadgets.xml"/>
 
     <!-- Default Services  -->
     <import file="/Defaults/Database/_database.xml"/>

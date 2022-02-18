@@ -5,16 +5,10 @@ namespace SpawnCore\System\ServiceSystem;
 use Doctrine\DBAL\Exception;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
 use SpawnCore\System\Custom\Gadgets\CookieHelper;
-use SpawnCore\System\Custom\Gadgets\CSRFTokenAssistant;
-use SpawnCore\System\Custom\Gadgets\CUriConverter;
 use SpawnCore\System\Custom\Gadgets\FileEditor;
-use SpawnCore\System\Custom\Gadgets\HeaderHelper;
 use SpawnCore\System\Custom\Gadgets\Logger;
-use SpawnCore\System\Custom\Gadgets\ScssHelper;
 use SpawnCore\System\Custom\Gadgets\SessionHelper;
 use SpawnCore\System\Custom\Gadgets\StringConverter;
-use SpawnCore\System\Custom\Gadgets\TwigHelper;
-use SpawnCore\System\Custom\Gadgets\ValueBag;
 use SpawnCore\System\Custom\Gadgets\XMLReader;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
@@ -23,7 +17,6 @@ use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\EventSystem\EventInitializer;
-use SpawnCore\System\NavigationSystem\Navigator;
 
 class ServiceContainerProvider
 {
@@ -44,40 +37,15 @@ class ServiceContainerProvider
             ServiceProperties::_STATIC => true,
             ServiceProperties::_CLASS => DatabaseHelper::class,
         ],
-        'system.header.helper' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => HeaderHelper::class,
-        ],
         'system.database.connection' => [
             ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
             ServiceProperties::_STATIC => true,
             ServiceProperties::_CLASS => DatabaseConnection::class,
         ],
-        'system.routing.helper' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => Navigator::class,
-        ],
-        'system.twig.helper' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => TwigHelper::class,
-        ],
-        'system.scss.helper' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => ScssHelper::class,
-        ],
         'system.xml.helper' => [
             ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
             ServiceProperties::_STATIC => true,
             ServiceProperties::_CLASS => XMLReader::class,
-        ],
-        'system.curi.converter.helper' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => CUriConverter::class,
         ],
         'system.file.editor.helper' => [
             ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
@@ -93,19 +61,6 @@ class ServiceContainerProvider
             ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
             ServiceProperties::_STATIC => true,
             ServiceProperties::_CLASS => StringConverter::class,
-        ],
-        'system.request.curi.valuebag' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => ValueBag::class,
-        ],
-        'system.csrf_token.helper' => [
-            ServiceProperties::_TAGS => [ServiceTags::BASE_SERVICE],
-            ServiceProperties::_STATIC => true,
-            ServiceProperties::_CLASS => CSRFTokenAssistant::class,
-            ServiceProperties::_ARGUMENTS => [
-                ["type" => "service", "value" => "system.session.helper"],
-            ]
         ],
     ];
 

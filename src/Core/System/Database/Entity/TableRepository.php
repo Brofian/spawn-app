@@ -131,7 +131,7 @@ abstract class TableRepository
     public function upsert(Entity $entity): bool {
         $this->verifyEntityClass($entity);
 
-        if($entity->has('id') === null) {
+        if($entity->has('id') === false) {
             return $this->insert($entity);
         }
 
