@@ -7,12 +7,18 @@ namespace SpawnCore\Defaults\Commands;
 use bin\spawn\IO;
 use Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
+use SpawnCore\Defaults\Events\JavascriptCompileEvent;
+use SpawnCore\Defaults\Events\ScssCompileEvent;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\Gadgets\JavascriptHelper;
 use SpawnCore\System\Custom\Gadgets\NamespaceHelper;
 use SpawnCore\System\Custom\Gadgets\ResourceCollector;
 use SpawnCore\System\Custom\Gadgets\ScssHelper;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\EventSystem\EventEmitter;
 
 class ThemeCompileCommand extends AbstractCommand {
 
@@ -78,10 +84,16 @@ class ThemeCompileCommand extends AbstractCommand {
     }
 
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
     protected function compileScss(): void {
         IO::printWarning("> compiling SCSS");
 
         $scssHelper = new ScssHelper();
+        EventEmitter::get()->publish(new ScssCompileEvent($scssHelper));
         $scssHelper->createCss($this->parameters['namespace']);
 
         IO::printSuccess("> - successfully compiled SCSS");
@@ -95,6 +107,7 @@ class ThemeCompileCommand extends AbstractCommand {
         IO::printWarning("> compiling JavaScript");
 
         $jsHelper = new JavascriptHelper();
+        EventEmitter::get()->publish(new JavascriptCompileEvent($jsHelper));
         $jsHelper->compileAll($this->parameters['namespace']);
 
         IO::printSuccess("> - successfully compiled JavaScript");

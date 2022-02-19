@@ -61,8 +61,8 @@ class ScssHelper
                 /** @var FileEditor $fileWriter */
                 $fileWriter = new FileEditor();
                 $fileWriter::createFolder($targetFolder);
-                $fileWriter::createFile($targetFolder.'/all.css', $css->getCss());
-                $fileWriter::createFile($targetFolder.'/all.min.css', $cssMinified->getCss());
+                $fileWriter::createFile($targetFolder.'/all.css', $css);
+                $fileWriter::createFile($targetFolder.'/all.min.css', $cssMinified);
 
                 IO::printLine(IO::TAB . '- ' . $namespace, '', 1);
             }
@@ -71,7 +71,7 @@ class ScssHelper
 
     }
 
-    private function compile(string $baseFile, bool $compressed = false)
+    public function compile(string $baseFile, bool $compressed = false): string
     {
         $scss = new Compiler();
 
@@ -100,7 +100,7 @@ class ScssHelper
         }
 
 
-        return $css;
+        return $css->getCss();
     }
 
     private function registerFunctions(Compiler $scss): void

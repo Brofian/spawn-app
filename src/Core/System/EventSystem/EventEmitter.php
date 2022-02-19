@@ -4,6 +4,7 @@ namespace SpawnCore\System\EventSystem;
 
 
 use Doctrine\DBAL\Exception;
+use SpawnCore\System\Custom\Gadgets\Logger;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\RepositoryException;
@@ -50,12 +51,22 @@ class EventEmitter
      * @throws Exception
      * @throws DatabaseConnectionException
      * @throws RepositoryException
-     * @throws SubscribeToNotAnEventException
      */
     public function publish(Event $event): void
     {
         $eventClass = get_class($event);
-        $serviceContainer = ServiceContainerProvider::getServiceContainer();
+        try {
+            $serviceContainer = ServiceContainerProvider::getServiceContainer();
+        }
+        catch (SubscribeToNotAnEventException $exception) {
+            Logger::writeToErrorLog(sprintf('%s: %s in %s:%d',
+                $exception->getCode(),
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine()
+            ));
+        }
+
 
         foreach ($this->eventListeners as $listenerEventClass => $whatever) {
             if (!is_subclass_of($eventClass, $listenerEventClass) && $eventClass !== $listenerEventClass) {
