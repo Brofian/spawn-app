@@ -11,9 +11,8 @@ abstract class AbstractCollectionBase implements Iterator, Countable
 
     protected array $collection = array();
     protected int $position;
-
-
-    public function current()
+    
+    public function current(): mixed
     {
         return $this->getByIndex($this->position);
     }
@@ -32,7 +31,7 @@ abstract class AbstractCollectionBase implements Iterator, Countable
     }
 
 
-    public function key()
+    public function key(): mixed
     {
         return $this->getCurrentKey();
     }
