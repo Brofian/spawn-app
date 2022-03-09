@@ -18,11 +18,11 @@ class AdministratorTable extends AbstractTable {
     {
         return [
             new UuidColumn('id', null),
-            new StringColumn('username', false, '', true, 1024),
+            new StringColumn('username', false, '', true, 750),
             new StringColumn('password', false, '', false, 1024),
-            new StringColumn('email', false, '', true, 1024),
+            new StringColumn('email', false, '', true, 750),
             new BooleanColumn('active', true),
-            new StringColumn('loginHash', true, null, false, '1024'),
+            new StringColumn('loginHash', true, null, false, 1024),
             new DateTimeColumn('loginExpiration'),
             new UpdatedAtColumn(),
             new CreatedAtColumn()

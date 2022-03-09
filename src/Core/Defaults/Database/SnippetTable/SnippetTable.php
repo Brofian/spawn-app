@@ -18,7 +18,7 @@ class SnippetTable extends AbstractTable {
         return [
             new UuidColumn('id', null),
             new UuidColumn('languageId', new ForeignKey('spawn_language', 'id', true, true)),
-            new StringColumn('path', false, 'text', 'languageId', 1024),
+            new StringColumn('path', false, 'text', 'languageId', 750),
             new StringColumn('value', true, null, false),
             new UpdatedAtColumn(),
             new CreatedAtColumn()

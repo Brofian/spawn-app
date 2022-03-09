@@ -36,8 +36,8 @@ class PrintSpawnCommand extends AbstractCommand {
         IO::printLine(IO::TAB . "  \__ \  / /_/ / / /| | | | /| / / /  |/ / ");
         IO::printLine(IO::TAB . " ___/ / / ____/ / ___ |_| |/ |/ / / /|  /  ");
         IO::printLine(IO::TAB . "/____(_)_/   (_)_/  |_(_)__/|__(_)_/ |_(_) ");
-        IO::printLine(IO::TAB . "-> Standard PHP Application without Norms <-");
-        IO::printLine(IO::TAB . "-> A Framework made by Fabian Holzwarth   <-");
+        IO::printLine(IO::TAB . " Selfmade PHP application website network  ");
+        IO::printLine(IO::TAB . "-> A Framework made by Fabian Holzwarth  <-");
         IO::endLine();
         IO::reset();
 

@@ -17,7 +17,7 @@ class ConfigurationTable extends AbstractTable {
     {
         return [
             new UuidColumn('id', null),
-            new StringColumn('internalName', false, '', true, 1024),
+            new StringColumn('internalName', false, '', true, 750),
             new StringColumn('type', false, 'text', false, 1024),
             new StringColumn('value', true, null, false),
             new JsonColumn('definition', false),

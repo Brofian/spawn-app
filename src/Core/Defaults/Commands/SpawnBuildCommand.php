@@ -7,7 +7,9 @@ use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableDefinition\InvalidForeignKeyConstraintException;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
@@ -39,9 +41,13 @@ class SpawnBuildCommand extends AbstractCommand  {
     }
 
     /**
-     * @throws Exception
+     * @param array $parameters
+     * @return int
      * @throws DatabaseConnectionException
+     * @throws Exception
      * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
+     * @throws InvalidForeignKeyConstraintException
      */
     public function execute(array $parameters): int  {
         $container = ServiceContainerProvider::getServiceContainer();
