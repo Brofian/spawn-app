@@ -76,8 +76,8 @@ class ListModulesCommand extends AbstractCommand {
                 $module->getId(),
                 $module->getSlug(),
                 $module->isActive() ? "Yes" : "No",
-                $module->getInformationValue("version"),
-                $module->getInformationValue("author")
+                $module->getInformation("version"),
+                $module->getInformation("author")
             ];
         }
 
