@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnBackend\Database\AdministratorTable;
 
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;

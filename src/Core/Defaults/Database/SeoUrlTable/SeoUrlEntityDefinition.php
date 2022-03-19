@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnCore\Defaults\Database\SeoUrlTable;
 
 use DateTime;
@@ -60,8 +59,8 @@ class SeoUrlEntityDefinition extends Entity
             $values['controller'],
             $values['action'],
             $values['parameters'],
-            $values['locked'],
-            $values['active'],
+            (bool)$values['locked'],
+            (bool)$values['active'],
             $values['id'],
             $values['updatedAt'],
             $values['createdAt']

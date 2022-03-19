@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnCore\Defaults\Database\ModuleTable;
 
 use DateTime;
@@ -54,7 +53,7 @@ class ModuleEntityDefinition extends Entity {
         return new static(
             $values['slug'],
             $values['path'],
-            $values['active'],
+            (bool)$values['active'],
             $values['information'],
             $values['resourceConfig'],
             $values['id'],

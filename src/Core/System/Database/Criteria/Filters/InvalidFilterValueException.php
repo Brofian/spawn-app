@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnCore\System\Database\Criteria\Filters;
 
 use SpawnCore\System\Custom\Throwables\AbstractException;

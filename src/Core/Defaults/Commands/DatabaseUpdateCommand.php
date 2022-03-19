@@ -7,6 +7,8 @@ use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Entity\TableDefinition\InvalidForeignKeyConstraintException;
 use SpawnCore\System\Database\Helpers\DatabaseStructureHelper;
 
@@ -33,6 +35,8 @@ class DatabaseUpdateCommand extends AbstractCommand {
      * @throws Exception
      * @throws DatabaseConnectionException
      * @throws InvalidForeignKeyConstraintException
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
      */
     public function execute(array $parameters): int
     {

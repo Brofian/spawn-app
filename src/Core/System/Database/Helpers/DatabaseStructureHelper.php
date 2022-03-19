@@ -7,6 +7,7 @@ use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\MigrationTable\MigrationTable;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleTable;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableDefinition\InvalidForeignKeyConstraintException;
@@ -21,6 +22,7 @@ class DatabaseStructureHelper
      * @throws DatabaseConnectionException
      * @throws InvalidForeignKeyConstraintException
      * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
      */
     public static function createDatabaseStructure(): void
     {

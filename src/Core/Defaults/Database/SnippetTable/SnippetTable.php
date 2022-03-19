@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnCore\Defaults\Database\SnippetTable;
 
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;

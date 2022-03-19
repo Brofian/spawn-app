@@ -55,6 +55,8 @@ abstract class TableRepository
         $qb = $conn->createQueryBuilder();
         $query = $qb->select('*')->from($this->tableName)->setMaxResults($limit)->setFirstResult($offset);
 
+        $criteria->computeRelations($query);
+
         $query->where($criteria->generateCriteria());
 
         /** @var EntityCollection $entityCollection */

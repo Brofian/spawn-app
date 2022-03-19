@@ -1,6 +1,4 @@
-<?php
-
-
+<?php declare(strict_types = 1);
 namespace SpawnBackend\Controller\Backend;
 
 use Exception;

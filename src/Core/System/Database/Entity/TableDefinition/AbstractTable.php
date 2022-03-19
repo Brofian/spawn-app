@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnCore\System\Database\Entity\TableDefinition;
 
 use bin\spawn\IO;
@@ -32,7 +31,6 @@ abstract class AbstractTable {
     /**
      * @throws DatabaseConnectionException
      * @throws Exception
-     * @throws InvalidForeignKeyConstraintException
      */
     final public function upsertTable(): bool
     {

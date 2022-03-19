@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnBackend\Database\Migrations;
 
 use Doctrine\DBAL\Exception;

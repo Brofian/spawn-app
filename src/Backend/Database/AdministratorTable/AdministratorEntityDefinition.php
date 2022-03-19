@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types = 1);
 namespace SpawnBackend\Database\AdministratorTable;
 
 
@@ -76,7 +75,7 @@ class AdministratorEntityDefinition extends Entity
             $values['username'],
             $values['password'],
             $values['email'],
-            $values['active'],
+            (bool)$values['active'],
             $values['loginHash'] ?? null,
             $values['loginExpiration'] ?? null,
             $values['id'] ?? null,
