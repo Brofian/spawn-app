@@ -33,7 +33,13 @@ class JsonHelper {
     }
 
     public static function validateJson(string $json): bool {
-        return (bool)json_decode($json, true);
+        try {
+            json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            return true;
+        }
+        catch (JsonConvertionException $exception) {
+            return false;
+        }
     }
 
 

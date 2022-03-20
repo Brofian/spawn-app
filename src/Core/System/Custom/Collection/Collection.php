@@ -68,7 +68,7 @@ class Collection extends AbstractCollectionBase
     }
 
     public function getArrayRange(int $limit, int $offset = 0): array {
-        if($limit < 1 || $offset < 0 || $offset >= $this->count()) {
+        if($limit < 1 || $offset < 0 || $offset > $this->count()) {
             // out of bound
             throw new OutOfBoundsException('The given range is out of the allowed bounds');
         }
