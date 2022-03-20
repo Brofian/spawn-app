@@ -82,7 +82,6 @@ abstract class TableRepository
         return $entityCollection;
     }
 
-
     /**
      * @throws DatabaseConnectionException
      * @throws InvalidRepositoryInteractionException
@@ -113,6 +112,27 @@ abstract class TableRepository
         }
 
         return true;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return int
+     * @throws DatabaseConnectionException
+     * @throws RepositoryException
+     */
+    public function count(Criteria $criteria): int {
+        $conn = DatabaseConnection::getConnection();
+        $qb = $conn->createQueryBuilder();
+        $query = $qb->select('COUNT(*) as count')->from($this->tableName);
+        $query->where($criteria->generateCriteria());
+
+        try {
+             $stmt = $conn->prepare($query->getSQL());
+             $result = $stmt->executeQuery($criteria->getParameters());
+             return (int)$result->fetchAssociative()['count'];
+        } catch (Exception $e) {
+            throw new RepositoryException($e->getMessage(), $e);
+        }
     }
 
     /**

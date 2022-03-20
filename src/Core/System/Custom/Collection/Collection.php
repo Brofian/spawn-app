@@ -2,10 +2,12 @@
 
 namespace SpawnCore\System\Custom\Collection;
 
+use OutOfBoundsException;
+
 class Collection extends AbstractCollectionBase
 {
 
-    protected array $collection = array();
+    protected array $collection = [];
     protected int $position = 0;
 
     public function add($value): void
@@ -63,6 +65,21 @@ class Collection extends AbstractCollectionBase
     public function getArray(): array
     {
         return $this->collection;
+    }
+
+    public function getArrayRange(int $limit, int $offset = 0): array {
+        if($limit < 1 || $offset < 0 || $offset >= $this->count()) {
+            // out of bound
+            throw new OutOfBoundsException('The given range is out of the allowed bounds');
+        }
+
+        $range = [];
+        $max = min($offset+$limit, $this->count());
+        for($i = $offset; $i < $max; $i++) {
+            $range[] = $this->collection[$i];
+        }
+
+        return $range;
     }
 
     protected function getByIndex(int $index)

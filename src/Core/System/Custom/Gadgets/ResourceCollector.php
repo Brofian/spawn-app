@@ -7,6 +7,7 @@ use RecursiveIteratorIterator;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SplFileInfo;
 
 class ResourceCollector
 {
@@ -107,7 +108,10 @@ class ResourceCollector
 
         FileEditor::createFolder($dest);
 
-        /** @var RecursiveIteratorIterator $iterator */
+        /**
+         * @var RecursiveIteratorIterator $iterator
+         * @var SplFileInfo $item
+         */
         foreach (
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -119,7 +123,7 @@ class ResourceCollector
                     FileEditor::createFolder($dest . '/' . $iterator->getSubPathName());
                 }
             } else {
-                copy($item, $dest . '/' . $iterator->getSubPathName());
+                copy($item->getPathname(), $dest . '/' . $iterator->getSubPathName());
             }
         }
 

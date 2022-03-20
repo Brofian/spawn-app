@@ -4,6 +4,7 @@ import AjaxDataReplace from './ajaxDataReplace.function';
 
 export default class BackendContentLinkPlugin extends Plugin {
 
+    static initializedBackEvent = false;
 
     init() {
         this.backendLinkUrlData = 'backendContentLink';
@@ -11,9 +12,23 @@ export default class BackendContentLinkPlugin extends Plugin {
         this.backendLinkUrlRewriteData = 'backendContentLinkUriRewrite';
         this.contentTargetSelector ='#backend_content';
 
+        if(!BackendContentLinkPlugin.initializedBackEvent) {
+            window.addEventListener('popstate', this.registerBackEvent.bind(this))
+            BackendContentLinkPlugin.initializedBackEvent = true;
+        }
+
         this.registerEvent();
     }
 
+
+    registerBackEvent(event) {
+        let targetSelector = history.state.selector;
+        let page = history.state.page;
+
+        AjaxDataReplace.loadAndReplaceContent(page, targetSelector);
+
+        event.preventDefault();
+    }
 
     registerEvent() {
         let event = DeviceManager.isTouchDevice() ? 'touch' : 'click';
@@ -23,7 +38,7 @@ export default class BackendContentLinkPlugin extends Plugin {
             targetSelector = this._element.dataset[this.backendTargetData];
         }
 
-        let addEntryToUri = this._element.dataset[this.backendLinkUrlRewriteData] === 'true';
+        let addEntryToUri = this._element.dataset[this.backendLinkUrlRewriteData] !== 'false';
 
         this._element.addEventListener(event, this.onSidebarLinkClick.bind(this, targetSelector, addEntryToUri));
     }
@@ -37,7 +52,12 @@ export default class BackendContentLinkPlugin extends Plugin {
         }
 
         if(addEntryToUri) {
-            window.history.pushState('', '', url);
+            var state = {
+                name: document.title,
+                page: url,
+                selector: targetSelector
+            };
+            window.history.pushState(state, '', url);
         }
 
         if(targetSelector && url) {

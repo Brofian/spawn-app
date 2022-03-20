@@ -4,7 +4,7 @@ namespace SpawnCore\System\Custom\Gadgets;
 class Stopwatch
 {
 
-    public static int $startingTime = 0;
+    public static float $startingTime = 0;
 
     public static function start(): void
     {

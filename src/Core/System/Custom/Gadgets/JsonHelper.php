@@ -20,7 +20,7 @@ class JsonHelper {
         }
     }
 
-    public static function jsonToArray(string $json, bool $throwOnError = true): string {
+    public static function jsonToArray(string $json, bool $throwOnError = true): array {
         try {
             return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         }
@@ -28,7 +28,7 @@ class JsonHelper {
             if($throwOnError) {
                 throw $exception;
             }
-            return '["error":"Could not parse JSON to array"]';
+            return ["error" => "Could not parse JSON to array"];
         }
     }
 

@@ -9,5 +9,10 @@
         <tag>event.subscriber</tag>
     </service>
 
+    <service id="system.service.pagination_helper" class="SpawnBackend\Services\PaginationHelper" static="true">
+        <argument type='service' value="system.kernel.request"/>
+        <tag>base.service</tag>
+    </service>
+
 </services>
 
