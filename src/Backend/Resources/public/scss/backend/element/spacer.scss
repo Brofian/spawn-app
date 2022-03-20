@@ -25,3 +25,10 @@
 		width: 1px;
 	}
 }
+
+.pseudo-spacer {
+	&-left 		{	margin-left: 	1rem; }
+	&-right 	{	margin-right: 	1rem; }
+	&-top 		{	margin-top: 	1rem; }
+	&-bottom 	{	margin-bottom: 	1rem; }
+}

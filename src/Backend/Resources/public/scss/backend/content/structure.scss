@@ -23,6 +23,13 @@
 	padding-right: 1rem;
 }
 
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	width: 100%;
+}
+
 @mixin structure-cols {
 	@for $i from 1 through 12 {
 		//create a shortcut for a column, that spans 1/i of the row

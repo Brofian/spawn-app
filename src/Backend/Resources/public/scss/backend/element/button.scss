@@ -62,5 +62,19 @@
 		}
 	}
 
+	&.btn-square-filled {
+		@include default_button(#3D94F6, #000000, true);
+
+		&-red {
+			@include default_button($red, #000000, true);
+		}
+		&-green {
+			@include default_button($green, #000000, true);
+		}
+		&-yellow {
+			@include default_button($yellow, #000000, true);
+		}
+	}
+
 }
 
