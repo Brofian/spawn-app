@@ -1,0 +1,48 @@
+.js-entity-select-element {
+	display: block;
+	background: $dark-gray;
+	width: 100%;
+	position: relative;
+	min-height: 2rem;
+
+	//noinspection CssUnusedSymbol
+	.js-entity-select-label {
+		padding: 0.5rem 1rem;
+		cursor: pointer;
+		line-height: 1rem;
+		min-height: 2rem;
+	}
+
+	&.opened {
+		.js-entity-select-options {
+			display: block;
+			box-shadow: 0 2px 3px 1px #262626;
+		}
+	}
+
+	.js-entity-select-options {
+		display: none;
+		position: absolute;
+		background: $dark-gray;
+		top: 100%;
+		width: 100%;
+		z-index: 999;
+
+		.js-entity-select-search {
+
+		}
+
+		//noinspection CssUnusedSymbol
+		.js-entity-select-option {
+			display: block;
+			padding: 0.2rem 1rem;
+			cursor: pointer;
+
+			&:hover {
+				background: lighten($background-dark, 20%);
+			}
+		}
+
+	}
+
+}

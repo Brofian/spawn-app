@@ -1,0 +1,31 @@
+input {
+
+	&[type="text"],
+	&[type="password"],
+	&[type="email"] {
+		background: $background-dark-highlight;
+		border: none;
+		padding: 0.5rem 1rem;
+		width: 100%;
+		color: $font-color-white;
+		font-size: 1rem;
+
+		&:focus {
+			background: $background-dark-highlight;
+		}
+
+		span + & {
+			//prev text
+		}
+
+		& + span {
+			//after text
+		}
+
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+}

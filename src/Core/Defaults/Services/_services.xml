@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<services>
+
+    <service id="system.service.configuration_manager" class="SpawnCore\Defaults\Services\ConfigurationManager" static="true">
+        <argument type='service' value="system.repository.configuration"/>
+        <tag>service</tag>
+    </service>
+
+
+    <service id="system.service.configuration_system" class="SpawnCore\Defaults\Services\ConfigurationSystem" static="true">
+        <argument type='service' value="system.repository.configuration"/>
+        <tag>service</tag>
+    </service>
+
+
+    <service id="system.service.seo_url_manager" class="SpawnCore\Defaults\Services\SeoUrlManager" static="true">
+        <argument type='service' value="system.repository.seo_urls"/>
+        <tag>service</tag>
+    </service>
+
+    <service id="system.service.snippet_system" class="SpawnCore\Defaults\Services\SnippetSystem" static="true">
+        <argument type='service' value="system.repository.snippet"/>
+        <argument type='service' value="system.repository.language"/>
+        <tag>service</tag>
+    </service>
+
+    <service id="system.service.snippet_manager" class="SpawnCore\Defaults\Services\SnippetManager" static="true">
+        <argument type='service' value="system.repository.snippet"/>
+        <argument type='service' value="system.repository.language"/>
+        <tag>service</tag>
+    </service>
+
+</services>

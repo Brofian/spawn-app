@@ -1,0 +1,71 @@
+.container {
+	padding: 1rem;
+	margin: 1rem;
+	border: 2px solid $dark-gray;
+	border-radius: 5px;
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+}
+
+.section {
+	padding: 1rem;
+	border: 1px solid $dark-gray;
+	border-radius: 5px;
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	width: 100%;
+}
+
+.inset {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	width: 100%;
+}
+
+@mixin structure-cols {
+	@for $i from 1 through 12 {
+		//create a shortcut for a column, that spans 1/i of the row
+		.col-#{$i} {
+			flex: 0 0 (100% / $i);
+			max-width: (100% / $i);
+			display: inline-flex;
+		}
+		//create a shortcut for a column, that spans 1/i*e of the row. e is always at most the same as i (= 100%) and never less than 2
+		@for $e from 2 through $i {
+			.col-#{$i}-#{$e} {
+				flex: 0 0 (100% / $i * $e);
+				max-width: (100% / $i * $e);
+				display: inline-flex;
+			}
+		}
+	}
+
+	//repeat the code above, but include the breakpoints
+	@each $breakpoint, $size in $breakpointList {
+		@include breakpoint-up($size) {
+			@for $i from 1 through 12 {
+				.col-#{$breakpoint}-#{$i} {
+					flex: 0 0 (100% / $i);
+					max-width: (100% / $i);
+					display: inline-flex;
+				}
+				@for $e from 2 through $i {
+					.col-#{$breakpoint}-#{$i}-#{$e} {
+						flex: 0 0 (100% / $i * $e);
+						max-width: (100% / $i * $e);
+					}
+					display: inline-flex;
+				}
+			}
+		}
+	}
+}
+@include structure-cols();

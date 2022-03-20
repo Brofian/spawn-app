@@ -1,0 +1,37 @@
+{% block index %}
+
+    <!doctype html>
+    <html lang="de">
+
+    {% block head %}
+        <head>
+            {% include 'backend/meta.html.twig' %}
+        </head>
+    {% endblock %}
+
+    {% block body %}
+        <body>
+
+        <div class="page-wrap">
+
+            {% block sidebar %}
+                <div id="backend_sidebar">
+                    {% include 'backend/sidebar/sidebar.html.twig' %}
+                </div>
+            {% endblock %}
+
+            {% block content %}
+                <div id="backend_content">
+                    {% include content_file %}
+                </div>
+            {% endblock %}
+
+        </div>
+
+
+
+        </body>
+    {% endblock %}
+    </html>
+
+{% endblock %}

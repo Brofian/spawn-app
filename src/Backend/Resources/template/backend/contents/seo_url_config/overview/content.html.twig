@@ -1,0 +1,13 @@
+{% block content_inner %}
+
+    {% include 'backend/contents/misc/headline.html.twig' with {
+        title: 'URL Configuration'
+    } only %}
+
+
+    <div class="container">
+        {% include 'backend/contents/seo_url_config/overview/overview_table/overview_table.html.twig' %}
+    </div>
+
+
+{% endblock %}

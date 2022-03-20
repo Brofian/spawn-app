@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<services>
+
+    <service id="system.gadget.json_helper" class="SpawnCore\System\Custom\Gadgets\JsonHelper" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.gadget.mobile_detect" class="SpawnCore\System\Custom\Gadgets\MobileDetectAdapter" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.header.helper" class="SpawnCore\System\Custom\Gadgets\HeaderHelper" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.routing.helper" class="SpawnCore\System\NavigationSystem\Navigator" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.curi.converter.helper" class="SpawnCore\System\Custom\Gadgets\CUriConverter" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.request.curi.valuebag" class="SpawnCore\System\Custom\Gadgets\ValueBag" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.twig.helper" class="SpawnCore\System\Custom\Gadgets\TwigHelper" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.scss.helper" class="SpawnCore\System\Custom\Gadgets\ScssHelper" static="true">
+        <tag>service</tag>
+    </service>
+
+    <service id="system.csrf_token.helper" class="SpawnCore\System\Custom\Gadgets\CSRFTokenAssistant" static="true">
+        <argument type="service" value="system.session.helper" />
+        <tag>service</tag>
+    </service>
+
+</services>

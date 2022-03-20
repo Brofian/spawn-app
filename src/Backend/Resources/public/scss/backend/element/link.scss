@@ -1,0 +1,28 @@
+a:link,
+a:visited {
+	text-decoration: none;
+	color: $white;
+}
+a:active,
+a:hover {
+	color: $white;
+}
+
+
+a.link {
+	&:link,
+	&:visited {
+		text-decoration: none;
+		color: $primary;
+	}
+
+	&:active,
+	&:hover {
+		color: darken($primary, 10%);
+	}
+
+	//noinspection CssUnusedSymbol
+	&.clickable {
+		cursor: pointer;
+	}
+}

@@ -1,0 +1,30 @@
+{% block headline %}
+    <div class="headline">
+
+        {% block headline_previous %}
+            <div class="headline-previous col-3">
+                {% if previous %}
+                    <a href="{{ previous }}">
+                        <span>
+                            <<<
+                        </span>
+                    </a>
+                {% endif %}
+            </div>
+        {% endblock %}
+
+        {% block headline_title %}
+            <div class="headline-title col-3">
+                {{ title }}
+            </div>
+        {% endblock %}
+
+
+        {% block headline_buttons %}
+            <div class="headline-buttons col-3">
+
+            </div>
+        {% endblock %}
+
+    </div>
+{% endblock %}

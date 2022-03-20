@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<configuration>
+
+    <collection folder="system">
+
+        <entityselectfield>
+            <name>config_system_fallback_method</name>
+            <repository>system.repository.seo_urls</repository>
+            <search>
+                <column>controller</column>
+                <column>action</column>
+            </search>
+            <identifier>id</identifier>
+            <identifier_getter>getId</identifier_getter>
+            <label>getLabel</label>
+        </entityselectfield>
+
+    </collection>
+
+    <collection folder="debug">
+
+        <textfield>
+            <name>config_debug_text</name>
+            <default>Example</default>
+        </textfield>
+
+        <numberfield>
+            <name>config_debug_number</name>
+            <default>0</default>
+            <step>0.01</step>
+        </numberfield>
+
+
+        <selectfield>
+            <name>config_debug_select</name>
+            <default>1</default>
+            <multiple>true</multiple>
+            <options>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option>C</option>
+            </options>
+        </selectfield>
+
+        <boolfield>
+            <name>config_debug_bool</name>
+            <default>false</default>
+        </boolfield>
+
+        <entityselectfield>
+            <name>config_debug_entity</name>
+            <repository>system.repository.seo_urls</repository>
+            <search> <!-- If this is given, the repository can be searched-->
+                <column>controller</column>
+                <column>action</column>
+            </search><!-- The function on the entity, that is called to get an unique identifier -->
+            <identifier>id</identifier><!-- The unique identifier column to be searched -->
+            <identifier_getter>getId</identifier_getter><!-- The function on the entity, that is called to get an unique identifier -->
+            <label>getLabel</label><!-- The function on the entity, that is called to get a label to display -->
+        </entityselectfield>
+
+    </collection>
+
+
+
+</configuration>

@@ -1,0 +1,28 @@
+$asset-path: $asset-path;
+$icon-path: $asset-path + '/icons';
+
+$default-font-size: 16px;
+$default-font-weight: 400;
+$default-font-family: 'hind_siliguri', sans-serif;
+
+$font-weight-light: 200;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+$font-weight-extra-bold: 800;
+
+$breakpoint-mobile: 480px;
+	$bp-sm: $breakpoint-mobile;
+$breakpoint-tablet: 786px;
+	$bp-md: $breakpoint-tablet;
+$breakpoint-laptop: 1024px;
+	$bp-lg: $breakpoint-laptop;
+$breakpoint-desktop: 1200px;
+	$bp-xl: $breakpoint-desktop;
+
+
+$breakpointList: (
+		'sm': $bp-sm,
+		'md': $bp-md,
+		'lg': $bp-lg,
+		'xl': $bp-xl,
+);

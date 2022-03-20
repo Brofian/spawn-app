@@ -1,0 +1,44 @@
+<table class="js-resizable-columns">
+
+    <thead>
+
+        <tr>
+
+            <th></th>
+            <th>Controller</th>
+            <th>Method</th>
+            <th>cUrl</th>
+            <th>actions</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+        {% for seo_url in seo_urls %}
+
+            {% include 'backend/contents/seo_url_config/overview/overview_table/overview_table_row.html.twig' %}
+
+        {% endfor %}
+    </tbody>
+
+</table>
+
+<div class="section">
+    {% set this_seo_url = seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction') %}
+    {% include 'backend/contents/misc/table_pagination.html.twig' with {
+        page: table_info.page,
+        availablePages: table_info.availablePages,
+        entriesPerPage: table_info.entriesPerPage,
+        tableUrl: this_seo_url,
+        getParameters: {
+            'showLocked': table_info.showLocked,
+        }
+    } only %}
+
+    <div class="seo-table--toggle-locked">
+        <input type="checkbox" id="seo_table_toggle_locked" {% if table_info.showLocked %}checked{% endif %} data-backend-content-link="{{ this_seo_url }}?showLocked={% if table_info.showLocked %}0{% else %}1{% endif %}&num={{ table_info.entriesPerPage }}&page=1"/>
+        <label for="seo_table_toggle_locked"></label>
+    </div>
+
+</div>

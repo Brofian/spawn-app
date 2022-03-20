@@ -1,5 +1,27 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
-<plugin>
-    <resources weight='1' namespace='WebuApp'>/src/Resources</resources>
+<plugin test="abc">
+
+    <resources>
+        <namespace>SpawnBackend</namespace>
+        <path>/src/Backend/Resources</path>
+        <weight>1</weight>
+        <using>
+            <namespace>exampleABC</namespace>
+        </using>
+    </resources>
+
+    <info>
+        <author>Fabian Holzwarth</author>
+        <version>1.0.0</version>
+    </info>
+
+    <services>
+        <import file="/src/Core/_core_services.xml"/>
+        <import file="/src/Backend/_backend_services.xml"/>
+    </services>
+
+
+
 </plugin>
+

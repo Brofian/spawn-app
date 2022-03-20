@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.command.debug" class="SpawnCore\Defaults\Commands\DebugCommand">
+        <argument type="service" value="system.repository.modules"/>
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.cache_clear" class="SpawnCore\Defaults\Commands\CacheClearCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.spawn_build" class="SpawnCore\Defaults\Commands\SpawnBuildCommand">
+        <argument type="service" value="system.database.helper"/>
+        <argument type="service" value="system.repository.modules"/>
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.npm_install_dependencies" class="SpawnCore\Defaults\Commands\NpmInstallCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.list_modules" class="SpawnCore\Defaults\Commands\ListModulesCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.migration_create" class="SpawnCore\Defaults\Commands\MigrationCreateCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.module_create" class="SpawnCore\Defaults\Commands\ModuleCreateCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.database_setup_minimal" class="SpawnCore\Defaults\Commands\DatabaseSetupMinimalCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.database_update" class="SpawnCore\Defaults\Commands\DatabaseUpdateCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.theme_compile" class="SpawnCore\Defaults\Commands\ThemeCompileCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.module_refresh" class="SpawnCore\Defaults\Commands\ModulesRefreshCommand">
+        <argument type="service" value="system.database.helper"/>
+        <argument type="service" value="system.repository.modules"/>
+        <argument type="service" value="system.service.seo_url_manager"/>
+        <argument type="service" value="system.service.configuration_system"/>
+        <argument type="service" value="system.service.snippet_system"/>
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.migration_execute" class="SpawnCore\Defaults\Commands\MigrationExecuteCommand">
+        <argument type="service" value="system.repository.migrations"/>
+        <argument type="service" value="system.database.helper"/>
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.spawn_setup" class="SpawnCore\Defaults\Commands\SpawnSetupCommand">
+        <tag>console.command</tag>
+    </service>
+
+    <service id="system.command.cron_queue_start" class="SpawnCore\Defaults\Commands\CronQueueCommand">
+        <tag>console.command</tag>
+    </service>
+
+
+</services>

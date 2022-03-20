@@ -1,0 +1,51 @@
+{% set neighbours = 2 %}
+
+{% set base_link = tableUrl~'?c' %}
+{% if getParameters %}
+    {% for key, param in getParameters %}
+        {% set base_link = base_link~'&'~key~'='~param %}
+    {% endfor %}
+{% endif %}
+
+{% set pag_base_link = base_link ~ '&num=' ~ entriesPerPage %}
+{% set num_base_link = base_link ~ '&page=1' %}
+
+<div class="pagination">
+
+    <div class="first-page {% if page <= 1 %}disabled{% endif %}">
+        <a {% if page > 1  %}href="{{ pag_base_link }}&page=1"{% endif %}>
+            First
+        </a>
+    </div>
+
+    {% for i in 1..availablePages %}
+        {% if i >= (page-neighbours) and i <= (page+neighbours) %}
+            <div class="index-page {% if i == page %}disabled{% endif %}">
+                <a {% if i != page %}href="{{ pag_base_link }}&page={{ i }}"{% endif %}>
+                    {{ i }}
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
+    <a {% if page < availablePages  %}href="{{ pag_base_link }}&page={{ availablePages }}"{% endif %}>
+        <div class="last-page {% if page >= availablePages %}disabled{% endif %}">
+            Last
+        </div>
+    </a>
+
+</div>
+
+{% set possibleNumbers = [10,20,50,100] %}
+<div class="numbersPerPage">
+    <label>
+        <span>Rows per page</span>
+
+        <select style="width: 50px">
+            {% for num in possibleNumbers %}
+                <option {% if entriesPerPage == num %}selected{% endif %} data-backend-content-link="{{ num_base_link }}&num={{ num }}">{{ num }}</option>
+            {% endfor %}
+        </select>
+    </label>
+</div>

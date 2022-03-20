@@ -1,0 +1,25 @@
+.signal {
+	width: 0.5em;
+	height: 0.5em;
+	display: inline-block;
+	border-radius: 50%;
+	background-color: $white;
+
+	&.red {
+		background-color: $red;
+	}
+
+	&.yellow {
+		background-color: $yellow;
+	}
+
+	&.green {
+		background-color: $green;
+	}
+
+	&.gray {
+		background-color: $gray;
+	}
+
+
+}

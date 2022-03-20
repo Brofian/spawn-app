@@ -1,0 +1,69 @@
+{% block content_inner %}
+
+    {% include 'backend/contents/misc/headline.html.twig' with {
+        title: 'URL Configuration',
+        previous: seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction')
+    } only %}
+
+    <div class="container">
+
+        <form
+            method="post"
+            action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.action]) }}"
+            data-ajax-form
+        >
+
+            {% block base_configuration %}
+                <div class="section" data-seo-url-editor="{{ seo_url.jsonParameters }}">
+
+                    <div class="col-1">SEO URL</div>
+
+                    <div class="col-10-7">
+
+                        <div class="col-1">
+                            <label>
+                                <input type="text" name="cUrl" value="{{ seo_url.cUrl }}" data-seo-url-editor-input required autocomplete="off"/>
+                            </label>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-10"></div>
+
+
+                    {% block base_configuration_active_switch %}
+                        <div class="col-10-2">
+
+                            <span class="col-3 align-self-center">Aktiv</span>
+
+                            <span class="col-3-2 align-self-center">
+                                <input type="checkbox" id="cb-active" name="active" {% if seo_url.active %}checked="checked"{% endif %}>
+                                <label for="cb-active"></label>
+                            </span>
+                        </div>
+                    {% endblock %}
+
+                    <div class="col-1"><span class="spacer-s"></span></div>
+                    <div class="col-1" data-seo-url-editor-preview></div>
+                    <div class="col-1" data-seo-url-editor-collection></div>
+
+                </div>
+            {% endblock %}
+
+
+            {% block form_submit_button %}
+
+                <div class="spacer-m"></div>
+
+                <div class="col-1">
+                    <button type="submit">Speichern</button>
+                </div>
+            {% endblock %}
+
+
+        </form>
+
+    </div>
+
+{% endblock %}

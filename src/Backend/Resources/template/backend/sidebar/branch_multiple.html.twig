@@ -1,0 +1,27 @@
+<div class="sidebar_branch_multiple">
+
+    {% block sidebar_branch_multiple_toggle %}
+        <div class="sidebar_category_toggle js-accordion">
+            {{ ('backend.sidebar.branch.title.'~sidebar_category.title)|translate }}
+        </div>
+    {% endblock %}
+
+    {% block sidebar_branch_multiple_accordion %}
+        <ul class="sidebar_category_accordion js-accordion-body">
+
+            {% for sidebar_action in sidebar_category.actions %}
+
+                <li class="sidebar_category_accordion_entry">
+                    <a href="{{ seo_url(sidebar_action.controller, sidebar_action.action) }}">
+                        {{ ('backend.sidebar.branch.title.'~sidebar_action.title)|translate }}
+                    </a>
+                </li>
+
+            {% endfor %}
+
+        </ul>
+    {% endblock %}
+
+
+</div>
+

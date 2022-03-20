@@ -1,0 +1,36 @@
+table {
+	width: 100%;
+	border: 2px solid $background-dark-highlight;
+	border-collapse: collapse;
+
+	thead {
+		th {
+			padding: 5px 1em;
+			text-align: left;
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+			border: 2px solid $background-dark-highlight;
+
+			&:not(:last-of-type) {
+				border-left: none;
+			}
+		}
+	}
+
+	tbody {
+		tr {
+			td {
+				padding: 5px 1em;
+				overflow-x: hidden;
+				text-overflow: ellipsis;
+				border: 2px solid $background-dark-highlight;
+
+				&:not(:last-of-type) {
+					border-left: none;
+				}
+			}
+		}
+	}
+
+}
+

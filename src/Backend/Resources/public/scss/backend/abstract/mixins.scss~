@@ -1,0 +1,17 @@
+@mixin breakpoint-up($bp) {
+	@media screen and (min-width: $bp) {
+		@content;
+	}
+}
+
+@mixin breakpoint-down($bp) {
+	@media screen and (min-width: $bp) {
+		@content;
+	}
+}
+
+@mixin breakpoint-between($bp-min, $bp-max) {
+	@media screen and (min-width: $bp-min max-width: $bp-max) {
+		@content;
+	}
+}

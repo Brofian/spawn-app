@@ -1,0 +1,44 @@
+{% block content_inner %}
+
+    {% include 'backend/contents/misc/headline.html.twig' with {
+        title: 'System configuration: ' ~ config_folder,
+        previous: seo_url('system.backend.system_config', 'overviewAction')
+    } only %}
+
+
+    <form
+        method="post"
+        action="{{ seo_url('system.backend.system_config', 'folderSaveSubmitAction') }}"
+        data-ajax-form
+    >
+
+        <div class="container">
+            <input type="submit" value="Speichern"/>
+        </div>
+
+
+        <div class="container column">
+
+            {% for field in config_fields %}
+
+                <div class="section">
+                    <div class="col-1">
+                        {{ field.internalName }}
+                    </div>
+
+                    {% include 'backend/contents/config/folder/elements/'~field.type~'-element.html.twig' with {
+                        field: field
+                    } only %}
+                </div>
+
+                {% if not loop.last %}
+                    <div class="spacer-m"></div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </form>
+
+
+{% endblock %}

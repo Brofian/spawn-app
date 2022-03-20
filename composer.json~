@@ -11,8 +11,8 @@
 
   "autoload": {
     "psr-4" : {
-      "SpawnBackend\\" : "src/Backend",
-      "SpawnCore\\" : "src/Core"
+      "spawnBackend\\" : "src/Backend",
+      "spawnCore\\" : "src/Core"
     }
   }
 }

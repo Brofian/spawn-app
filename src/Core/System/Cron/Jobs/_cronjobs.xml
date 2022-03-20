@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<services>
+
+    <service id="system.core.cron.job.clean_cron_queue" class="SpawnCore\System\Cron\Jobs">
+        <argument type="service" value="system.repository.crons" />
+        <tag>cron.service</tag>
+    </service>
+
+</services>
+

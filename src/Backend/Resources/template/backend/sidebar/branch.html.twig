@@ -1,0 +1,17 @@
+<li>
+
+    <div class="sidebar_branch" style="border-right: 5px solid {{ sidebar_category.color }}">
+
+        {% if sidebar_category.actions|length == 1 %}
+
+            {% include 'backend/sidebar/branch_single.html.twig' %}
+
+        {% else %}
+
+            {% include 'backend/sidebar/branch_multiple.html.twig' %}
+
+        {% endif %}
+
+    </div>
+
+</li>

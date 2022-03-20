@@ -1,0 +1,43 @@
+{% block sidebar %}
+
+    <div class="backend_sidebar_container">
+
+        <div class="backend_sidebar_top">
+            {{ 'icon_spawn'|icon('SpawnBackend', 'backend_sidebar_top_icon') }}
+        </div>
+
+        {% block sidebar_inner %}
+            <ul>
+                {% for sidebar_category in sidebar_tree %}
+                    {% include 'backend/sidebar/branch.html.twig' %}
+                {% endfor %}
+            </ul>
+        {% endblock %}
+
+        {% block sidebar_profile %}
+            <div>
+                <div class="backend_sidebar_profile js-accordion">
+                    {{ 'profile'|icon('SpawnBackend', 'backend_sidebar_profile_icon') }}
+
+                    <div class="backend_sidebar_profile_box js-accordion-body">
+
+                        {% block sidebar_profile_logout_form %}
+                            <form
+                                method="post"
+                                action="{{ seo_url('system.backend.administrator', 'logoutAction') }}"
+                                data-ajax-form>
+                                <label>
+                                    <span class="clickable">Logout</span>
+                                    <input type="submit" value="Logout" style="display: none"/>
+                                </label>
+                            </form>
+                        {% endblock %}
+
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+
+
+{% endblock %}
