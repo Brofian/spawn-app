@@ -66,12 +66,7 @@ class ServiceContainerProvider
 
     protected static ServiceContainer $serviceContainer;
 
-    /**
-     * @throws Exception
-     * @throws DatabaseConnectionException
-     * @throws RepositoryException
-     * @throws SubscribeToNotAnEventException
-     */
+
     public static function getServiceContainer(): ServiceContainer
     {
         if (!isset(self::$serviceContainer)) {

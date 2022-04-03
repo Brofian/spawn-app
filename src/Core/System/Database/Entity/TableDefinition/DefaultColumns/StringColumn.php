@@ -47,7 +47,7 @@ class StringColumn extends AbstractColumn {
 
     public function getType(): string
     {
-        return ($this->length !== null || $this->default !== null) ? ColumnTypes::STRING : ColumnTypes::TEXT;
+        return ($this->length !== null) ? ColumnTypes::STRING : ColumnTypes::TEXT;
     }
 
     public function hasFixedLength(): ?bool

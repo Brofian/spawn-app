@@ -25,8 +25,10 @@ class CSRFTokenAssistant
         $token = $this->generateToken($purpose . $microtime);
 
         $tokens = $this->sessionHelper->get(self::TOKEN_ROOT, []);
-        $tokens[$purpose][$token] = $microtime;
-        $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
+        if(count($tokens) <= 100) {
+            $tokens[$purpose][$token] = $microtime;
+            $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
+        }
 
         return $token;
     }
@@ -66,7 +68,7 @@ class CSRFTokenAssistant
         }
 
         //token ist valid: remove token from list and return true
-        unset($tokens[$purpose][$token]);
+        // unset($tokens[$purpose][$token]);
         $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
         return true;
     }
