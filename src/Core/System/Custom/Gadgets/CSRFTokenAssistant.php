@@ -25,12 +25,28 @@ class CSRFTokenAssistant
         $token = $this->generateToken($purpose . $microtime);
 
         $tokens = $this->sessionHelper->get(self::TOKEN_ROOT, []);
+        $tokens = $this->purgeStaleTokens($tokens);
+
         if(count($tokens) <= 100) {
             $tokens[$purpose][$token] = $microtime;
-            $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
         }
+        $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
 
         return $token;
+    }
+
+    protected function purgeStaleTokens(array $tokens): array {
+        $currentTime = microtime(true);
+
+        foreach($tokens as $p => $purposeTokens) {
+            foreach($purposeTokens as $t => $tokenItem) {
+                if ($currentTime - $tokenItem > self::TOKEN_LIFETIME) {
+                    unset($tokens[$p][$t]);
+                }
+            }
+        }
+
+        return $tokens;
     }
 
     protected function generateToken(string $string): string
@@ -64,13 +80,18 @@ class CSRFTokenAssistant
         $tokenLifetime = microtime(true) - $tokens[$purpose][$token];
         if ($tokenLifetime > self::TOKEN_LIFETIME) {
             unset($tokens[$purpose][$token]);
+            $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
             throw new InvalidCsrfTokenException($purpose);
         }
 
         //token ist valid: remove token from list and return true
-        // unset($tokens[$purpose][$token]);
-        $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
         return true;
+    }
+
+    public function invalidateToken(string $token, string $purpose): void {
+        $tokens = $this->sessionHelper->get(self::TOKEN_ROOT, []);
+        unset($tokens[$purpose][$token]);
+        $this->sessionHelper->set(self::TOKEN_ROOT, $tokens);
     }
 
 
