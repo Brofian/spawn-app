@@ -115,6 +115,7 @@ class SnippetSystem {
     /**
      * @throws DatabaseConnectionException
      * @throws RepositoryException
+     * @throws Exception
      */
     public function loadSnippetsFromModules(): array {
         $this->loadAvailableLanguages();
