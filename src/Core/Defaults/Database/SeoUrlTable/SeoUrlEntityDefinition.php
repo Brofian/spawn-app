@@ -9,35 +9,40 @@ use SpawnCore\System\Database\Entity\EntityTraits\EntityUpdatedAtTrait;
 
 class SeoUrlEntityDefinition extends Entity
 {
-
     use EntityIDTrait;
     use EntityUpdatedAtTrait;
     use EntityCreatedAtTrait;
 
+    protected ?string $name;
     protected string $cUrl;
     protected string $controller;
     protected string $action;
     protected array $parameters;
     protected bool $locked;
     protected bool $active;
+    protected bool $api;
 
     public function __construct(
+        ?string $name,
         string $cUrl,
         string $controller,
         string $action,
         array $parameters,
         bool $locked = false,
         bool $active = true,
+        bool $api = false,
         ?string $id = null,
         ?DateTime $createdAt = null,
         ?DateTime $updatedAt = null)
     {
+        $this->setName($name);
         $this->setCUrl($cUrl);
         $this->setController($controller);
         $this->setAction($action);
         $this->setParameters($parameters);
         $this->setLocked($locked);
         $this->setActive($active);
+        $this->setApi($api);
         $this->setId($id);
         $this->setCreatedAt($createdAt);
         $this->setUpdatedAt($updatedAt);
@@ -48,19 +53,21 @@ class SeoUrlEntityDefinition extends Entity
         return SeoUrlRepository::class;
     }
 
-    public static function getEntityFromArray(array $values): Entity
+    public static function getEntityFromArray(array $values): self
     {
         $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
         $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
         $values['parameters'] = self::getArrayFromVariable($values['parameters']??null);
 
         return new SeoUrlEntity(
+            $values['name'],
             $values['cUrl'],
             $values['controller'],
             $values['action'],
             $values['parameters'],
             (bool)$values['locked'],
             (bool)$values['active'],
+            (bool)$values['api'],
             $values['id'],
             $values['updatedAt'],
             $values['createdAt']
@@ -71,12 +78,14 @@ class SeoUrlEntityDefinition extends Entity
     {
         return [
             'id' => $this->getId(),
+            'name' => $this->getName(),
             'cUrl' => $this->getCUrl(),
             'controller' => $this->getController(),
             'action' => $this->getAction(),
             'parameters' => $this->getParameters(),
             'locked' => $this->isLocked(),
             'active' => $this->isActive(),
+            'api' => $this->isApi(),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
         ];
@@ -151,5 +160,28 @@ class SeoUrlEntityDefinition extends Entity
     {
         $this->parameters = $parameters;
     }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function isApi(): bool
+    {
+        return $this->api;
+    }
+
+    public function setApi(bool $api): self
+    {
+        $this->api = $api;
+        return $this;
+    }
+
 
 }

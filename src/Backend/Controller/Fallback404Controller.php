@@ -10,10 +10,9 @@ use SpawnCore\System\Custom\Response\SimpleResponse;
 class Fallback404Controller extends AbstractController  {
 
 
-
-
     /**
      * @route /404
+     * @name "app.fallback.404"
      * @return AbstractResponse
      */
     public function error404Action(): AbstractResponse {

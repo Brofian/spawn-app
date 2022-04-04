@@ -49,6 +49,7 @@ class SeoUrlConfigController extends AbstractBackendController {
 
     /**
      * @route /backend/seo_config/overview
+     * @name "app.backend.seo_config.overview"
      * @locked
      * @throws DatabaseConnectionException
      * @throws RepositoryException
@@ -80,10 +81,8 @@ class SeoUrlConfigController extends AbstractBackendController {
 
     /**
      * @route /backend/seo_config/edit/{}/{}
+     * @name "app.backend.seo_config.edit"
      * @locked
-     * @param string|null $ctrl
-     * @param string|null $method
-     * @return AbstractResponse
      * @throws DatabaseConnectionException
      * @throws RepositoryException
      */
@@ -98,10 +97,9 @@ class SeoUrlConfigController extends AbstractBackendController {
 
     /**
      * @route /backend/seo_config/edit/submit/{}/{}
+     * @name "app.backend.seo_config.edit.submit"
      * @locked
-     * @param string|null $ctrl
-     * @param $method
-     * @return AbstractResponse
+     * @api
      */
     public function seoUrlEditSubmitAction(string $ctrl = null, string $method = null): AbstractResponse {
         /** @var Request $request */

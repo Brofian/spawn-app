@@ -11,6 +11,9 @@ use SpawnCore\System\Custom\Gadgets\CSRFTokenAssistant;
 use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\JsonResponse;
 use SpawnCore\System\Custom\Response\TwigResponse;
+use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
+use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class AdminLoginController extends AbstractBackendController {
@@ -36,6 +39,7 @@ class AdminLoginController extends AbstractBackendController {
 
     /**
      * @route /backend/login
+     * @name "app.backend.login"
      * @locked
      * @return AbstractResponse
      */
@@ -46,6 +50,8 @@ class AdminLoginController extends AbstractBackendController {
 
     /**
      * @route /backend/login/submit
+     * @name "app.backend.login.submit"
+     * @api
      * @locked
      * @return AbstractResponse
      */
@@ -88,8 +94,13 @@ class AdminLoginController extends AbstractBackendController {
 
     /**
      * @route /backend/logout
+     * @name "app.backend.logout"
      * @locked
      * @return AbstractResponse
+     * @throws \Doctrine\DBAL\Exception
+     * @throws DatabaseConnectionException
+     * @throws SubscribeToNotAnEventException
+     * @throws RepositoryException
      */
     public function logoutAction(): AbstractResponse {
         $errors = [];

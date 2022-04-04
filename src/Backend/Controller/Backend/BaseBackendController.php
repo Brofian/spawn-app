@@ -32,6 +32,7 @@ class BaseBackendController extends AbstractBackendController {
 
     /**
      * @route /backend
+     * @name "app.backend.home"
      * @locked
      * @return AbstractResponse
      * @throws DatabaseConnectionException

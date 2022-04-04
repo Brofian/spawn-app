@@ -6,10 +6,13 @@ class SeoUrlEntity extends SeoUrlEntityDefinition
 {
 
 
-
     public function getLabel(): string {
         return $this->getController() . ' | ' . $this->getAction();
     }
 
+
+    public function compareSeoUrlEntity(SeoUrlEntity $seoUrlEntity): bool {
+        return $seoUrlEntity->toArray() === $this->toArray();
+    }
 
 }

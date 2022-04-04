@@ -109,10 +109,16 @@ class MethodInspector extends Mutable
                     $docData['return'] = $elements[0];
                     break;
                 case 'route':
-                    $docData['route'] = $elements[0];
+                    $docData['route'] = trim($elements[0], '"');
+                    break;
+                case 'name':
+                    $docData['name'] = trim($elements[0], '"');
                     break;
                 case 'locked':
                     $docData['locked'] = true;
+                    break;
+                case 'api':
+                    $docData['api'] = true;
                     break;
                 default:
                     $docData[$first][] = $elements;

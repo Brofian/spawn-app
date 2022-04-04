@@ -58,7 +58,7 @@ class ConfigurationManager {
             case ConfigurationSystem::TYPE_NUMBER:
                 return (double)$entity->getValue();
             case ConfigurationSystem::TYPE_BOOL:
-                return (bool)$entity->getValue();
+                return ($entity->getValue() === 'true');
             default:
                 // ConfigurationSystem::TYPE_TEXT,
                 // ConfigurationSystem::TYPE_SELECT,

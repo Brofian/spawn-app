@@ -53,6 +53,16 @@ class Request extends Mutable
         }
     }
 
+    public function getVars(): array {
+        return [
+            'cookies' => $this->getCookies()->getArray(),
+            'get' => $this->getGet()->getArray(),
+            'post' => $this->getPost()->getArray(),
+            'curl' => $this->getCurlValues(),
+            'uri' => $this->getRequestURI()
+        ];
+    }
+
     protected function enrichGetValueBag(): void
     {
         $this->get = new AssociativeCollection();
@@ -134,7 +144,6 @@ class Request extends Mutable
 
 
     /**
-     * @throws Exception
      * @throws DatabaseConnectionException
      * @throws RepositoryException
      */

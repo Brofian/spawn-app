@@ -170,6 +170,7 @@ class ModulesRefreshCommand extends AbstractCommand {
         $result = $this->seoUrlManager->refreshSeoUrlEntries($removeStaleActions);
 
         IO::printSuccess('> Added '.$result['added'].' Methods', 1);
+        IO::printSuccess('> Updated '.$result['updated'].' Methods', 1);
         if(isset($result['removed'])) {
             IO::printSuccess('> Removed '.$result['removed'].' Methods', 1);
         }

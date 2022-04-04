@@ -8,6 +8,7 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\HeadersSendByException;
 use SpawnCore\System\Custom\Throwables\NoActionFoundInControllerException;
 use SpawnCore\System\Custom\Throwables\NoControllerFoundException;
+use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\ServiceSystem\ServiceContainer;
@@ -93,8 +94,12 @@ class Kernel
     }
 
     /**
+     * @throws DatabaseConnectionException
+     * @throws Exception
      * @throws NoActionFoundInControllerException
      * @throws NoControllerFoundException
+     * @throws RepositoryException
+     * @throws SubscribeToNotAnEventException
      */
     public function handle(): void
     {
@@ -104,10 +109,13 @@ class Kernel
 
     /**
      * @return string
+     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws HeadersSendByException
      * @throws LoaderError
+     * @throws RepositoryException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws HeadersSendByException
      */
     public function getAnswer(): string
     {

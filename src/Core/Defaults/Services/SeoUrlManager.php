@@ -2,7 +2,9 @@
 
 namespace SpawnCore\Defaults\Services;
 
+use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
+use http\Exception\RuntimeException;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlTable;
@@ -28,11 +30,7 @@ class SeoUrlManager {
     protected SeoUrlRepository $seoUrlRepository;
     protected ServiceContainer $serviceContainer;
 
-    /**
-     * @throws DatabaseConnectionException
-     * @throws Exception
-     * @throws RepositoryException
-     */
+
     public function __construct(
         SeoUrlRepository $seoUrlRepository
     )
@@ -111,44 +109,77 @@ class SeoUrlManager {
      */
     public function refreshSeoUrlEntries(bool $removeStaleEntries = true): array
     {
-        /** @var EntityCollection $registeredSeoUrls */
-        $registeredSeoUrls = $this->getSeoUrls();
+        /** @var SeoUrlEntity[] $registeredSeoUrls */
+        $registeredSeoUrls = [];
+        /** @var SeoUrlEntity $seoUrl */
+        foreach($this->getSeoUrls(false) as $seoUrl) {
+            $registeredSeoUrls[$seoUrl->getName()] = $seoUrl;
+        }
+
         /** @var ClassInspector[string] $availableControllers */
         $availableControllers = $this->getEveryController();
 
         $result = [
-            'added' => 0
+            'added' => 0,
+            'updated' => 0
         ];
         // Add controller actions, that have no entry in the database yet
+        /**
+         * @var string $controllerServiceId
+         * @var ClassInspector $inspectedController
+         */
         foreach($availableControllers as $controllerServiceId => $inspectedController) {
             foreach($inspectedController->getLoadedMethods() as $inspectedMethod) {
-                $isNew = true;
+                $cUrl = $inspectedMethod->getTag('route', '');
+                $isLocked = $inspectedMethod->getTag('locked', false);
+                $name = $inspectedMethod->getTag('name', null);
+                $isApi = $inspectedMethod->getTag('api', false);
 
-                /** @var SeoUrlEntity $registeredSeoUrl */
-                foreach($registeredSeoUrls->getArray() as $registeredSeoUrl) {
-                    if( $registeredSeoUrl->getController() == $controllerServiceId &&
-                        $registeredSeoUrl->getAction() == $inspectedMethod->getMethodName())
-                    {
-                        $isNew = false;
-                        break;
-                    }
+                if(!$name) {
+                    IO::printWarning('# Missing tag "@name" in action definition in ' . $controllerServiceId);
+                    continue;
+                }
+                if(!$cUrl) {
+                    IO::printWarning('# Missing tag "@route" in action definition in ' . $controllerServiceId);
+                    continue;
                 }
 
-                if($isNew) {
+                if(!isset($registeredSeoUrls[$name])) {
 
-                    $this->seoUrlRepository->upsert(
-                        new SeoUrlEntity(
-                            $inspectedMethod->getTag('route', ''),
-                            $controllerServiceId,
-                            $inspectedMethod->getMethodName(),
-                            $inspectedMethod->getParameters(),
-                            $inspectedMethod->getTag('locked', false),
-                            true,
-                        )
+                    $seoUrl = new SeoUrlEntity(
+                        $name,
+                        $cUrl,
+                        $controllerServiceId,
+                        $inspectedMethod->getMethodName(),
+                        $inspectedMethod->getParameters(),
+                        $isLocked,
+                        false,
+                        $isApi
                     );
+
+                    $this->seoUrlRepository->upsert($seoUrl);
+                    $registeredSeoUrls[$name] = $seoUrl;
                     $result['added']++;
                 }
+                else {
+                    $seoUrl = $registeredSeoUrls[$name];
+                    $oldSeoUrl = clone $seoUrl;
 
+                    $seoUrl->setLocked($isLocked);
+                    $seoUrl->setController($controllerServiceId);
+                    $seoUrl->setAction($inspectedMethod->getMethodName());
+                    $seoUrl->setParameters($inspectedMethod->getParameters());
+                    $seoUrl->setApi($isApi);
+                    if($isLocked) {
+                        $seoUrl->setCUrl($cUrl);
+                    }
+
+
+                    if(!$seoUrl->compareSeoUrlEntity($oldSeoUrl)) {
+                        $this->seoUrlRepository->upsert($seoUrl);
+                        $result['updated']++;
+                    }
+                }
             }
         }
 
@@ -159,7 +190,7 @@ class SeoUrlManager {
             $result['removed'] = 0;
 
             /** @var SeoUrlEntity $registeredSeoUrl */
-            foreach($registeredSeoUrls->getArray() as $registeredSeoUrl) {
+            foreach($registeredSeoUrls as $registeredSeoUrl) {
                 $isInUse = false;
 
                 /**
@@ -168,11 +199,10 @@ class SeoUrlManager {
                  */
                 foreach($availableControllers as $controllerServiceId => $inspectedController) {
                     foreach($inspectedController->getLoadedMethods() as $inspectedMethod) {
-                        if( $registeredSeoUrl->getController() == $controllerServiceId &&
-                            $registeredSeoUrl->getAction() == $inspectedMethod->getMethodName())
-                        {
+                        $name = $inspectedMethod->getTag('name', '');
+                        if($name && $name === $registeredSeoUrl->getName()) {
                             $isInUse = true;
-                            break;
+                            break 2;
                         }
                     }
                 }

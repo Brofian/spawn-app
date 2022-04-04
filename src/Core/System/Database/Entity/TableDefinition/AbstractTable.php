@@ -44,7 +44,7 @@ abstract class AbstractTable {
 
             if($schema->hasTable($tableName)) {
                 //update
-                IO::printLine(IO::TAB.":: Updating Table \"$tableName\"", IO::YELLOW_TEXT);
+                IO::printLine(IO::TAB.":: Updating Table \"$tableName\"", IO::YELLOW_TEXT, 1);
                 $this->updateTable($schema);
             }
             else {
@@ -64,7 +64,7 @@ abstract class AbstractTable {
             }
             $steps = count($schemaDiffSql);
 
-            IO::printLine(IO::TAB.":: Updated table \"$tableName\" in $steps Steps!", IO::GREEN_TEXT);
+            IO::printLine(IO::TAB.":: Updated table \"$tableName\" in $steps Steps!", IO::GREEN_TEXT, $steps ? 0 : 1);
         }
         catch(Exception|DatabaseConnectionException|\Exception $e) {
             IO::printLine(IO::TAB.":: Error! Could not create or update table \"$tableName\"!", IO::RED_TEXT);

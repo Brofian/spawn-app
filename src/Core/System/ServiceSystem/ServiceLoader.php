@@ -72,10 +72,10 @@ class ServiceLoader
                 $service->setDecorates($serviceTag->getAttribute("decorates"));
             }
             if ($serviceTag->getAttribute("abstract")) {
-                $service->setAbstract($serviceTag->getAttribute("abstract") != "");
+                $service->setAbstract($serviceTag->getAttribute("abstract") !== "");
             }
             if ($serviceTag->getAttribute("static")) {
-                $service->setStatic($serviceTag->getAttribute("static") != "");
+                $service->setStatic($serviceTag->getAttribute("static") !== "");
             }
 
             /** @var XMLContentModel[] $tagElements */
