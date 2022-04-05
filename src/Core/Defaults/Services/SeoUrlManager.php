@@ -69,13 +69,6 @@ class SeoUrlManager {
         return $stmt->executeQuery()->fetchAssociative()['count'];
     }
 
-    /**
-     * @param string $controller
-     * @param string $method
-     * @return SeoUrlEntity|null
-     * @throws DatabaseConnectionException
-     * @throws RepositoryException
-     */
     public function getSeoUrl(string $controller, string $method): ?SeoUrlEntity
     {
         return $this->seoUrlRepository->search(
@@ -86,12 +79,19 @@ class SeoUrlManager {
         )->first();
     }
 
-    /**
-     * @param SeoUrlEntity $seoUrlEntity
-     * @throws Exception
-     * @throws WrongEntityForRepositoryException
-     * @throws DatabaseConnectionException
-     */
+
+    public function getSeoUrlFromId(string $id): ?SeoUrlEntity {
+        return $this->seoUrlRepository->search(
+            new Criteria(new EqualsFilter('id', UUID::hexToBytes($id)))
+        )->first();
+    }
+
+    public function getSeoUrlFromName(string $name): ?SeoUrlEntity {
+        return $this->seoUrlRepository->search(
+            new Criteria(new EqualsFilter('name', $name))
+        )->first();
+    }
+
     public function saveSeoUrlEntity(SeoUrlEntity $seoUrlEntity): void {
         $this->seoUrlRepository->upsert($seoUrlEntity);
     }

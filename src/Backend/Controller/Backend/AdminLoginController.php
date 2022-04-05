@@ -74,8 +74,8 @@ class AdminLoginController extends AbstractBackendController {
             $this->csrfTokenAssistant->validateToken($post->get('csrf'), 'admin.login.token');
 
             $this->adminLoginManager->tryAdminLogin(
-                $post->get('username'),
-                $post->get('password')
+                (string)$post->get('username'),
+                (string)$post->get('password')
             );
         }
         catch (Exception $e) {

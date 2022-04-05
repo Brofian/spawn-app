@@ -50,8 +50,8 @@ class SystemConfigController extends AbstractBackendController {
                 'color' => "#00ff00", //Kategory color
                 'actions' => [
                     [
-                        'controller' => '%self.key%',
-                        'action' => 'overviewAction',
+                        'route' => 'app.backend.config.overview',
+                        'parameters' => [],
                         'title' => 'system_config'
                     ]
                 ]

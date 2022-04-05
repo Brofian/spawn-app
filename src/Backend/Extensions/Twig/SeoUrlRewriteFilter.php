@@ -18,17 +18,12 @@ class SeoUrlRewriteFilter extends FunctionExtension {
 
     protected function getFunctionFunction(): callable
     {
-        return static function ($controller = null, $action = null, array $parameters = []) {
-
-            if(!preg_match('/^.*Action$/m', $action)) {
-                $action .= 'Action';
-            }
+        return static function (string $name, array $parameters = []) {
 
             /** @var Navigator $routingHelper */
             $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
-
-            return $routingHelper->getSeoLinkByParameters($controller, $action, $parameters);
+            return $routingHelper->getSeoLinkByParameters($name, $parameters);
         };
     }
 

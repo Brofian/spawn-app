@@ -38,8 +38,8 @@ class SeoUrlConfigController extends AbstractBackendController {
                 'color' => "#00ff00",
                 'actions' => [
                     [
-                        'controller' => '%self.key%',
-                        'action' => 'seoUrlOverviewAction',
+                        'route' => 'app.backend.seo_config.overview',
+                        'parameters' => [],
                         'title' => 'seo_config'
                     ]
                 ]
@@ -80,14 +80,12 @@ class SeoUrlConfigController extends AbstractBackendController {
     }
 
     /**
-     * @route /backend/seo_config/edit/{}/{}
+     * @route /backend/seo_config/edit/{}
      * @name "app.backend.seo_config.edit"
      * @locked
-     * @throws DatabaseConnectionException
-     * @throws RepositoryException
      */
-    public function seoUrlEditAction(string $ctrl, string $method): AbstractResponse {
-        $seoUrl = $this->seoUrlManager->getSeoUrl($ctrl, $method);
+    public function seoUrlEditAction(string $seoUrlId): AbstractResponse {
+        $seoUrl = $this->seoUrlManager->getSeoUrlFromId($seoUrlId);
 
         $this->twig->assign('seo_url', $seoUrl);
         $this->twig->assign('content_file', 'backend/contents/seo_url_config/edit/content.html.twig');

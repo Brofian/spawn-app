@@ -2,7 +2,6 @@
 
 namespace spawnCore\System\NavigationSystem;
 
-use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository;
 use SpawnCore\Defaults\Services\ConfigurationManager;
@@ -10,19 +9,16 @@ use SpawnCore\System\Custom\Gadgets\CUriConverter;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;
-use SpawnCore\System\Database\Criteria\Filters\AndFilter;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Entity\RepositoryException;
-use SpawnCore\System\ServiceSystem\Service;
 use SpawnCore\System\ServiceSystem\ServiceContainer;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class Navigator
 {
     public const FALLBACK_CONFIG = 'config_system_fallback_method';
-    protected string $fallbackService = 'system.fallback.404';
-    protected string $fallbackAction = 'error404Action';
 
+    protected SeoUrlEntity $fallbackEntity;
     protected ServiceContainer $serviceContainer;
     protected SeoUrlRepository $seoUrlRepository;
 
@@ -30,7 +26,6 @@ class Navigator
     /**
      * @throws DatabaseConnectionException
      * @throws RepositoryException
-     * @throws Exception
      */
     public function __construct()
     {
@@ -43,44 +38,23 @@ class Navigator
         $configurationManager = $this->serviceContainer->getServiceInstance('system.service.configuration_manager');
         $fallbackActionID = $configurationManager->getConfiguration(self::FALLBACK_CONFIG);
         if($fallbackActionID) {
-            $seoUrlEntity = $this->seoUrlRepository->search(new Criteria(new EqualsFilter('id', UUID::hexToBytes($fallbackActionID))))->first();
-            if($seoUrlEntity instanceof SeoUrlEntity) {
-                $this->fallbackAction = $seoUrlEntity->getAction();
-                $this->fallbackService = $seoUrlEntity->getController();
-            }
+            $this->fallbackEntity = $this->seoUrlRepository->search(new Criteria(new EqualsFilter('id', UUID::hexToBytes($fallbackActionID))))->first();
         }
     }
 
 
-    public function route(string $controller, string $action, ?Service &$controllerCls, ?string &$actionStr): void
+    /**
+     * Get a seo url entity by the provided route
+     */
+    public function route(string $name): SeoUrlEntity
     {
-        if ($controller === "" || $action === "") {
-            $controllerCls = $this->serviceContainer->getService($this->fallbackService);
-            $actionStr = $this->fallbackAction;
-            return;
+        if (!$name) {
+            return $this->fallbackEntity;
         }
 
-        //find service
-        $controllerCls = $this->serviceContainer->getService($controller);
-        if (!$controllerCls) {
-            //controller does not exist
-            $controllerCls = $this->serviceContainer->getService($this->fallbackService);
-            $actionStr = $this->fallbackAction;
-            return;
-        }
+        $seoUrlEntity = $this->getSeoUrlByName($name);
 
-        if (!preg_match('/^.*Action$/m', $action)) {
-            $actionStr = $action . "Action";
-        } else {
-            $actionStr = $action;
-        }
-
-        if (!method_exists($controllerCls->getClass(), $actionStr)) {
-            //action does not exist
-            $controllerCls = $this->serviceContainer->getService($this->fallbackService);
-            $actionStr = $this->fallbackAction;
-            return;
-        }
+        return $seoUrlEntity ?? $this->fallbackEntity;
     }
 
 
@@ -88,12 +62,11 @@ class Navigator
      * @throws DatabaseConnectionException
      * @throws RepositoryException
      */
-    public function rewriteURL(string $original, array &$values): string
+    public function rewriteURL(string $original, array &$values): SeoUrlEntity
     {
-
         $original = trim($original, '/? #');
-        if ($original === '' || $original !== '') {
-            $original = '/' . $original;
+        if (strpos($original, '/') !== 0) {
+            $original = '/'.$original;
         }
         //$original = "/[whatever]"
 
@@ -110,54 +83,43 @@ class Navigator
             $hasMatched = preg_match($regex, $original, $matches);
 
             if ($hasMatched) {
-
-                for ($i = 1, $iMax = count($matches); $i < $iMax; $i++) {
-                    $values[] = $matches[$i];
-                }
-
-                return self::getFormattedLink($seo_url->getController(), $seo_url->getAction());
+                array_shift($matches);
+                $values = array_values($matches);
+                return $seo_url;
             }
         }
 
-        return self::getFormattedLink($this->fallbackService, $this->fallbackAction);
+        return $this->fallbackEntity;
     }
 
-    public static function getFormattedLink(string $controller, string $action): string
-    {
-        return "/?controller=$controller&action=$action";
-    }
 
-    /**
-     * @throws DatabaseConnectionException
-     * @throws RepositoryException
-     */
-    public function getSeoLinkByParameters(?string $controller, ?string $action, array $parameters = []): string
+    public function getSeoLinkByParameters(string $name, array $parameters = []): string
     {
-
-        if ($controller === null || $action === null) {
-            return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
+        if (!$name) {
+            return $this->getSeoUrlFromEntity($this->fallbackEntity, $parameters);
         }
 
-        $seoUrlCollection = $this->seoUrlRepository->search(
+        $seoUrl = $this->getSeoUrlByName($name);
+
+        return $this->getSeoUrlFromEntity($seoUrl ?? $this->fallbackEntity, $parameters);
+    }
+
+
+    public function getSeoUrlFromEntity(SeoUrlEntity $seoUrlEntity, array $parameters): string {
+        return CUriConverter::cUriToUri($seoUrlEntity->getCUrl(), $parameters);
+    }
+
+
+    protected function getSeoUrlByName(string $name): ?SeoUrlEntity {
+        return $this->seoUrlRepository->search(
             new Criteria(
-                new AndFilter(
-                    new EqualsFilter('controller', $controller),
-                    new EqualsFilter('action', $action)
-                )
+                new EqualsFilter('name', $name)
             )
-        );
-
-
-        $seoUrl = $seoUrlCollection->first();
-
-
-        if ($seoUrl instanceof SeoUrlEntity) {
-            $cUrl = $seoUrl->getCUrl();
-            return CUriConverter::cUriToUri($cUrl, $parameters);
-        }
-
-        return self::getSeoLinkByParameters($this->fallbackService, $this->fallbackAction);
+        )->first();
     }
 
+    public function getFallbackEntity(): SeoUrlEntity {
+        return $this->fallbackEntity;
+    }
 
 }

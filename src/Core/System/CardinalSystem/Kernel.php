@@ -96,10 +96,7 @@ class Kernel
     /**
      * @throws DatabaseConnectionException
      * @throws Exception
-     * @throws NoActionFoundInControllerException
-     * @throws NoControllerFoundException
      * @throws RepositoryException
-     * @throws SubscribeToNotAnEventException
      */
     public function handle(): void
     {

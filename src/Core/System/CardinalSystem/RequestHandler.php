@@ -7,9 +7,6 @@ use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\JsonResponse;
 use SpawnCore\System\Custom\Response\SimpleResponse;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
-use SpawnCore\System\Custom\Throwables\NoActionFoundInControllerException;
-use SpawnCore\System\Custom\Throwables\NoControllerFoundException;
-use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\EventSystem\EventEmitter;
 use SpawnCore\System\EventSystem\Events\RequestRoutedEvent;
@@ -27,12 +24,6 @@ class RequestHandler
     protected array $cUrlValues;
 
 
-    /**
-     * @throws DatabaseConnectionException
-     * @throws Exception
-     * @throws RepositoryException
-     * @throws SubscribeToNotAnEventException
-     */
     public function __construct()
     {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
@@ -41,8 +32,6 @@ class RequestHandler
     /**
      * @throws DatabaseConnectionException
      * @throws Exception
-     * @throws NoActionFoundInControllerException
-     * @throws NoControllerFoundException
      * @throws RepositoryException
      */
     public function handleRequest(): void
@@ -53,8 +42,6 @@ class RequestHandler
 
 
     /**
-     * @throws NoActionFoundInControllerException
-     * @throws NoControllerFoundException
      * @throws Exception
      * @throws DatabaseConnectionException
      * @throws RepositoryException
@@ -66,28 +53,23 @@ class RequestHandler
         /** @var Request $request */
         $request = $this->serviceContainer->getServiceInstance('system.kernel.request');
         $this->cUrlValues = $request->getCurlValues();
-        $getBag = $request->getGet();
+        $seoUrlEntity = $request->getSeoUrl();
+        if(!$seoUrlEntity) {
+            $routingHelper->getFallbackEntity();
+        }
+/*
+        else {
+            $seoUrlEntity = $routingHelper->route($getBag->get('name'));
+        }
+*/
 
-        $routingHelper->route(
-            $getBag->get('controller') ?? "",
-            $getBag->get('action') ?? "",
-            $this->controllerService,
-            $this->actionMethod
-        );
 
-        $event = new RequestRoutedEvent($request, $this->controllerService, $this->actionMethod);
+        $event = new RequestRoutedEvent($request, $this->serviceContainer->getService($seoUrlEntity->getController()), $seoUrlEntity->getAction());
         EventEmitter::get()->publish($event);
         $this->controllerService = $event->getControllerService();
         $this->actionMethod = $event->getMethod();
-
-        if (!$this->controllerService) {
-            throw new NoControllerFoundException($getBag->get('controller'));
-        }
-
-        if (!$this->actionMethod) {
-            throw new NoActionFoundInControllerException($getBag->get('controller'), $getBag->get('action'));
-        }
     }
+
 
     protected function callControllerMethod(): void
     {

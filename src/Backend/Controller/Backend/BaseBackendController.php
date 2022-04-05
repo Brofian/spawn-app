@@ -21,8 +21,8 @@ class BaseBackendController extends AbstractBackendController {
                 'color' => "#ff0000", //Category color
                 'actions' => [ //Category actions
                     [
-                        'controller' => '%self.key%',
-                        'action' => 'homeAction', //action
+                        'route' => 'app.backend.home',
+                        'parameters' => [],
                         'title' => 'testaction' //action title
                     ]
                 ]

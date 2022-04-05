@@ -2,14 +2,14 @@
 
     {% include 'backend/contents/misc/headline.html.twig' with {
         title: 'URL Configuration',
-        previous: seo_url('system.backend.seo_url_config', 'seoUrlOverviewAction')
+        previous: seo_url('app.backend.seo_config.overview')
     } only %}
 
     <div class="container">
 
         <form
             method="post"
-            action="{{ seo_url('system.backend.seo_url_config', 'seoUrlEditSubmitAction', [seo_url.controller, seo_url.action]) }}"
+            action="{{ seo_url('app.backend.seo_config.edit.submit', [seo_url.controller, seo_url.action]) }}"
             data-ajax-form
         >
 

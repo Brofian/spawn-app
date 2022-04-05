@@ -8,6 +8,7 @@ namespace SpawnCore\System\CardinalSystem;
 
 
 use Doctrine\DBAL\Exception;
+use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
 use SpawnCore\System\Custom\Gadgets\Logger;
@@ -29,9 +30,10 @@ class Request extends Mutable
     protected string $requestMethod;
     protected bool $isHttps;
 
+    protected ?SeoUrlEntity $seoUrl = null;
+
     /**
      * @throws DatabaseConnectionException
-     * @throws Exception
      * @throws RepositoryException
      */
     public function __construct()
@@ -149,28 +151,13 @@ class Request extends Mutable
      */
     protected function checkForRewriteUrl(): void
     {
-
-        if ($this->get->get('controller') !== null && $this->get->get('action') !== null) {
-            return;
-        }
-
         /** @var Navigator $routingHelper */
         $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
-        $newURL = $routingHelper->rewriteURL(
+        $this->seoUrl = $routingHelper->rewriteURL(
             $this->requestPath,
             $this->curl_values
         );
-
-        $parts = parse_url($newURL);
-        if (isset($parts['query'])) {
-            //read and add get parameters
-            parse_str($parts['query'], $query);
-
-            foreach ($query as $key => $value) {
-                $this->get->set($key, $value);
-            }
-        }
     }
 
 
@@ -204,5 +191,8 @@ class Request extends Mutable
         return $this->requestURI;
     }
 
+    public function getSeoUrl(): ?SeoUrlEntity {
+        return $this->seoUrl;
+    }
 
 }

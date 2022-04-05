@@ -1,12 +1,8 @@
 {% set sidebar_action = sidebar_category.actions|first %}
 
 
-{% if sidebar_action.controller and sidebar_action.action %}
-    {% set seo = seo_url(sidebar_action.controller, sidebar_action.action) %}
-{% endif %}
-
 <div class="sidebar_branch_single">
-    <a href="{{ seo }}">
+    <a {% if sidebar_action.route %}href="{{ seo_url(sidebar_action.route, sidebar_action.parameters) }}"{% endif %}>
         {{ ('backend.sidebar.branch.title.'~sidebar_category.title)|translate }}
     </a>
 </div>

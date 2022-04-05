@@ -2,13 +2,13 @@
 
     {% include 'backend/contents/misc/headline.html.twig' with {
         title: 'System configuration: ' ~ config_folder,
-        previous: seo_url('system.backend.system_config', 'overviewAction')
+        previous: seo_url('app.backend.config.overview')
     } only %}
 
 
     <form
         method="post"
-        action="{{ seo_url('system.backend.system_config', 'folderSaveSubmitAction') }}"
+        action="{{ seo_url('app.backend.config.folder.submit') }}"
         data-ajax-form
     >
 

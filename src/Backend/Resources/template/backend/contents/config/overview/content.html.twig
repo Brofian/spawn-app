@@ -10,7 +10,7 @@
         <ul class="button-list ">
             {% for folder in available_folders %}
                 <li>
-                    <a href="{{ seo_url('system.backend.system_config', 'folder', [folder]) }}">
+                    <a href="{{ seo_url('app.backend.config.folder', [folder]) }}">
                         <div class="button-list-element">
                             {{ folder }}
                         </div>
