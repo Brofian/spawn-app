@@ -16,18 +16,24 @@ class AnalysisEntityDefinition extends Entity
     protected ?string $url_id;
     protected ?string $dataJson;
     protected bool $bot;
+    protected string $ipHash;
+    protected int $count;
 
 
     public function __construct(
         ?string $url_id,
         ?string $dataJson,
         bool $bot,
+        string $ipHash,
+        int $count = 1,
         ?string $id = null,
         ?DateTime $createdAt = null
     )
     {
+        $this->setIpHash($ipHash);
         $this->setBot($bot);
         $this->setUrlId($url_id);
+        $this->setCount($count);
         $this->setDataJson($dataJson);
         $this->setId($id);
         $this->setCreatedAt($createdAt);
@@ -46,6 +52,8 @@ class AnalysisEntityDefinition extends Entity
             'urlId' => $this->getUrlId(),
             'data' => $this->getDataJson(),
             'bot' => $this->isBot(),
+            'count' => $this->getCount(),
+            'ipHash' => $this->getIpHash(),
             'createdAt' => $this->getCreatedAt(),
         ];
     }
@@ -58,6 +66,8 @@ class AnalysisEntityDefinition extends Entity
             $values['urlId'],
             $values['data'],
             (bool)$values['bot'],
+            $values['ipHash'],
+            (int)$values['count'],
             $values['id'] ?? null,
             $values['createdAt'] ?? null,
         );
@@ -96,8 +106,27 @@ class AnalysisEntityDefinition extends Entity
         return $this;
     }
 
+    public function getIpHash(): string
+    {
+        return $this->ipHash;
+    }
 
+    public function setIpHash(string $ipHash): self
+    {
+        $this->ipHash = $ipHash;
+        return $this;
+    }
 
+    public function getCount(): int
+    {
+        return $this->count;
+    }
+
+    public function setCount(int $count): self
+    {
+        $this->count = $count;
+        return $this;
+    }
 
 
 }

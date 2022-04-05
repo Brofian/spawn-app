@@ -7,6 +7,7 @@ use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Entity\Entity;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableRepository;
+use SpawnCore\System\Database\Helpers\DatabaseConnection;
 
 class AnalysisRepository extends TableRepository {
 
@@ -25,6 +26,7 @@ class AnalysisRepository extends TableRepository {
     protected function prepareValuesForUpdate(array $updateValues): array
     {
         $updateValues['id'] = UUID::hexToBytes($updateValues['id']);
+        $updateValues['urlId'] = $updateValues['urlId'] ? UUID::hexToBytes($updateValues['urlId']) : null;
 
         return $updateValues;
     }
@@ -41,7 +43,7 @@ class AnalysisRepository extends TableRepository {
      */
     protected function prepareValuesForInsert(array $values): array
     {
-        $now = new DateTime();
+        $now = new DateTime("midnight");
 
         $values['id'] = UUID::randomBytes();
         $values['urlId'] = $values['urlId'] ? UUID::hexToBytes($values['urlId']) : null;
@@ -64,5 +66,6 @@ class AnalysisRepository extends TableRepository {
         $values['id'] = UUID::bytesToHex($values['id']);
         $values['urlId'] = $values['urlId'] ? UUID::bytesToHex($values['urlId']) : null;
     }
+
 
 }

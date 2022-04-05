@@ -2,9 +2,11 @@
 
 namespace spawnCore\System\NavigationSystem;
 
+use SpawnBackend\Controller\Fallback404Controller;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository;
 use SpawnCore\Defaults\Services\ConfigurationManager;
+use SpawnCore\System\Cron\CronStates;
 use SpawnCore\System\Custom\Gadgets\CUriConverter;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
@@ -37,9 +39,16 @@ class Navigator
         /** @var ConfigurationManager $configurationManager */
         $configurationManager = $this->serviceContainer->getServiceInstance('system.service.configuration_manager');
         $fallbackActionID = $configurationManager->getConfiguration(self::FALLBACK_CONFIG);
+        $fallbackEntity = false;
         if($fallbackActionID) {
-            $this->fallbackEntity = $this->seoUrlRepository->search(new Criteria(new EqualsFilter('id', UUID::hexToBytes($fallbackActionID))))->first();
+            $fallbackEntity = $this->seoUrlRepository->search(new Criteria(new EqualsFilter('id', UUID::hexToBytes($fallbackActionID))))->first();
         }
+
+        if(!$fallbackEntity) {
+            $fallbackEntity = $this->seoUrlRepository->search(new Criteria(new EqualsFilter('name', 'app.fallback.404')))->first();
+        }
+
+        $this->fallbackEntity = $fallbackEntity;
     }
 
 
@@ -64,10 +73,7 @@ class Navigator
      */
     public function rewriteURL(string $original, array &$values): SeoUrlEntity
     {
-        $original = trim($original, '/? #');
-        if (strpos($original, '/') !== 0) {
-            $original = '/'.$original;
-        }
+        $original = '/'.trim($original, '/? #');
         //$original = "/[whatever]"
 
 

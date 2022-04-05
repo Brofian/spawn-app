@@ -63,7 +63,6 @@ class RequestHandler
         }
 */
 
-
         $event = new RequestRoutedEvent($request, $this->serviceContainer->getService($seoUrlEntity->getController()), $seoUrlEntity->getAction());
         EventEmitter::get()->publish($event);
         $this->controllerService = $event->getControllerService();

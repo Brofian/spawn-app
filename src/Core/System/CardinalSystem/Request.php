@@ -28,9 +28,10 @@ class Request extends Mutable
     protected string $requestHostName;
     protected string $requestPath;
     protected string $requestMethod;
+    protected string $clientIp;
     protected bool $isHttps;
 
-    protected ?SeoUrlEntity $seoUrl = null;
+    protected SeoUrlEntity $seoUrl;
 
     /**
      * @throws DatabaseConnectionException
@@ -47,6 +48,7 @@ class Request extends Mutable
         $this->enrichRequestPath();
         $this->enrichRequestURI();
         $this->enrichRequestMethod();
+        $this->enrichClientIp();
 
         $this->checkForRewriteUrl();
 
@@ -61,7 +63,8 @@ class Request extends Mutable
             'get' => $this->getGet()->getArray(),
             'post' => $this->getPost()->getArray(),
             'curl' => $this->getCurlValues(),
-            'uri' => $this->getRequestURI()
+            'uri' => $this->getRequestURI(),
+            'seoUrl' => $this->getSeoUrl() ? $this->getSeoUrl()->getName() : ''
         ];
     }
 
@@ -161,6 +164,16 @@ class Request extends Mutable
     }
 
 
+    public function enrichClientIp(): void
+    {
+        $remoteAddr = $_SERVER['REMOTE_ADDR'];
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] && in_array($remoteAddr, TRUSTED_PROXIES, true)) {
+            $remoteAddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
+        $this->clientIp = filter_var($remoteAddr, FILTER_VALIDATE_IP) ?? '0.0.0.0';
+    }
+
     public function writeAccessLogEntry(): void
     {
         Logger::writeToAccessLog("Call to \"{$this->requestURI}\"");
@@ -191,8 +204,11 @@ class Request extends Mutable
         return $this->requestURI;
     }
 
-    public function getSeoUrl(): ?SeoUrlEntity {
+    public function getSeoUrl(): SeoUrlEntity {
         return $this->seoUrl;
     }
 
+    public function getClientIp(): string {
+        return $this->clientIp;
+    }
 }

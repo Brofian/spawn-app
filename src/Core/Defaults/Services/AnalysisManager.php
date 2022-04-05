@@ -6,6 +6,11 @@ use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use SpawnBackend\Controller\Backend\SystemConfigController;
 use SpawnCore\Defaults\Database\AnalysisTable\AnalysisEntity;
 use SpawnCore\Defaults\Database\AnalysisTable\AnalysisRepository;
+use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
+use SpawnCore\System\Custom\Gadgets\UUID;
+use SpawnCore\System\Database\Criteria\Criteria;
+use SpawnCore\System\Database\Criteria\Filters\AndFilter;
+use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\EventSystem\Events\RequestRoutedEvent;
 use SpawnCore\System\EventSystem\EventSubscriberInterface;
 
@@ -35,12 +40,8 @@ class AnalysisManager implements EventSubscriberInterface {
         }
 
         $request = $event->getRequest();
-        $controllerService = $event->getControllerService();
 
-        $data = [
-            'request' => $request->getVars(),
-            'connection' => $this->getConnectionData()
-        ];
+        $data = $this->getConnectionData();
 
         $crawlerDetect = new CrawlerDetect();
         $isBot = $crawlerDetect->isCrawler();
@@ -48,12 +49,25 @@ class AnalysisManager implements EventSubscriberInterface {
             $data['possibleCrawlers'] = $crawlerDetect->getMatches();
         }
 
+        $ipHash = md5(SALT.$request->getClientIp());
 
-        $this->createNewAnalysisEntry(null, $data, $isBot);
+        $this->createNewAnalysisEntry($request->getSeoUrl()->getId(), $data, $isBot, $ipHash);
     }
 
-    protected function createNewAnalysisEntry(?string $urlId, array $data, bool $isBot): void {
-        $analysis = new AnalysisEntity($urlId, json_encode($data, JSON_THROW_ON_ERROR), $isBot);
+    protected function createNewAnalysisEntry(?string $urlId, array $data, bool $isBot, string $ipHash): void {
+        /** @var AnalysisEntity $existing */
+        $existing = $this->analysisRepository->search(new Criteria(new AndFilter(
+            new EqualsFilter('ipHash', $ipHash),
+            new EqualsFilter('urlId', UUID::hexToBytes($urlId)),
+        )))->first();
+
+        if($existing) {
+            $existing->setCount($existing->getCount()+1);
+            $this->analysisRepository->upsert($existing);
+            return;
+        }
+
+        $analysis = new AnalysisEntity($urlId, json_encode($data, JSON_THROW_ON_ERROR), $isBot, $ipHash);
         $this->analysisRepository->upsert($analysis);
     }
 
