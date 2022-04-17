@@ -7,7 +7,8 @@
             "home": "Home",
             "config": "Configuration",
             "seo_config": "SEO Urls",
-            "system_config": "System"
+            "system_config": "System",
+            "users": "User"
           }
         }
       }

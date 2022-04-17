@@ -1,0 +1,37 @@
+<table class="js-resizable-columns">
+
+    <thead>
+
+        <tr>
+
+            <th></th>
+            <th>Username</th>
+            <th>E-Mail</th>
+            <th>Last Login</th>
+            <th>Created At</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+        {% for user in users %}
+
+            {% include 'backend/contents/users/overview/overview_table/overview_table_row.html.twig' %}
+
+        {% endfor %}
+    </tbody>
+
+</table>
+
+<div class="section">
+    {% set this_users_url = seo_url('app.backend.user.overview') %}
+    {% include 'backend/contents/misc/table_pagination.html.twig' with {
+        page: table_info.page,
+        availablePages: table_info.availablePages,
+        entriesPerPage: table_info.entriesPerPage,
+        tableUrl: this_users_url
+    } only %}
+
+
+</div>

@@ -6,6 +6,7 @@ namespace SpawnCore\Defaults\Services;
 class ApiResponseBag {
 
     protected array $errors = [];
+    protected array $data = [];
 
     public function getResponseData(): array {
         $data =  [
@@ -16,6 +17,10 @@ class ApiResponseBag {
             $data['errors'] = $this->errors;
         }
 
+        if(!empty($this->data)) {
+            $data['data'] = $this->data;
+        }
+
         return $data;
     }
 
@@ -23,8 +28,15 @@ class ApiResponseBag {
         $this->errors[] = $error;
     }
 
-
     public function getErrors(): array {
         return $this->errors;
+    }
+
+    public function addData(string $key, $data): void {
+        $this->data[$key] = $data;
+    }
+
+    public function getData(): array {
+        return $this->data;
     }
 }

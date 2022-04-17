@@ -79,6 +79,8 @@
         <tag>base.service.static</tag>
     </service>
 
+
+
     <!-- Analysis -->
     <service id="system.database.table.analysis" class="SpawnCore\Defaults\Database\AnalysisTable\AnalysisTable" static="true">
         <tag>database.table</tag>
@@ -86,6 +88,18 @@
 
     <service id="system.repository.analysis" class="SpawnCore\Defaults\Database\AnalysisTable\AnalysisRepository" static="true">
         <argument type="service" value="system.database.table.analysis" />
+        <tag>base.service.static</tag>
+    </service>
+
+
+
+    <!-- User -->
+    <service id="system.database.table.user" class="SpawnCore\Defaults\Database\UserTable\UserTable" static="true">
+        <tag>database.table</tag>
+    </service>
+
+    <service id="system.repository.user" class="SpawnCore\Defaults\Database\UserTable\UserRepository" static="true">
+        <argument type="service" value="system.database.table.user" />
         <tag>base.service.static</tag>
     </service>
 

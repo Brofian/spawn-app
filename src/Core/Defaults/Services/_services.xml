@@ -34,5 +34,12 @@
         <tag>event.subscriber</tag>
     </service>
 
+    <service id="system.service.user_manager" class="SpawnCore\Defaults\Services\UserManager" static="true">
+        <argument type='service' value="system.repository.user"/>
+        <argument type='service' value="system.kernel.request"/>
+        <argument type='service' value="system.session.helper"/>
+        <tag>service</tag>
+    </service>
+
 
 </services>

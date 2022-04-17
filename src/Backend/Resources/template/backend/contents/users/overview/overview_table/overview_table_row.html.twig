@@ -1,0 +1,44 @@
+<tr>
+
+    <td class="text-align-center" style="width: 1em">
+
+        {% if not user.active %}
+            <span class="signal green" title="active"></span>
+        {% else %}
+            <span class="signal gray" title="inactive"></span>
+        {% endif %}
+
+    </td>
+
+    <td>
+        {{ user.username }}
+    </td>
+
+    <td>
+        {{ user.email }}
+    </td>
+
+    <td>
+        {% if user.lastLogin %}
+            {{ user.lastLogin|date("m.d.Y h:i:s") }}
+        {% else %}
+            -
+        {% endif %}
+    </td>
+
+    <td>
+        {{ user.createdAt|date("m.d.Y h:i:s") }}
+    </td>
+
+    <td>
+        {% set editLink = seo_url('app.backend.seo_config.edit', [seo_url.id]) %}
+
+        <a {% if not seo_url.locked %}href="{{ editLink }}"{% endif %}>
+            <span class="btn btn-square-red {% if seo_url.locked %}disabled{% endif %}">
+                {{ 'edit'|icon() }}
+            </span>
+        </a>
+
+    </td>
+
+</tr>
