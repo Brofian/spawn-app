@@ -6,6 +6,6 @@
         <argument type='service' value="system.service.user_manager"/>
         <argument type='service' value="system.kernel.request"/>
         <argument type='service' value="system.session.helper"/>
-        <tag>backend.controller</tag>
+        <tag>base.controller</tag>
     </service>
 </services>
