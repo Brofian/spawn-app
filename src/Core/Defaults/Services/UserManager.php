@@ -41,18 +41,29 @@ class UserManager {
 
 
     public function getUserById(string $id): ?UserEntity {
+        if(!$id) {
+            return null;
+        }
         return $this->getUserByCriteria(new Criteria(
             new EqualsFilter('id', UUID::hexToBytes($id))
         ))->first();
     }
 
     public function getUserByToken(string $token): ?UserEntity {
+        if(!$token) {
+            return null;
+        }
+
         return $this->getUserByCriteria(new Criteria(
             new EqualsFilter('loginHash', $token)
         ))->first();
     }
 
     public function getUserByEmailOrUsername(string $value): ?UserEntity {
+        if(!$value) {
+            return null;
+        }
+
         return $this->getUserByCriteria(new Criteria(
             new OrFilter(
                 new EqualsFilter('email', UUID::hexToBytes($value)),
