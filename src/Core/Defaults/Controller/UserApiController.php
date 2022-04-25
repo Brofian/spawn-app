@@ -43,6 +43,14 @@ class UserApiController extends AbstractController {
         try {
             $username = $this->request->getPost()->get('login_username');
             $password = $this->request->getPost()->get('login_password');
+
+            if(!$username) {
+                throw new \RuntimeException('Missing username');
+            }
+            if(!$password) {
+                throw new \RuntimeException('Missing password');
+            }
+
             $isAppRequest = $this->request->getPost()->get('login_type_app', false);
             $user = $this->userManager->tryLogin($username, $password);
             if($user instanceof UserEntity) {
