@@ -45,7 +45,7 @@ class UserApiController extends AbstractController {
             $password = $this->request->getPost()->get('login_password');
 
             if(!$username) {
-                throw new \RuntimeException('Missing username');
+                throw new \RuntimeException('Missing username: ' . var_export($this->request->getPost()->getArray(), true));
             }
             if(!$password) {
                 throw new \RuntimeException('Missing password');
