@@ -10,5 +10,6 @@
     <import file="/Defaults/Database/_database.xml"/>
     <import file="/Defaults/Services/_services.xml"/>
     <import file="/Defaults/Commands/_commands.xml"/>
+    <import file="/Defaults/Controller/_controller.xml"/>
 
 </services>
