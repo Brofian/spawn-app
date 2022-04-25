@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace SpawnCore\Defaults\Commands;
+namespace SpawnCore\Defaults\Controller;
 
 
 use SpawnCore\Defaults\Database\UserTable\UserEntity;
