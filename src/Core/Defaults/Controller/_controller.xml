@@ -2,7 +2,7 @@
 
 <services>
 
-    <service id="system.backend.seo_url_config" class="SpawnCore\Defaults\Commands\UserApiController">
+    <service id="system.backend.user_api_controller" class="SpawnCore\Defaults\Commands\UserApiController">
         <argument type='service' value="system.service.user_manager"/>
         <argument type='service' value="system.kernel.request"/>
         <argument type='service' value="system.session.helper"/>
