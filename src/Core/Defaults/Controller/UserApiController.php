@@ -69,5 +69,25 @@ class UserApiController extends AbstractController {
     }
 
 
+    /**
+     * @route /api/user/validate
+     * @name "app.api.user.validate"
+     * @api
+     * @locked
+     * @return AbstractResponse
+     */
+    public function validateAction(): AbstractResponse {
+        $responseBag = new ApiResponseBag();
+        try {
+            $currentUser = $this->userManager->getCurrentlyLoggedInUser(true);
+            $responseBag->addData('isValidLoginSession', $currentUser !== null);
+        }
+        catch (\Exception $e) {
+            $responseBag->addError(MODE==='dev' ? $e->getMessage() : 'Something went wrong!');
+        }
+
+        return new JsonResponse($responseBag->getResponseData(), new CacheControlState(false, true, true));
+    }
+
 
 }
