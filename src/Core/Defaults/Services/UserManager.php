@@ -66,6 +66,10 @@ class UserManager {
     }
 
     public function tryLogin(string $name, string $password): ?UserEntity {
+        if(!$name || !$password) {
+            return null;
+        }
+
         $user = $this->getUserByEmailOrUsername($name);
         if(!$user) {
             return null;
