@@ -83,11 +83,16 @@ class UserManager {
             new EqualsFilter('loginHash', $sessionToken)
         );
 
+        $postToken = null;
         if($allowPostToken) {
             $postToken = $this->request->getPost()->get(self::USER_LOGIN_TOKEN);
             $filter->addFilter(
                 new EqualsFilter('loginHash', $postToken)
             );
+        }
+
+        if(!$sessionToken && !$postToken) {
+            return null;
         }
 
         $users = $this->getUserByCriteria(new Criteria($filter));
