@@ -66,8 +66,8 @@ class UserManager {
 
         return $this->getUserByCriteria(new Criteria(
             new OrFilter(
-                new EqualsFilter('email', UUID::hexToBytes($value)),
-                new EqualsFilter('username', UUID::hexToBytes($value))
+                new EqualsFilter('email', $value),
+                new EqualsFilter('username', $value)
             )
         ))->first();
     }

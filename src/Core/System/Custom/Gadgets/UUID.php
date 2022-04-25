@@ -2,6 +2,7 @@
 namespace SpawnCore\System\Custom\Gadgets;
 
 use Exception;
+use Throwable;
 
 class UUID
 {
@@ -39,14 +40,20 @@ class UUID
 
     public static function validateUUID($uuid): bool
     {
-        $uuidLength = strlen($uuid);
-        if ($uuidLength == self::UUID_LENGTH) {
-            $uuid = self::bytesToHex($uuid);
-        } else if ($uuidLength != (2 * self::UUID_LENGTH)) {
+        try {
+            $uuidLength = strlen($uuid);
+            if ($uuidLength === self::UUID_LENGTH) {
+                $uuid = self::bytesToHex($uuid);
+            } else if ($uuidLength !== (2 * self::UUID_LENGTH)) {
+                return false;
+            }
+
+            return (bool)preg_match(self::UUID_PATTERN, $uuid);
+        }
+        catch (Throwable $t) {
             return false;
         }
 
-        return (bool)preg_match(self::UUID_PATTERN, $uuid);
     }
 
 
