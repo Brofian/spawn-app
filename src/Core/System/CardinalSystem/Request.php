@@ -8,11 +8,14 @@ namespace SpawnCore\System\CardinalSystem;
 
 
 use Doctrine\DBAL\Exception;
+use JsonException;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\Defaults\Database\UserTable\UserEntity;
 use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
+use SpawnCore\System\Custom\Gadgets\JsonHelper;
 use SpawnCore\System\Custom\Gadgets\Logger;
+use SpawnCore\System\Custom\Response\Exceptions\JsonConvertionException;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\NavigationSystem\Navigator;
@@ -92,14 +95,28 @@ class Request extends Mutable
                 }
             }
         }
-
     }
 
+    /**
+     * @throws JsonConvertionException
+     * @throws JsonException
+     */
     protected function enrichPostValueBag(): void
     {
         $this->post = new AssociativeCollection();
-        foreach ($_POST as $key => $value) {
-            $this->post->set($key, $value);
+
+        if(!empty($_POST)) {
+            foreach ($_POST as $key => $value) {
+                $this->post->set($key, $value);
+            }
+        }
+        else {
+            $bodyData = file_get_contents('php://input');
+            if(JsonHelper::validateJson($bodyData)) {
+                foreach(JsonHelper::jsonToArray($bodyData) as $key => $value) {
+                    $this->post->set($key, $value);
+                }
+            }
         }
     }
 
