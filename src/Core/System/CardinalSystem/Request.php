@@ -9,6 +9,7 @@ namespace SpawnCore\System\CardinalSystem;
 
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
+use SpawnCore\Defaults\Database\UserTable\UserEntity;
 use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
 use SpawnCore\System\Custom\Gadgets\Logger;
@@ -30,6 +31,7 @@ class Request extends Mutable
     protected string $requestMethod;
     protected string $clientIp;
     protected bool $isHttps;
+    protected ?UserEntity $user;
 
     protected SeoUrlEntity $seoUrl;
 
@@ -211,4 +213,17 @@ class Request extends Mutable
     public function getClientIp(): string {
         return $this->clientIp;
     }
+
+    public function getUser(): ?UserEntity
+    {
+        return $this->user;
+    }
+
+    public function setUser(?UserEntity $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+
 }

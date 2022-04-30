@@ -14,18 +14,18 @@ class ApiResponseBag {
         ];
 
         if(!empty($this->errors)) {
-            $data['errors'] = $this->errors;
+            $data['errors'] = $this->getErrors();
         }
 
         if(!empty($this->data)) {
-            $data['data'] = $this->data;
+            $data['data'] = $this->getData();
         }
 
         return $data;
     }
 
-    public function addError(string $error): void {
-        $this->errors[] = $error;
+    public function addError(string $error, bool $isSecure = false): void {
+        $this->errors[] = ($isSecure || MODE === 'dev') ? $error : 'Something went wrong!';
     }
 
     public function getErrors(): array {

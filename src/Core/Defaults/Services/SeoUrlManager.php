@@ -119,6 +119,7 @@ class SeoUrlManager {
         /** @var ClassInspector[string] $availableControllers */
         $availableControllers = $this->getEveryController();
 
+
         $result = [
             'added' => 0,
             'updated' => 0
