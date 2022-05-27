@@ -3,6 +3,7 @@
 namespace SpawnCore\System\Custom\Gadgets;
 
 use Exception;
+use JsonException;
 use SpawnCore\System\Custom\Response\Exceptions\JsonConvertionException;
 
 class JsonHelper {
@@ -11,7 +12,7 @@ class JsonHelper {
         try {
             return json_encode($data, JSON_THROW_ON_ERROR);
         }
-        catch (JsonConvertionException $exception) {
+        catch (JsonException $exception) {
             if($throwOnError) {
                 throw $exception;
             }
@@ -24,7 +25,7 @@ class JsonHelper {
         try {
             return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         }
-        catch (JsonConvertionException $exception) {
+        catch (JsonException $exception) {
             if($throwOnError) {
                 throw $exception;
             }
@@ -37,7 +38,7 @@ class JsonHelper {
             json_decode($json, true, 512, JSON_THROW_ON_ERROR);
             return true;
         }
-        catch (JsonConvertionException $exception) {
+        catch (JsonException $exception) {
             return false;
         }
     }
