@@ -67,6 +67,13 @@ class Navigator
     }
 
 
+    public function getSeoEntityById(string $id): ?SeoUrlEntity {
+        return $this->seoUrlRepository->search(new Criteria(
+            new EqualsFilter('id', UUID::hexToBytes($id))
+        ))->first();
+    }
+
+
     /**
      * @throws DatabaseConnectionException
      * @throws RepositoryException

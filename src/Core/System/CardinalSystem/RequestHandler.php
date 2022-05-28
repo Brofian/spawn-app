@@ -54,8 +54,9 @@ class RequestHandler
         $request = $this->serviceContainer->getServiceInstance('system.kernel.request');
         $this->cUrlValues = $request->getCurlValues();
         $seoUrlEntity = $request->getSeoUrl();
+
         if(!$seoUrlEntity) {
-            $routingHelper->getFallbackEntity();
+            $seoUrlEntity = $routingHelper->getFallbackEntity();
         }
 /*
         else {

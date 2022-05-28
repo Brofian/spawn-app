@@ -9,8 +9,11 @@ namespace SpawnCore\System\CardinalSystem;
 
 use Doctrine\DBAL\Exception;
 use JsonException;
+use SpawnBackend\Controller\Backend\AdminLoginController;
+use SpawnBackend\Database\AdministratorTable\AdministratorEntity;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\Defaults\Database\UserTable\UserEntity;
+use SpawnCore\Defaults\Services\ConfigurationManager;
 use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
 use SpawnCore\System\Custom\Gadgets\JsonHelper;
@@ -34,7 +37,8 @@ class Request extends Mutable
     protected string $requestMethod;
     protected string $clientIp;
     protected bool $isHttps;
-    protected ?UserEntity $user;
+    protected ?UserEntity $user = null;
+    protected ?AdministratorEntity $administrator = null;
 
     protected SeoUrlEntity $seoUrl;
 
@@ -176,10 +180,27 @@ class Request extends Mutable
         /** @var Navigator $routingHelper */
         $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
-        $this->seoUrl = $routingHelper->rewriteURL(
+        $computedSeoUrl = $routingHelper->rewriteURL(
             $this->requestPath,
             $this->curl_values
         );
+
+        if($computedSeoUrl->isRequiresUser() && !$this->getUser()) {
+            // route to configured login page
+            /** @var ConfigurationManager $configurationManager */
+            $configurationManager = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.service.configuration_manager');
+            $configuredEntity = $configurationManager->getConfiguration('config_system_user_login_route');
+            if($configuredEntity) {
+                $computedSeoUrl = $routingHelper->getSeoEntityById($configuredEntity);
+            }
+        }
+
+        if($computedSeoUrl->isRequiresAdmin() && !$this->getAdministrator()) {
+            // route to configured backend page
+            $routingHelper->route(AdminLoginController::ADMIN_LOGIN_ROUTE);
+        }
+
+        $this->seoUrl = $computedSeoUrl;
     }
 
 
@@ -241,6 +262,18 @@ class Request extends Mutable
         $this->user = $user;
         return $this;
     }
+
+    public function getAdministrator(): ?AdministratorEntity
+    {
+        return $this->administrator;
+    }
+
+    public function setAdministrator(?AdministratorEntity $administrator): self
+    {
+        $this->administrator = $administrator;
+        return $this;
+    }
+
 
 
 }

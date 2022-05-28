@@ -24,6 +24,8 @@ class SeoUrlTable extends AbstractTable {
             new JsonColumn('parameters', true),
             new BooleanColumn('locked', false),
             new BooleanColumn('active', true),
+            new BooleanColumn('requiresAdmin', false),
+            new BooleanColumn('requiresUser', false),
             new BooleanColumn('api', false),
             new CreatedAtColumn(),
             new UpdatedAtColumn()

@@ -136,6 +136,26 @@ class SeoUrlManager {
                 $name = $inspectedMethod->getTag('name', null);
                 $isApi = $inspectedMethod->getTag('api', false);
 
+                $requiresTags = $inspectedMethod->getTag('requires', '');
+                $requiresUser = false;
+                $requiresAdmin = false;
+                if(is_array($requiresTags) && count($requiresTags)) {
+                    $firstOccuringRequiresTag = $requiresTags[0];
+                    if(count($firstOccuringRequiresTag)) {
+                        $firstParameter = $firstOccuringRequiresTag[0];
+
+                        $requiresTags = explode(',',$firstParameter);
+                        $requiresAdmin = in_array('admin', $requiresTags, true);
+                        $requiresUser = in_array('login', $requiresTags, true);
+                    }
+                }
+
+
+
+
+
+
+
                 if(!$name) {
                     IO::printWarning('# Missing tag "@name" in action definition in ' . $controllerServiceId);
                     continue;
@@ -155,6 +175,8 @@ class SeoUrlManager {
                         $inspectedMethod->getParameters(),
                         $isLocked,
                         false,
+                        $requiresAdmin,
+                        $requiresUser,
                         $isApi
                     );
 
@@ -171,10 +193,11 @@ class SeoUrlManager {
                     $seoUrl->setAction($inspectedMethod->getMethodName());
                     $seoUrl->setParameters($inspectedMethod->getParameters());
                     $seoUrl->setApi($isApi);
+                    $seoUrl->setRequiresUser($requiresUser);
+                    $seoUrl->setRequiresAdmin($requiresAdmin);
                     if($isLocked) {
                         $seoUrl->setCUrl($cUrl);
                     }
-
 
                     if(!$seoUrl->compareSeoUrlEntity($oldSeoUrl)) {
                         $this->seoUrlRepository->upsert($seoUrl);

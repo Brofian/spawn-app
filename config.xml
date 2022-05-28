@@ -8,6 +8,20 @@
             <name>config_system_fallback_method</name>
             <repository>system.repository.seo_urls</repository>
             <search>
+                <column>name</column>
+                <column>controller</column>
+                <column>action</column>
+            </search>
+            <identifier>id</identifier>
+            <identifier_getter>getId</identifier_getter>
+            <label>getLabel</label>
+        </entityselectfield>
+
+        <entityselectfield>
+            <name>config_system_user_login_route</name>
+            <repository>system.repository.seo_urls</repository>
+            <search>
+                <column>name</column>
                 <column>controller</column>
                 <column>action</column>
             </search>

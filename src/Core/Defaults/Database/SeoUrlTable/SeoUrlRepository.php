@@ -14,7 +14,6 @@ class SeoUrlRepository extends TableRepository {
         return SeoUrlEntity::class;
     }
 
-
     /**
      * @param array $values
      * @return array

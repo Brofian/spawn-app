@@ -18,6 +18,8 @@ use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class AdminLoginController extends AbstractBackendController {
 
+    public const ADMIN_LOGIN_ROUTE = 'app.backend.login';
+
     protected AdminLoginManager $adminLoginManager;
     protected CSRFTokenAssistant $csrfTokenAssistant;
 

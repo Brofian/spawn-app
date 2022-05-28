@@ -3,6 +3,7 @@
 namespace SpawnCore\System\CardinalSystem;
 
 use Doctrine\DBAL\Exception;
+use SpawnBackend\Services\AdminLoginManager;
 use SpawnCore\Defaults\Services\UserManager;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
@@ -79,6 +80,10 @@ class Kernel
         /** @var UserManager $userManager */
         $userManager = $serviceContainer->get('system.service.user_manager');
         $this->request->setUser($userManager->getCurrentlyLoggedInUser());
+
+        /** @var AdminLoginManager $adminLoginManager */
+        $adminLoginManager = $serviceContainer->get('system.service.admin_login_manager');
+        $this->request->setAdministrator($adminLoginManager->getAdminUserFromSessionData());
 
         return $this->request;
     }

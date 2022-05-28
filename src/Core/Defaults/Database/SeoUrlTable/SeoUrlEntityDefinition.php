@@ -20,6 +20,8 @@ class SeoUrlEntityDefinition extends Entity
     protected array $parameters;
     protected bool $locked;
     protected bool $active;
+    protected bool $requiresAdmin;
+    protected bool $requiresUser;
     protected bool $api;
 
     public function __construct(
@@ -30,6 +32,8 @@ class SeoUrlEntityDefinition extends Entity
         array $parameters,
         bool $locked = false,
         bool $active = true,
+        bool $requiresAdmin = false,
+        bool $requiresUser = false,
         bool $api = false,
         ?string $id = null,
         ?DateTime $createdAt = null,
@@ -42,6 +46,8 @@ class SeoUrlEntityDefinition extends Entity
         $this->setParameters($parameters);
         $this->setLocked($locked);
         $this->setActive($active);
+        $this->setRequiresAdmin($requiresAdmin);
+        $this->setRequiresUser($requiresUser);
         $this->setApi($api);
         $this->setId($id);
         $this->setCreatedAt($createdAt);
@@ -67,6 +73,8 @@ class SeoUrlEntityDefinition extends Entity
             $values['parameters'],
             (bool)$values['locked'],
             (bool)$values['active'],
+            (bool)$values['requiresAdmin'],
+            (bool)$values['requiresUser'],
             (bool)$values['api'],
             $values['id'],
             $values['updatedAt'],
@@ -85,6 +93,8 @@ class SeoUrlEntityDefinition extends Entity
             'parameters' => $this->getParameters(),
             'locked' => $this->isLocked(),
             'active' => $this->isActive(),
+            'requiresAdmin' => $this->isRequiresAdmin(),
+            'requiresUser' => $this->isRequiresUser(),
             'api' => $this->isApi(),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
@@ -143,6 +153,28 @@ class SeoUrlEntityDefinition extends Entity
     public function setActive(bool $active): self
     {
         $this->active = $active;
+        return $this;
+    }
+
+    public function isRequiresAdmin(): bool
+    {
+        return $this->requiresAdmin;
+    }
+
+    public function setRequiresAdmin(bool $requiresAdmin): self
+    {
+        $this->requiresAdmin = $requiresAdmin;
+        return $this;
+    }
+
+    public function isRequiresUser(): bool
+    {
+        return $this->requiresUser;
+    }
+
+    public function setRequiresUser(bool $requiresUser): self
+    {
+        $this->requiresUser = $requiresUser;
         return $this;
     }
 
