@@ -50,6 +50,7 @@ class SeoUrlConfigController extends AbstractBackendController {
     /**
      * @route /backend/seo_config/overview
      * @name "app.backend.seo_config.overview"
+     * @requires admin
      * @locked
      * @throws DatabaseConnectionException
      * @throws RepositoryException
@@ -82,6 +83,7 @@ class SeoUrlConfigController extends AbstractBackendController {
     /**
      * @route /backend/seo_config/edit/{}
      * @name "app.backend.seo_config.edit"
+     * @requires admin
      * @locked
      */
     public function seoUrlEditAction(string $seoUrlId): AbstractResponse {
@@ -96,6 +98,7 @@ class SeoUrlConfigController extends AbstractBackendController {
     /**
      * @route /backend/seo_config/edit/submit/{}/{}
      * @name "app.backend.seo_config.edit.submit"
+     * @requires admin
      * @locked
      * @api
      */

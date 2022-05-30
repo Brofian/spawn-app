@@ -62,6 +62,7 @@ class SystemConfigController extends AbstractBackendController {
     /**
      * @route /backend/config/overview
      * @name "app.backend.config.overview"
+     * @requires admin
      * @locked
      * @return AbstractResponse
      */
@@ -87,6 +88,7 @@ class SystemConfigController extends AbstractBackendController {
     /**
      * @route /backend/config/folder/{}
      * @name "app.backend.config.folder"
+     * @requires admin
      * @locked
      * @return AbstractResponse
      */
@@ -137,6 +139,7 @@ class SystemConfigController extends AbstractBackendController {
     /**
      * @route /backend/config/submit/folder
      * @name "app.backend.config.folder.submit"
+     * @requires admin
      * @api
      * @locked
      * @return AbstractResponse
@@ -175,6 +178,7 @@ class SystemConfigController extends AbstractBackendController {
     /**
      * @route /backend/api/config/entity/{}
      * @name "app.backend.config.entity.search"
+     * @requires admin
      * @api
      * @locked
      * @param string $internalName

@@ -44,6 +44,7 @@ class UserController extends AbstractBackendController {
     /**
      * @route /backend/user/overview
      * @name "app.backend.user.overview"
+     * @requires admin
      * @locked
      * @return AbstractResponse
      */

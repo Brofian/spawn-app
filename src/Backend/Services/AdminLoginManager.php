@@ -42,6 +42,8 @@ class AdminLoginManager implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
+        return [];
+
         return [
             RequestRoutedEvent::class => 'onRequestRoutedEvent'
         ];
