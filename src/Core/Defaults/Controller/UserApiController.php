@@ -12,6 +12,7 @@ use SpawnCore\System\Custom\Gadgets\SessionHelper;
 use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\CacheControlState;
 use SpawnCore\System\Custom\Response\JsonResponse;
+use SpawnCore\System\Custom\Throwables\AbstractException;
 
 class UserApiController extends AbstractController {
 
@@ -66,11 +67,11 @@ class UserApiController extends AbstractController {
                 $this->sessionHelper->set(UserManager::USER_LOGIN_TOKEN, $user->getLoginHash());
             }
             else {
-                $responseBag->addError('Invalid credentials!');
+                $responseBag->addError('Invalid credentials!', true);
             }
         }
         catch (\Exception $e) {
-            $responseBag->addError(MODE==='dev' ? $e->getMessage() : 'Something went wrong!');
+            $responseBag->addError($e->getMessage(), false);
         }
 
         return new JsonResponse($responseBag->getResponseData(), new CacheControlState(false, true, true));
@@ -97,5 +98,32 @@ class UserApiController extends AbstractController {
         return new JsonResponse($responseBag->getResponseData(), new CacheControlState(false, true, true));
     }
 
+
+
+    /**
+     * @route /api/user/logout
+     * @name "app.api.user.logout"
+     * @api
+     * @locked
+     * @return AbstractResponse
+     */
+    public function logoutAction(): AbstractResponse {
+        $responseBag = new ApiResponseBag();
+
+        try {
+            if(!$this->request->getUser()) {
+                throw new \RuntimeException('User is already not logged in!');
+            }
+
+            $this->userManager->
+            $this->request->setUser(null);
+
+        }
+        catch (\Throwable $t) {
+            $responseBag->addError($t->getMessage());
+        }
+
+        return new JsonResponse($responseBag->getResponseData(), new CacheControlState(false, true, true));
+    }
 
 }

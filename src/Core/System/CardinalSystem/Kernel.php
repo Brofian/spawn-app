@@ -85,6 +85,8 @@ class Kernel
         $adminLoginManager = $serviceContainer->get('system.service.admin_login_manager');
         $this->request->setAdministrator($adminLoginManager->getAdminUserFromSessionData());
 
+        $this->request->checkAccessPermissionStatus();
+
         return $this->request;
     }
 

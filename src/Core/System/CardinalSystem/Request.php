@@ -180,29 +180,30 @@ class Request extends Mutable
         /** @var Navigator $routingHelper */
         $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
 
-        $computedSeoUrl = $routingHelper->rewriteURL(
+        $this->seoUrl = $routingHelper->rewriteURL(
             $this->requestPath,
             $this->curl_values
         );
+    }
 
-        if($computedSeoUrl->isRequiresUser() && !$this->getUser()) {
-            // route to configured login page
+    public function checkAccessPermissionStatus(): void {
+        /** @var Navigator $routingHelper */
+        $routingHelper = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.routing.helper');
+
+        if($this->seoUrl->isRequiresAdmin() && !$this->getAdministrator()) {
+            // route to backend login page
+            $this->seoUrl = $routingHelper->route(AdminLoginController::ADMIN_LOGIN_ROUTE);
+        }
+        elseif($this->seoUrl->isRequiresUser() && !$this->getUser()) {
+            // route to configured frontend login page
             /** @var ConfigurationManager $configurationManager */
             $configurationManager = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.service.configuration_manager');
             $configuredEntity = $configurationManager->getConfiguration('config_system_user_login_route');
             if($configuredEntity) {
-                $computedSeoUrl = $routingHelper->getSeoEntityById($configuredEntity);
+                $this->seoUrl = $routingHelper->getSeoEntityById($configuredEntity);
             }
         }
-
-        if($computedSeoUrl->isRequiresAdmin() && !$this->getAdministrator()) {
-            // route to configured backend page
-            $routingHelper->route(AdminLoginController::ADMIN_LOGIN_ROUTE);
-        }
-
-        $this->seoUrl = $computedSeoUrl;
     }
-
 
     public function enrichClientIp(): void
     {

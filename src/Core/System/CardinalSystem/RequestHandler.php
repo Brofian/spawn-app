@@ -22,11 +22,15 @@ class RequestHandler
     protected ?Service $controllerService;
     protected ?string $actionMethod;
     protected array $cUrlValues;
+    protected Response $response;
+    protected Request $request;
 
 
     public function __construct()
     {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
+        $this->response = $this->serviceContainer->getServiceInstance('system.kernel.response');
+        $this->request = $this->serviceContainer->getServiceInstance('system.kernel.request');
     }
 
     /**
@@ -79,9 +83,7 @@ class RequestHandler
         $responseObject = $controllerInstance->$actionMethod(...array_values($this->cUrlValues));
         $responseObject = $this->validateAndCovertResponseObject($responseObject);
 
-        /** @var Response $response */
-        $response = $this->serviceContainer->getServiceInstance('system.kernel.response');
-        $response->setResponseObject($responseObject);
+        $this->response->setResponseObject($responseObject);
     }
 
     /**

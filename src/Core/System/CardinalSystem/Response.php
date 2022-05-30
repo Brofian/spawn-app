@@ -32,13 +32,8 @@ class Response
     protected ScssHelper $scssHelper;
     protected HeaderHelper $headerHelper;
     protected EntityCollection $moduleCollection;
-    protected AbstractResponse $responseObject;
+    protected ?AbstractResponse $responseObject = null;
 
-    /**
-     * @throws DatabaseConnectionException
-     * @throws Exception
-     * @throws RepositoryException
-     */
     public function __construct()
     {
         $serviceContainer = ServiceContainerProvider::getServiceContainer();
@@ -80,19 +75,20 @@ class Response
 
     }
 
-    /**
-     * @param AbstractResponse $responseObject
-     */
     public function setResponseObject(AbstractResponse $responseObject): void
     {
         $this->responseObject = $responseObject;
     }
 
+    public function getResponseObject(): ?AbstractResponse
+    {
+        return $this->responseObject;
+    }
+
+
+
     /**
      * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws HeadersSendByException
      */
     public function finish(): string

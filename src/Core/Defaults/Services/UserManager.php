@@ -91,6 +91,13 @@ class UserManager {
         return null;
     }
 
+    public function logoutUser(bool $destructive): void {
+        $this->sessionHelper->set(self::USER_LOGIN_TOKEN, null);
+        if($destructive) {
+            $this->sessionHelper->destroySession();
+        }
+    }
+
     public function getCurrentlyLoggedInUser(bool $allowPostToken = true): ?UserEntity {
         //check for token in session and post
         $sessionToken = $this->sessionHelper->get(self::USER_LOGIN_TOKEN);

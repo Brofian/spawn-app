@@ -30,6 +30,7 @@ abstract class AbstractComparisonFilter extends AbstractFilter {
 
         $this->column = $column;
         $this->value = $value;
+        $this->comparison = $comparison;
     }
 
     public function getCondition(): string
