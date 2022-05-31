@@ -11,15 +11,18 @@ class UuidColumn extends AbstractColumn {
 
     protected string $columnName;
     protected ?ForeignKey $foreignKey;
+    protected bool $canBeNull;
 
 
     public function __construct(
         string $columnName,
-        ?ForeignKey $foreignKey = null
+        ?ForeignKey $foreignKey = null,
+        bool $canBeNull = true
     )
     {
         $this->columnName = $columnName;
         $this->foreignKey = $foreignKey;
+        $this->canBeNull = $canBeNull;
     }
 
 
@@ -45,7 +48,7 @@ class UuidColumn extends AbstractColumn {
 
     public function canBeNull(): ?bool
     {
-        return true;
+        return $this->canBeNull;
     }
 
     public function getForeignKeyConstraint(): ?ForeignKey

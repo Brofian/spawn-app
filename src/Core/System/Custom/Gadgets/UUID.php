@@ -56,5 +56,8 @@ class UUID
 
     }
 
+    public static function stringToHexUUID(string $string): string {
+        return 'fab1a40000000000' . md5($string);
+    }
 
 }

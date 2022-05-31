@@ -2,6 +2,8 @@
 
 namespace SpawnCore\Defaults\Database\UserTable;
 
+use SpawnCore\Defaults\Database\LanguageTable\LanguageRepository;
+use SpawnCore\Defaults\Database\LanguageTable\LanguageTable;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\BooleanColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\CreatedAtColumn;
@@ -9,6 +11,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\DateTimeColu
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\StringColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UpdatedAtColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
+use SpawnCore\System\Database\Entity\TableDefinition\ForeignKey;
 
 class UserTable extends AbstractTable {
 
@@ -24,6 +27,7 @@ class UserTable extends AbstractTable {
             new BooleanColumn('active', true),
             new StringColumn('loginHash', true, null, true, 1024),
             new DateTimeColumn('lastLogin', true),
+            new UuidColumn('languageId', new ForeignKey(LanguageTable::TABLE_NAME, 'id', false, false), false),
             new UpdatedAtColumn(),
             new CreatedAtColumn()
         ];

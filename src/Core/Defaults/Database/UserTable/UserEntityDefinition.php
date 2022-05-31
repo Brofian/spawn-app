@@ -21,6 +21,7 @@ class UserEntityDefinition extends Entity
     protected string $email;
     protected bool $active;
     protected ?string $loginHash;
+    protected ?string $languageId;
     protected ?DateTime $lastLogin;
 
     public function __construct(
@@ -30,6 +31,7 @@ class UserEntityDefinition extends Entity
         bool $active = true,
         ?string $loginHash = null,
         ?DateTime $lastLogin = null,
+        ?string $languageId = null,
         ?string $id = null,
         ?DateTime $createdAt = null,
         ?DateTime $updatedAt = null
@@ -41,6 +43,7 @@ class UserEntityDefinition extends Entity
         $this->setActive($active);
         $this->setLoginHash($loginHash);
         $this->setLastLogin($lastLogin);
+        $this->setLanguageId($languageId);
         $this->setId($id);
         $this->setUpdatedAt($updatedAt);
         $this->setCreatedAt($createdAt);
@@ -61,6 +64,7 @@ class UserEntityDefinition extends Entity
             'email' => $this->getEmail(),
             'active' => $this->isActive(),
             'lastLogin' => $this->getLastLogin(),
+            'languageId' => $this->getLanguageId(),
             'updatedAt' => $this->getUpdatedAt(),
             'createdAt' => $this->getCreatedAt(),
             'loginHash' => $this->getLoginHash(),
@@ -80,10 +84,22 @@ class UserEntityDefinition extends Entity
             (bool)$values['active'],
             $values['loginHash'] ?? null,
             $values['lastLogin'] ?? null,
+            $values['languageId'] ?? null,
             $values['id'] ?? null,
             $values['createdAt'] ?? null,
             $values['updatedAt'] ?? null
         );
+    }
+
+    public function getLanguageId(): ?string
+    {
+        return $this->languageId;
+    }
+
+    public function setLanguageId(?string $languageId): self
+    {
+        $this->languageId = $languageId;
+        return $this;
     }
 
     public function getUsername(): string
