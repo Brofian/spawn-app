@@ -13,9 +13,9 @@ table.js-resizable-columns {
 				height: 100%;
 				background: linear-gradient(to left,
 						$background-dark-highlight,
-						transparentize($background-dark-highlight, 30%),
-						transparentize($background-dark-highlight, 55%),
-						transparentize($background-dark-highlight, 100%),
+						transparentize($background-dark-highlight, 0.3),
+						transparentize($background-dark-highlight, 0.55),
+						transparentize($background-dark-highlight, 1),
 				);
 				cursor: col-resize;
 			}
