@@ -7,7 +7,6 @@ use SpawnCore\System\Custom\Collection\Collection;
 class EntityCollection extends Collection {
 
     protected string $containedEntityType;
-    protected int $count = 0;
 
     public function __construct(string $containedEntityType)
     {
@@ -21,7 +20,7 @@ class EntityCollection extends Collection {
     public function add($value): void {
         if($value instanceof $this->containedEntityType) {
             $this->collection[] = $value;
-            $this->count++;
+            $this->count = null;
         }
     }
 
@@ -29,13 +28,13 @@ class EntityCollection extends Collection {
         foreach($values as $value) {
             if($value instanceof $this->containedEntityType) {
                 $this->collection[] = $value;
-                $this->count++;
+                $this->count = null;
             }
         }
     }
     
     public function getCount(): int {
-        return $this->count;
+        return $this->count();
     }
 
 }

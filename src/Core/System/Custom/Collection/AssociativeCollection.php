@@ -23,6 +23,7 @@ class AssociativeCollection extends AbstractCollectionBase
         if ($isNewEntry) {
             $this->generateOrUpdateKeys();
         }
+        $this->count = null;
     }
 
     protected function generateOrUpdateKeys(): void
@@ -31,6 +32,7 @@ class AssociativeCollection extends AbstractCollectionBase
         foreach ($this->collection as $key => $item) {
             $this->keys[] = $key;
         }
+        $this->count = null;
     }
 
     public function first()

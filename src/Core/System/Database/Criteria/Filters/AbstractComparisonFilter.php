@@ -15,9 +15,7 @@ abstract class AbstractComparisonFilter extends AbstractFilter {
         '>=',
     ];
 
-    /**
-     * @throws InvalidFilterValueException
-     */
+
     public function __construct(string $column, string $comparison, $value)
     {
         if(!is_string($value) && !is_numeric($value)) {

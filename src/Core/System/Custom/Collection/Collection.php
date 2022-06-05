@@ -13,6 +13,7 @@ class Collection extends AbstractCollectionBase
     public function add($value): void
     {
         $this->collection[] = $value;
+        $this->count = null;
     }
 
     public function overwrite(array $collection): void
@@ -33,6 +34,7 @@ class Collection extends AbstractCollectionBase
             $this->collection[$key] = $value;
         } else {
             $this->collection[] = $value;
+            $this->count = null;
         }
     }
 

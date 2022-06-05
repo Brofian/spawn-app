@@ -39,4 +39,8 @@ class ApiResponseBag {
     public function getData(): array {
         return $this->data;
     }
+
+    public static function getSimpleSuccessData(): array {
+        return (new static())->getResponseData();
+    }
 }

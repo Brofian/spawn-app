@@ -11,6 +11,7 @@ abstract class AbstractCollectionBase implements Iterator, Countable
 
     protected array $collection = array();
     protected int $position;
+    protected ?int $count = null;
     
     public function current(): mixed
     {
@@ -57,7 +58,7 @@ abstract class AbstractCollectionBase implements Iterator, Countable
 
     public function count(): int
     {
-        return count($this->collection);
+        return $this->count ?? ($this->count = count($this->collection));
     }
 
 }
