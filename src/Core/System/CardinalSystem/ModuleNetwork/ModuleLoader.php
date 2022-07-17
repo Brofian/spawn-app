@@ -172,19 +172,16 @@ class ModuleLoader
         $moduleResources = $moduleXML->getChildrenByType("resources")->first();
         if ($moduleResources) {
             foreach($moduleResources->getChildren() as $configChild) {
+
+                if($configChild->getType() === 'using') {
+                    $config[$configChild->getType()][] = $configChild->getValue();
+                    continue;
+                }
+
                 $value = $configChild->getValue();
 
-                // special cases
                 if($configChild->getType() === 'namespace') {
                     $value = $value ?? ModuleNamespacer::FALLBACK_NAMESPACE;
-                }
-                elseif($configChild->getType() === 'using') {
-                    $useNamespaces = [];
-                    foreach($configChild->getChildren() as $child) {
-                        $useNamespaces[] = $child->getValue();
-                    }
-
-                    $value = $useNamespaces;
                 }
 
                 $config[$configChild->getType()] = $value;

@@ -16,21 +16,21 @@ class NamespaceHelper {
 
         return $modulesInNamespaces;
     }
-
     protected static function assignModulesToNamespaceList(array &$modulesInNamespaces, array $slugToModule): void {
-
         foreach($modulesInNamespaces as $namespace => &$slugs) {
             do {
                 $hasChanged = false;
                 $slugsToAdd = [];
+
                 foreach($slugs as $slug) {
                     if(!isset($slugToModule[$slug])) {
                         continue;
                     }
+                    /** @var ModuleEntity $module */
                     $module = $slugToModule[$slug];
                     $using = $module->getResourceConfigValue('using');
                     if(is_array($using)) {
-                        $slugsToAdd = array_merge($using);
+                        $slugsToAdd = [...$slugsToAdd, ...$using];
                     }
                 }
 
@@ -56,7 +56,7 @@ class NamespaceHelper {
         foreach($moduleCollection->getArray() as $module) {
             $namespace = $module->getNamespace();
             $slug = $module->getSlug();
-            $slugToModule[$slug] = &$module;
+            $slugToModule[$slug] = $module;
 
             if(!isset($modulesInNamespaces[$namespace])) {
                 $modulesInNamespaces[$namespace] = [];

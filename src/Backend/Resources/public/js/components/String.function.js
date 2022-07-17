@@ -1,8 +1,8 @@
 export default class String {
 
     static trim(value, charlist = ' \n\r\t') {
-        //value = String.trimRight(value, charlist);
-        //value = String.trimLeft(value, charlist);
+        value = String.trimRight(value, charlist);
+        value = String.trimLeft(value, charlist);
 
         return value;
     }
@@ -42,8 +42,4 @@ export default class String {
 
         return value;
     }
-
-
-
-
 }
