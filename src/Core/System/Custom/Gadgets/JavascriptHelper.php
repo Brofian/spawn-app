@@ -78,6 +78,7 @@ class JavascriptHelper
             }
 
             IO::printLine(IO::TAB . '- ' . $namespace, '', 1);
+            IO::printLine(IO::TAB . '   > ' . ModuleNamespacer::hashNamespace($namespace), '', 2);
             IO::printLine(IO::TAB . '   > ' . $output, '', 2);
         }
     }

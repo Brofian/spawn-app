@@ -44,10 +44,14 @@ class ForeignKey {
     }
 
     public function getOptions(): array {
-        return [
-            'onUpdate' => $this->onUpdateCascade ? 'CASCADE' : 'NULL',
+        $options = [
             'onDelete' => $this->onDeleteCascade ? 'CASCADE' : 'SET NULL'
         ];
+        if($this->onUpdateCascade) {
+            $options['onUpdate'] = 'CASCADE';
+        }
+
+        return $options;
     }
 
 }

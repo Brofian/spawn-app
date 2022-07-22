@@ -4,7 +4,6 @@ namespace SpawnCore\System\Custom\Collection;
 
 class AssociativeCollection extends AbstractCollectionBase
 {
-
     protected array $collection = array();
     protected array $keys = array();
     protected int $position = 0;
@@ -60,6 +59,13 @@ class AssociativeCollection extends AbstractCollectionBase
         }
 
         return $default;
+    }
+
+    public function require($key) {
+        if($this->has($key)) {
+            return $this->get($key);
+        }
+        throw new \Exception('Missing required collection entry!');
     }
 
     /**

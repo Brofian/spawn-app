@@ -38,6 +38,13 @@ class CacheControlState {
         }
     }
 
+    public static function BASE_REUSABLE(): self {
+        return new self(true, false, false);
+    }
+
+    public static function BASE_NOCACHE(): self {
+        return new self(false, true, true);
+    }
 
     public function setReusable(bool $reusable = true): self {
         $this->isReusable = $reusable;
