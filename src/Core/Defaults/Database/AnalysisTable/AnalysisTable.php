@@ -4,6 +4,7 @@ namespace SpawnCore\Defaults\Database\AnalysisTable;
 
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlTable;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
+use SpawnCore\System\Database\Entity\TableDefinition\Association\ToOneAssociation;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\BooleanColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\CreatedAtColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\IntColumn;
@@ -14,13 +15,18 @@ use SpawnCore\System\Database\Entity\TableDefinition\ForeignKey;
 
 class AnalysisTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_analysis';
+    public const ENTITY_NAME = 'spawn_analysis';
+
+    public function getEntityClass(): string
+    {
+        return AnalysisEntity::class;
+    }
 
     public function getTableColumns(): array
     {
         return [
             new UuidColumn('id', null),
-            new UuidColumn('urlId', new ForeignKey(SeoUrlTable::TABLE_NAME, 'id', true, false)),
+            new UuidColumn('urlId', new ForeignKey(SeoUrlTable::ENTITY_NAME, 'id', true, false)),
             new StringColumn('ipHash', true, '', 'urlId', 750),
             new JsonColumn('data', true),
             new BooleanColumn('bot', true),
@@ -29,8 +35,17 @@ class AnalysisTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
+    public function getTableAssociations(): array
     {
-        return self::TABLE_NAME;
+        return [
+            new ToOneAssociation('urlId', SeoUrlTable::ENTITY_NAME, 'id')
+        ];
     }
+
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+        ];
+    }
+
 }

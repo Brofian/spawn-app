@@ -101,7 +101,7 @@ class CreateAdminUserCommand extends AbstractCommand {
         );
 
         /** @var AdministratorRepository $administrationRepository */
-        $administrationRepository = ServiceContainerProvider::getServiceContainer()->getServiceInstance('system.repository.administrator');
+        $administrationRepository = ServiceContainerProvider::getServiceContainer()->getServiceInstance('administrator.repository');
 
         $administrationRepository->upsert($adminEntity);
         IO::printSuccess("> successfully created admin user ");

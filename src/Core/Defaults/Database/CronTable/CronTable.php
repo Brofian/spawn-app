@@ -10,7 +10,12 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class CronTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_crons';
+    public const ENTITY_NAME = 'spawn_crons';
+
+    public function getEntityClass(): string
+    {
+        return CronEntity::class;
+    }
 
     public function getTableColumns(): array
     {
@@ -24,8 +29,10 @@ class CronTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
-    {
-        return self::TABLE_NAME;
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+        ];
     }
+
 }

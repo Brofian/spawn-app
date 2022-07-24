@@ -9,7 +9,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.administrator" class="SpawnBackend\Database\AdministratorTable\AdministratorRepository" static="true">
+    <service id="administrator.repository" class="SpawnBackend\Database\AdministratorTable\AdministratorRepository" static="true">
         <argument type="service" value="system.database.table.administrator" />
         <tag>base.service.static</tag>
     </service>

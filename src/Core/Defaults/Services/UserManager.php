@@ -130,7 +130,7 @@ class UserManager {
 
         $stmt = $queryBuilder
             ->select('COUNT(*) as count')
-            ->from(UserTable::TABLE_NAME);
+            ->from(UserTable::ENTITY_NAME);
 
         return (int)$stmt->executeQuery()->fetchAssociative()['count'];
     }

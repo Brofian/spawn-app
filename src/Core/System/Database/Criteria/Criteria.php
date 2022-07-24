@@ -19,6 +19,8 @@ class Criteria {
     /** @var OrderBy[] */
     protected array $orderBys = [];
 
+    protected array $associations = [];
+
     public function __construct(AbstractFilter ...$filters)
     {
         foreach($filters as $filter) {
@@ -47,8 +49,6 @@ class Criteria {
     public function addRelation(Relation $relation): void {
         $this->relations[] = $relation;
     }
-
-
 
     public function getParameters(): array {
         $params = [];
@@ -81,5 +81,16 @@ class Criteria {
      */
     public function getOrderBys(): array {
         return $this->orderBys;
+    }
+
+    public function getAssociations(): array
+    {
+        return $this->associations;
+    }
+
+    public function addAssociation(string $association): self
+    {
+        $this->associations[] = $association;
+        return $this;
     }
 }

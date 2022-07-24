@@ -11,7 +11,12 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class ModuleTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_modules';
+    public const ENTITY_NAME = 'spawn_modules';
+
+    public function getEntityClass(): string
+    {
+        return ModuleEntity::class;
+    }
 
     public function getTableColumns(): array
     {
@@ -27,8 +32,12 @@ class ModuleTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
-    {
-        return self::TABLE_NAME;
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+            'slug',
+            'path',
+        ];
     }
+
 }

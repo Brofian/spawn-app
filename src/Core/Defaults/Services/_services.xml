@@ -2,40 +2,40 @@
 <services>
 
     <service id="system.service.configuration_manager" class="SpawnCore\Defaults\Services\ConfigurationManager" static="true">
-        <argument type='service' value="system.repository.configuration"/>
+        <argument type='service' value="configuration.repository"/>
         <tag>service</tag>
     </service>
 
     <service id="system.service.configuration_system" class="SpawnCore\Defaults\Services\ConfigurationSystem" static="true">
-        <argument type='service' value="system.repository.configuration"/>
+        <argument type='service' value="configuration.repository"/>
         <tag>service</tag>
     </service>
 
     <service id="system.service.seo_url_manager" class="SpawnCore\Defaults\Services\SeoUrlManager" static="true">
-        <argument type='service' value="system.repository.seo_urls"/>
+        <argument type='service' value="seo_urls.repository"/>
         <tag>service</tag>
     </service>
 
     <service id="system.service.snippet_system" class="SpawnCore\Defaults\Services\SnippetSystem" static="true">
-        <argument type='service' value="system.repository.snippet"/>
-        <argument type='service' value="system.repository.language"/>
+        <argument type='service' value="snippet.repository"/>
+        <argument type='service' value="language.repository"/>
         <tag>service</tag>
     </service>
 
     <service id="system.service.snippet_manager" class="SpawnCore\Defaults\Services\SnippetManager" static="true">
-        <argument type='service' value="system.repository.snippet"/>
-        <argument type='service' value="system.repository.language"/>
+        <argument type='service' value="snippet.repository"/>
+        <argument type='service' value="language.repository"/>
         <tag>service</tag>
     </service>
 
     <service id="system.service.analysis_manager" class="SpawnCore\Defaults\Services\AnalysisManager" static="true">
-        <argument type='service' value="system.repository.analysis"/>
+        <argument type='service' value="analysis.repository"/>
         <argument type='service' value="system.service.configuration_manager"/>
         <tag>event.subscriber</tag>
     </service>
 
     <service id="system.service.user_manager" class="SpawnCore\Defaults\Services\UserManager" static="true">
-        <argument type='service' value="system.repository.user"/>
+        <argument type='service' value="user.repository"/>
         <argument type='service' value="system.kernel.request"/>
         <argument type='service' value="system.session.helper"/>
         <tag>service</tag>

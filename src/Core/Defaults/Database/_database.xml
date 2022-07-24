@@ -7,7 +7,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.configuration" class="SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository" static="true">
+    <service id="configuration.repository" class="SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository" static="true">
         <argument type="service" value="system.database.table.configuration" />
         <tag>base.service.static</tag>
     </service>
@@ -18,7 +18,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.crons" class="SpawnCore\Defaults\Database\CronTable\CronRepository" static="true">
+    <service id="crons.repository" class="SpawnCore\Defaults\Database\CronTable\CronRepository" static="true">
         <argument type="service" value="system.database.table.crons" />
         <tag>base.service.static</tag>
     </service>
@@ -29,7 +29,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.language" class="SpawnCore\Defaults\Database\LanguageTable\LanguageRepository" static="true">
+    <service id="language.repository" class="SpawnCore\Defaults\Database\LanguageTable\LanguageRepository" static="true">
         <argument type="service" value="system.database.table.language" />
         <tag>base.service.static</tag>
     </service>
@@ -40,7 +40,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.migrations" class="SpawnCore\Defaults\Database\MigrationTable\MigrationRepository" static="true">
+    <service id="migrations.repository" class="SpawnCore\Defaults\Database\MigrationTable\MigrationRepository" static="true">
         <argument type="service" value="system.database.table.migrations" />
         <tag>base.service.static</tag>
     </service>
@@ -51,7 +51,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.modules" class="SpawnCore\Defaults\Database\ModuleTable\ModuleRepository" static="true">
+    <service id="modules.repository" class="SpawnCore\Defaults\Database\ModuleTable\ModuleRepository" static="true">
         <argument type="service" value="system.database.table.modules" />
         <tag>base.service.static</tag>
     </service>
@@ -62,7 +62,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.seo_urls" class="SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository" static="true">
+    <service id="seo_urls.repository" class="SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository" static="true">
         <argument type="service" value="system.database.table.seo_urls" />
         <tag>base.service.static</tag>
     </service>
@@ -74,7 +74,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.snippet" class="SpawnCore\Defaults\Database\SnippetTable\SnippetRepository" static="true">
+    <service id="snippet.repository" class="SpawnCore\Defaults\Database\SnippetTable\SnippetRepository" static="true">
         <argument type="service" value="system.database.table.snippet" />
         <tag>base.service.static</tag>
     </service>
@@ -86,7 +86,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.analysis" class="SpawnCore\Defaults\Database\AnalysisTable\AnalysisRepository" static="true">
+    <service id="analysis.repository" class="SpawnCore\Defaults\Database\AnalysisTable\AnalysisRepository" static="true">
         <argument type="service" value="system.database.table.analysis" />
         <tag>base.service.static</tag>
     </service>
@@ -98,7 +98,7 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="system.repository.user" class="SpawnCore\Defaults\Database\UserTable\UserRepository" static="true">
+    <service id="user.repository" class="SpawnCore\Defaults\Database\UserTable\UserRepository" static="true">
         <argument type="service" value="system.database.table.user" />
         <tag>base.service.static</tag>
     </service>

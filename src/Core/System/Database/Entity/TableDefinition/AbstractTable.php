@@ -1,4 +1,5 @@
 <?php declare(strict_types = 1);
+
 namespace SpawnCore\System\Database\Entity\TableDefinition;
 
 use bin\spawn\IO;
@@ -11,6 +12,7 @@ use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use SpawnCore\System\Custom\Gadgets\Slugifier;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
+use SpawnCore\System\Database\Entity\TableDefinition\Association\AbstractAssociation;
 use SpawnCore\System\Database\Entity\TableDefinition\Constants\ColumnTypeOptions;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 
@@ -21,12 +23,28 @@ abstract class AbstractTable {
     public const UNIQUE_INDEX_PREFIX = 'UI_';
     public const FOREIGN_KEY_PREFIX = 'FK_';
 
+    abstract public function getEntityClass(): string;
+
     /**
      * @return AbstractColumn[]
      */
     abstract public function getTableColumns(): array;
 
-    abstract public function getTableName(): string;
+    /**
+     * @return string[]
+     */
+    abstract public function getRequiredColumns(): array;
+
+    /**
+     * @return AbstractAssociation[]
+     */
+    public function getTableAssociations(): array {
+        return [];
+    }
+
+    public function getTableName(): string {
+        return static::ENTITY_NAME;
+    }
 
     /**
      * @throws DatabaseConnectionException
@@ -314,7 +332,5 @@ abstract class AbstractTable {
     protected function toUniqueIndex(string $table, string $column): string {
         return self::UNIQUE_INDEX_PREFIX.$table.'_'.$column;
     }
-
-
 
 }

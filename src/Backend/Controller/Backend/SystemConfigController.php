@@ -71,7 +71,7 @@ class SystemConfigController extends AbstractBackendController {
         try {
             $qb = DatabaseConnection::getConnection()->createQueryBuilder();
             $stmt = $qb->select('DISTINCT (folder)')
-                ->from(ConfigurationTable::TABLE_NAME)
+                ->from(ConfigurationTable::ENTITY_NAME)
                 ->executeQuery();
             $folders = array_column($stmt->fetchAllAssociative(), 'folder');
         }
@@ -148,7 +148,7 @@ class SystemConfigController extends AbstractBackendController {
     public function folderSaveSubmitAction(): AbstractResponse {
 
         $queryBuilder = DatabaseConnection::getConnection()->createQueryBuilder();
-        $stmt = $queryBuilder->update(ConfigurationTable::TABLE_NAME, 'c')
+        $stmt = $queryBuilder->update(ConfigurationTable::ENTITY_NAME, 'c')
             ->set('c.value', '?')
             ->where('c.internalName = ?');
 

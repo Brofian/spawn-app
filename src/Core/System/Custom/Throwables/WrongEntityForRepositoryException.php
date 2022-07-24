@@ -6,13 +6,12 @@ use Throwable;
 
 class WrongEntityForRepositoryException extends AbstractException
 {
-    public function __construct(string $entityClass, string $desiredClass, $repositoryClass, Throwable $previous = null)
+    public function __construct(string $entityClass, string $desiredClass, Throwable $previous = null)
     {
         parent::__construct(
             [
                 'entityClass' => $entityClass,
                 'desiredClass' => $desiredClass,
-                'repositoryClass' => $repositoryClass,
             ],
             $previous
         );
@@ -20,7 +19,7 @@ class WrongEntityForRepositoryException extends AbstractException
 
     protected function getMessageTemplate(): string
     {
-        return 'The Repository "%repositoryClass%" expects an entity of type "%desiredClass%". Entity of class "%entityClass%" given!';
+        return 'The Repository expects an entity of type "%desiredClass%". Entity of class "%entityClass%" given!';
     }
 
     protected function getExitCode(): int

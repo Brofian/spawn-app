@@ -14,6 +14,7 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\EventSystem\EventInitializer;
@@ -77,6 +78,7 @@ class ServiceContainerProvider
             $modules = $moduleLoader->loadModules();
             self::$serviceContainer = $serviceLoader->loadServices($modules);
             self::addCoreServices();
+            self::addRepositoryServices();
 
             EventInitializer::registerSubscriberFromServices(self::$serviceContainer);
         }
@@ -84,10 +86,8 @@ class ServiceContainerProvider
         return self::$serviceContainer;
     }
 
-
     protected static function addCoreServices(): void
     {
-
         $propertySetterList = ServiceProperties::getPropertySetterMethods();
 
         foreach (self::CORE_SERVICE_LIST as $coreServiceId => $coreServiceData) {
@@ -105,5 +105,20 @@ class ServiceContainerProvider
 
     }
 
+    protected static function addRepositoryServices(): void {
+        $tableServices = self::$serviceContainer->getServicesByTag('database.table');
+        foreach($tableServices as $tableService) {
+            $tableClass = $tableService->getClass();
+            $entityName = $tableClass::ENTITY_NAME;
 
+            $service = new Service();
+            $service->setId($entityName . '.repository');
+            $service->setTags([ServiceTags::DATABASE_REPOSITORY]);
+            $service->setStatic(true);
+            $service->setClass(TableRepository::class);
+            $service->addArgument('service', $tableService->getId());
+
+            self::$serviceContainer->addService($service);
+        }
+    }
 }

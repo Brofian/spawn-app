@@ -11,7 +11,12 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class MigrationTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_migrations';
+    public const ENTITY_NAME = 'spawn_migrations';
+
+    public function getEntityClass(): string
+    {
+        return MigrationEntity::class;
+    }
 
     public function getTableColumns(): array
     {
@@ -24,8 +29,10 @@ class MigrationTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
-    {
-        return self::TABLE_NAME;
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+        ];
     }
+
 }

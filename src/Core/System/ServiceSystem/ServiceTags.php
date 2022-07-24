@@ -15,6 +15,8 @@ class ServiceTags
     public const TECHNICAL_SERVICE = 'technical.service';
     /* The definition of an auto generated database table */
     public const DATABASE_TABLE = 'database.table';
+    /* Defines a repository for accessing a database table */
+    public const DATABASE_REPOSITORY = 'database.repository';
     /* Classes with these tags are loaded and added to the twig loader */
     public const EXTENSION_TWIG = 'extension.twig';
     /* A class, that implements the EventSubscriber interface to be called by an event */

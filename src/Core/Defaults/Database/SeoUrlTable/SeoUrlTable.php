@@ -1,7 +1,9 @@
 <?php declare(strict_types = 1);
 namespace SpawnCore\Defaults\Database\SeoUrlTable;
 
+use SpawnCore\Defaults\Database\AnalysisTable\AnalysisTable;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
+use SpawnCore\System\Database\Entity\TableDefinition\Association\ToOneAssociation;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\BooleanColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\CreatedAtColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\JsonColumn;
@@ -11,7 +13,12 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class SeoUrlTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_seo_urls';
+    public const ENTITY_NAME = 'spawn_seo_urls';
+
+    public function getEntityClass(): string
+    {
+        return SeoUrlEntity::class;
+    }
 
     public function getTableColumns(): array
     {
@@ -32,8 +39,17 @@ class SeoUrlTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
+    public function getTableAssociations(): array
     {
-        return self::TABLE_NAME;
+        return [
+            new ToOneAssociation('id', AnalysisTable::ENTITY_NAME, 'urlId')
+        ];
     }
+
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+        ];
+    }
+
 }

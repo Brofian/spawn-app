@@ -10,7 +10,12 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class ConfigurationTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_configuration';
+    public const ENTITY_NAME = 'spawn_configuration';
+
+    public function getEntityClass(): string
+    {
+        return ConfigurationEntity::class;
+    }
 
     public function getTableColumns(): array
     {
@@ -26,8 +31,11 @@ class ConfigurationTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
-    {
-        return self::TABLE_NAME;
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+            'internalName',
+        ];
     }
+
 }

@@ -23,7 +23,7 @@
     </service>
 
     <service id="system.backend.system_config" class="SpawnBackend\Controller\Backend\SystemConfigController">
-        <argument type='service' value="system.repository.configuration"/>
+        <argument type='service' value="configuration.repository"/>
         <argument type='service' value="system.kernel.request"/>
         <tag>backend.controller</tag>
     </service>

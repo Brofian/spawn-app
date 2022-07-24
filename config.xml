@@ -6,7 +6,7 @@
 
         <entityselectfield>
             <name>config_system_fallback_method</name>
-            <repository>system.repository.seo_urls</repository>
+            <repository>seo_urls.repository</repository>
             <search>
                 <column>name</column>
                 <column>controller</column>
@@ -19,7 +19,7 @@
 
         <entityselectfield>
             <name>config_system_user_login_route</name>
-            <repository>system.repository.seo_urls</repository>
+            <repository>seo_urls.repository</repository>
             <search>
                 <column>name</column>
                 <column>controller</column>
@@ -69,7 +69,7 @@
 
         <entityselectfield>
             <name>config_debug_entity</name>
-            <repository>system.repository.seo_urls</repository>
+            <repository>seo_urls.repository</repository>
             <search> <!-- If this is given, the repository can be searched-->
                 <column>controller</column>
                 <column>action</column>

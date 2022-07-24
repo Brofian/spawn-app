@@ -44,7 +44,7 @@ class ModuleLoader
                 return $this->readModulesFromCache();
             }
 
-            if ($databaseTable->doesTableExist(ModuleTable::TABLE_NAME)) {
+            if ($databaseTable->doesTableExist(ModuleTable::ENTITY_NAME)) {
                 $moduleCollection = $this->readModulesFromDB();
                 if ($moduleCollection->count()) {
                     return $moduleCollection;

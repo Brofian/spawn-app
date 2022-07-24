@@ -11,7 +11,12 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class AdministratorTable extends AbstractTable {
 
-    public const TABLE_NAME = 'spawn_administrator';
+    public const ENTITY_NAME = 'spawn_administrator';
+
+    public function getEntityClass(): string
+    {
+        return AdministratorEntity::class;
+    }
 
     public function getTableColumns(): array
     {
@@ -28,8 +33,10 @@ class AdministratorTable extends AbstractTable {
         ];
     }
 
-    public function getTableName(): string
-    {
-        return self::TABLE_NAME;
+    public function getRequiredColumns(): array {
+        return [
+            'id',
+        ];
     }
+
 }

@@ -3,7 +3,7 @@
 <services>
 
     <service id="system.command.debug" class="SpawnCore\Defaults\Commands\DebugCommand">
-        <argument type="service" value="system.repository.modules"/>
+        <argument type="service" value="modules.repository"/>
         <tag>console.command</tag>
     </service>
 
@@ -13,7 +13,7 @@
 
     <service id="system.command.spawn_build" class="SpawnCore\Defaults\Commands\SpawnBuildCommand">
         <argument type="service" value="system.database.helper"/>
-        <argument type="service" value="system.repository.modules"/>
+        <argument type="service" value="modules.repository"/>
         <tag>console.command</tag>
     </service>
 
@@ -47,7 +47,7 @@
 
     <service id="system.command.module_refresh" class="SpawnCore\Defaults\Commands\ModulesRefreshCommand">
         <argument type="service" value="system.database.helper"/>
-        <argument type="service" value="system.repository.modules"/>
+        <argument type="service" value="modules.repository"/>
         <argument type="service" value="system.service.seo_url_manager"/>
         <argument type="service" value="system.service.configuration_system"/>
         <argument type="service" value="system.service.snippet_system"/>
@@ -55,7 +55,7 @@
     </service>
 
     <service id="system.command.migration_execute" class="SpawnCore\Defaults\Commands\MigrationExecuteCommand">
-        <argument type="service" value="system.repository.migrations"/>
+        <argument type="service" value="migrations.repository"/>
         <argument type="service" value="system.database.helper"/>
         <tag>console.command</tag>
     </service>

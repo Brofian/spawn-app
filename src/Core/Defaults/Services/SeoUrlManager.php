@@ -61,7 +61,7 @@ class SeoUrlManager {
 
         $stmt = $queryBuilder
             ->select('COUNT(*) as count')
-            ->from(SeoUrlTable::TABLE_NAME);
+            ->from(SeoUrlTable::ENTITY_NAME);
         if($ignoreLocked) {
            $stmt->where('locked = 0');
         }

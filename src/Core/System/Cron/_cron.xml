@@ -5,7 +5,7 @@
     <import file="/Jobs/_cronjobs.xml"/>
 
     <service id="system.core.cron.manager" class="SpawnCore\System\Cron\CronManager" static="true">
-        <argument type="service" value="system.repository.crons" />
+        <argument type="service" value="crons.repository" />
         <tag>base.service</tag>
     </service>
 

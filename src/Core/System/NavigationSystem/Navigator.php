@@ -32,7 +32,7 @@ class Navigator
     public function __construct()
     {
         $this->serviceContainer = ServiceContainerProvider::getServiceContainer();
-        $this->seoUrlRepository = $this->serviceContainer->getServiceInstance('system.repository.seo_urls');
+        $this->seoUrlRepository = $this->serviceContainer->getServiceInstance('seo_urls.repository');
 
         
         //load fallback service and action
