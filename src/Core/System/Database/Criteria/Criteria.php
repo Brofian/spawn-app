@@ -5,6 +5,7 @@ namespace SpawnCore\System\Database\Criteria;
 use Doctrine\DBAL\Query\QueryBuilder;
 use SpawnCore\System\Database\Criteria\Filters\AbstractFilter;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;
+use SpawnCore\System\Database\Criteria\Orders\OrderBy;
 use SpawnCore\System\Database\Criteria\Relation\Relation;
 
 class Criteria {
@@ -14,6 +15,9 @@ class Criteria {
 
     /** @var Relation[]  */
     protected array $relations = [];
+
+    /** @var OrderBy[] */
+    protected array $orderBys = [];
 
     public function __construct(AbstractFilter ...$filters)
     {
@@ -68,4 +72,14 @@ class Criteria {
         }
     }
 
+    public function addOrderBy(OrderBy $orderBy): void {
+        $this->orderBys[] = $orderBy;
+    }
+
+    /**
+     * @return OrderBy[]
+     */
+    public function getOrderBys(): array {
+        return $this->orderBys;
+    }
 }

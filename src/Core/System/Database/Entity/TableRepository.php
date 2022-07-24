@@ -59,6 +59,10 @@ abstract class TableRepository
 
         $query->where($criteria->generateCriteria());
 
+        foreach($criteria->getOrderBys() as $orderBy) {
+            $query->addOrderBy($orderBy->getColumn(), $orderBy->getDirection());
+        }
+
         /** @var EntityCollection $entityCollection */
         $entityCollection = new EntityCollection(static::getEntityClass());
 

@@ -4,6 +4,7 @@ namespace SpawnCore\System\Custom\Collection;
 
 class AssociativeCollection extends AbstractCollectionBase
 {
+
     protected array $collection = array();
     protected array $keys = array();
     protected int $position = 0;
