@@ -13,18 +13,19 @@ use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Criteria\Filters\OrFilter;
 use SpawnCore\System\Database\Entity\EntityCollection;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 
 class UserManager {
 
     public const USER_LOGIN_TOKEN = 'user_login_token';
 
-    protected UserRepository $userRepository;
+    protected TableRepository $userRepository;
     protected Request $request;
     protected SessionHelper $sessionHelper;
 
     public function __construct(
-        UserRepository $userRepository,
+        TableRepository $userRepository,
         Request $request,
         SessionHelper $sessionHelper
     )   {

@@ -5,7 +5,6 @@ namespace SpawnCore\Defaults\Commands;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
-use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\Defaults\Exceptions\AddedSnippetForMissingLanguageException;
 use SpawnCore\Defaults\Services\ConfigurationSystem;
 use SpawnCore\Defaults\Services\SeoUrlManager;
@@ -18,19 +17,20 @@ use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Entity\InvalidRepositoryInteractionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 
 class ModulesRefreshCommand extends AbstractCommand {
 
     protected DatabaseHelper $databaseHelper;
-    protected ModuleRepository $moduleRepository;
+    protected TableRepository $moduleRepository;
     protected SeoUrlManager $seoUrlManager;
     protected ConfigurationSystem $configurationSystem;
     protected SnippetSystem $snippetSystem;
 
     public function __construct(
         DatabaseHelper $databaseHelper,
-        ModuleRepository $moduleRepository,
+        TableRepository $moduleRepository,
         SeoUrlManager $seoUrlManager,
         ConfigurationSystem $configurationSystem,
         SnippetSystem $snippetSystem
@@ -72,7 +72,7 @@ class ModulesRefreshCommand extends AbstractCommand {
     {
         $refreshAll = !($parameters['modules'] || $parameters['actions'] || $parameters['configurations']);
 
-        try {
+/*        try {*/
             if($parameters['modules'] || $refreshAll) {
                 $this->refreshModules((bool)$parameters['delete']);
             }
@@ -88,7 +88,7 @@ class ModulesRefreshCommand extends AbstractCommand {
             if($parameters['snippets'] || $refreshAll) {
                 $this->refreshSnippets();
             }
-        } catch (
+/*        } catch (
             Exception |
             WrongEntityForRepositoryException |
             DatabaseConnectionException |
@@ -97,7 +97,7 @@ class ModulesRefreshCommand extends AbstractCommand {
             $e)
         {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
-        }
+        }*/
 
         return 0;
     }

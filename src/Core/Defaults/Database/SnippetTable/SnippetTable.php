@@ -12,7 +12,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\ForeignKey;
 
 class SnippetTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_snippets';
+    public const ENTITY_NAME = 'snippets';
 
     public function getEntityClass(): string
     {

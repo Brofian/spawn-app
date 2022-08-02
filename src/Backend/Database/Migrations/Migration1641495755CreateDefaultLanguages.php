@@ -2,6 +2,7 @@
 
 namespace SpawnBackend\Database\Migrations;
 
+use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\LanguageTable\LanguageEntity;
 use SpawnCore\Defaults\Database\LanguageTable\LanguageRepository;
@@ -29,10 +30,16 @@ class Migration1641495755CreateDefaultLanguages extends AbstractMigration {
         $repository = new LanguageRepository(new LanguageTable());
 
         $langEN = new LanguageEntity('EN', null);
-        $repository->upsert($langEN);
-
         $langDE = new LanguageEntity('DE', $langEN->getId());
-        $repository->upsert($langDE);
+
+        try {
+            $repository->upsert($langEN);
+            $repository->upsert($langDE);
+        }
+        catch (\Throwable $t) {
+            IO::printError($t->getMessage());
+        }
+
     }
 
 }        

@@ -14,17 +14,18 @@ use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\ServiceSystem\Service;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class MigrationExecuteCommand extends AbstractCommand {
 
-    protected MigrationRepository $migrationRepository;
+    protected TableRepository $migrationRepository;
     protected DatabaseHelper $databaseHelper;
 
     public function __construct(
-        MigrationRepository $migrationRepository,
+        TableRepository $migrationRepository,
         DatabaseHelper $databaseHelper
     )
     {

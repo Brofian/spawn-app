@@ -17,6 +17,7 @@ use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\EventSystem\Events\RequestRoutedEvent;
 use SpawnCore\System\EventSystem\EventSubscriberInterface;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
@@ -28,11 +29,11 @@ class AdminLoginManager implements EventSubscriberInterface
     public const BACKEND_LOGIN_CONTROLLER_SERVICE_ID = 'system.backend.administrator';
     public const BACKEND_LOGIN_ACTION = 'loginAction';
 
-    protected AdministratorRepository $administratorRepository;
+    protected TableRepository $administratorRepository;
     protected SessionHelper $sessionHelper;
 
     public function __construct(
-        AdministratorRepository $administratorRepository,
+        TableRepository $administratorRepository,
         SessionHelper $sessionHelper
     )
     {

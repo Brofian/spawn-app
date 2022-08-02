@@ -16,12 +16,6 @@ class LanguageRepository extends TableRepository {
         parent::__construct($tableDefinition);
     }
 
-
-    public static function getEntityClass(): string
-    {
-        return LanguageEntity::class;
-    }
-
     protected function getUpdateFilterColumnsFromValues(array $updateValues): array
     {
         return [

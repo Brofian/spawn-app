@@ -4,7 +4,6 @@ namespace SpawnCore\System\CardinalSystem\ModuleNetwork;
 
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
-use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleTable;
 use SpawnCore\System\Custom\Gadgets\Slugifier;
 use SpawnCore\System\Custom\Gadgets\XMLContentModel;
@@ -13,6 +12,7 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 
 class ModuleLoader
@@ -78,7 +78,7 @@ class ModuleLoader
     protected function readModulesFromDB(): EntityCollection
     {
         //load modules from database
-        return (new ModuleRepository(new ModuleTable()))->search(new Criteria());
+        return (new TableRepository(new ModuleTable()))->search(new Criteria());
     }
 
     protected function readModulesFromFileSystem(): EntityCollection
@@ -96,7 +96,6 @@ class ModuleLoader
                 if (in_array($namespace, $this->ignoredDirs, true) || !is_dir($namespacePath)) {
                     continue;
                 }
-
 
                 $possibleModulesForNamespace = scandir($namespacePath);
 

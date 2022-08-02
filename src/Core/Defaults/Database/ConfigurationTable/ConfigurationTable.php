@@ -10,7 +10,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class ConfigurationTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_configuration';
+    public const ENTITY_NAME = 'configuration';
 
     public function getEntityClass(): string
     {

@@ -11,7 +11,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class AdministratorTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_administrator';
+    public const ENTITY_NAME = 'administrator';
 
     public function getEntityClass(): string
     {

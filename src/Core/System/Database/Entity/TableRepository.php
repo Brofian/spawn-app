@@ -11,6 +11,7 @@ use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\DateTimeColumn;
+use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\JsonColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 
@@ -196,9 +197,10 @@ class TableRepository
         return true;
     }
 
-    /**
-     * @return array
-     */
+    public function getEntityClass(): string {
+        return $this->tableDefinition->getEntityClass();
+    }
+
     protected function getTypeIdentifiersForColumns(array $columns): array {
         $identifiers = [];
         foreach($columns as $column) {
@@ -258,13 +260,16 @@ class TableRepository
                 if($tableColumn instanceof UuidColumn) {
                     $updateValues[$tableColumn->getName()] = $updateValues[$tableColumn->getName()] ? UUID::hexToBytes($updateValues[$tableColumn->getName()]): null;
                 }
+                elseif($tableColumn instanceof JsonColumn) {
+                    $updateValues[$tableColumn->getName()] = $updateValues[$tableColumn->getName()] ? json_encode($updateValues[$tableColumn->getName()], JSON_THROW_ON_ERROR): null;
+                }
             }
         }
 
         return $updateValues;
     }
 
-    protected function adjustEntityAfterSuccessfulUpdate(Entity $entity, array $updatedValues): void {
+    protected function adjustEntityAfterSuccessfulUpdate(Entity &$entity, array $updatedValues): void {
         $entity = $entity::getEntityFromArray(array_merge($entity->toArray(), $updatedValues));
     }
 
@@ -275,7 +280,7 @@ class TableRepository
             $columnName = $tableColumn->getName();
 
             if($columnName === 'id') {
-                $values[$columnName] = $values[$columnName] ?? UUID::randomHex();
+                $values[$columnName] = $values[$columnName] ?? UUID::randomBytes();
             }
             else if($columnName === 'updatedAt') {
                 $values[$columnName] = $values[$columnName] ?? $now;
@@ -286,12 +291,15 @@ class TableRepository
             else if($tableColumn instanceof UuidColumn && isset($values[$columnName])) {
                 $values[$columnName] = UUID::hexToBytes($values[$columnName]);
             }
+            else if($tableColumn instanceof JsonColumn && isset($values[$columnName])) {
+                $values[$columnName] = json_encode($values[$columnName], JSON_THROW_ON_ERROR);
+            }
         }
 
         return $values;
     }
 
-    protected function adjustEntityAfterSuccessfulInsert(Entity $entity, array $insertedValues): void {
+    protected function adjustEntityAfterSuccessfulInsert(Entity &$entity, array $insertedValues): void {
 
         foreach($this->tableDefinition->getTableColumns() as $tableColumn) {
             $columnName = $tableColumn->getName();

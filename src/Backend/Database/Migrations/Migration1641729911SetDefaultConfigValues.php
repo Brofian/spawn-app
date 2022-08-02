@@ -12,16 +12,17 @@ use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 
 class Migration1641729911SetDefaultConfigValues extends AbstractMigration {
 
-    protected ConfigurationRepository $configurationRepository;
-    protected SeoUrlRepository $seoUrlRepository;
+    protected TableRepository $configurationRepository;
+    protected TableRepository $seoUrlRepository;
 
     public function __construct(
-        ConfigurationRepository $configurationRepository,
-        SeoUrlRepository $seoUrlRepository
+        TableRepository $configurationRepository,
+        TableRepository $seoUrlRepository
     )
     {
         $this->configurationRepository = $configurationRepository;

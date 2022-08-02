@@ -9,11 +9,6 @@ use SpawnCore\System\Database\Entity\TableRepository;
 
 class ModuleRepository extends TableRepository {
 
-    public static function getEntityClass(): string
-    {
-        return ModuleEntity::class;
-    }
-
     /**
      * @param array $values
      * @return array

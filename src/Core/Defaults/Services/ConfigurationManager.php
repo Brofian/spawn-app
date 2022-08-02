@@ -8,10 +8,11 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 
 class ConfigurationManager {
 
-    protected ConfigurationRepository $configurationRepository;
+    protected TableRepository $configurationRepository;
     protected array $configurations = [];
 
     /**
@@ -19,7 +20,7 @@ class ConfigurationManager {
      * @throws RepositoryException
      */
     public function __construct(
-        ConfigurationRepository $configurationRepository
+        TableRepository $configurationRepository
     )
     {
         $this->configurationRepository = $configurationRepository;

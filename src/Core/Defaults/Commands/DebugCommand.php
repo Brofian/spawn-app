@@ -3,15 +3,15 @@
 namespace SpawnCore\Defaults\Commands;
 
 
-use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
+use SpawnCore\System\Database\Entity\TableRepository;
 
 class DebugCommand extends AbstractCommand  {
 
-    protected ModuleRepository $moduleRepository;
+    protected TableRepository $moduleRepository;
 
     public function __construct(
-        ModuleRepository $moduleRepository
+        TableRepository $moduleRepository
     )
     {
         $this->moduleRepository = $moduleRepository;

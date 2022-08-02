@@ -18,6 +18,7 @@ use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\InFilter;
 use SpawnCore\System\Database\Entity\InvalidRepositoryInteractionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 
 class ConfigurationSystem {
 
@@ -30,10 +31,10 @@ class ConfigurationSystem {
     public const TYPE_BOOL = 'bool';
 
 
-    protected ConfigurationRepository $configurationRepository;
+    protected TableRepository $configurationRepository;
 
     public function __construct(
-        ConfigurationRepository $configurationRepository
+        TableRepository $configurationRepository
     )
     {
         $this->configurationRepository = $configurationRepository;
@@ -48,10 +49,7 @@ class ConfigurationSystem {
      * @throws \Doctrine\DBAL\Exception
      */
     public function updateConfigurationEntries(bool $removeStaleOnes = false): array {
-        $result = [
-            'added' => 0,
-            'updated' => 0
-        ];
+        $result = [];
 
         $configurations = $this->loadConfigurationFiles();
         $existingConfigurations = $this->loadExistingConfigurations();
@@ -265,7 +263,6 @@ class ConfigurationSystem {
                 break;
             default:
                 throw new MissingRequiredConfigurationFieldException('valid_type_err', 'valid_type_err');
-                break;
         }
 
         return $fieldData;

@@ -15,7 +15,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\ForeignKey;
 
 class LanguageTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_language';
+    public const ENTITY_NAME = 'language';
 
     public function getEntityClass(): string
     {

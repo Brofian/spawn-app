@@ -19,6 +19,7 @@ use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\InvalidRepositoryInteractionException;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 use SpawnCore\System\ServiceSystem\Service;
 use SpawnCore\System\ServiceSystem\ServiceContainer;
@@ -27,12 +28,12 @@ use SpawnCore\System\ServiceSystem\ServiceTags;
 
 class SeoUrlManager {
 
-    protected SeoUrlRepository $seoUrlRepository;
+    protected TableRepository $seoUrlRepository;
     protected ServiceContainer $serviceContainer;
 
 
     public function __construct(
-        SeoUrlRepository $seoUrlRepository
+        TableRepository $seoUrlRepository
     )
     {
         $this->seoUrlRepository = $seoUrlRepository;
@@ -150,12 +151,6 @@ class SeoUrlManager {
                     }
                 }
 
-
-
-
-
-
-
                 if(!$name) {
                     IO::printWarning('# Missing tag "@name" in action definition in ' . $controllerServiceId);
                     continue;
@@ -206,8 +201,6 @@ class SeoUrlManager {
                 }
             }
         }
-
-
 
         if($removeStaleEntries) {
             //remove the old actions from $registeredSeoUrls

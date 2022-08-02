@@ -15,7 +15,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\ForeignKey;
 
 class AnalysisTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_analysis';
+    public const ENTITY_NAME = 'analysis';
 
     public function getEntityClass(): string
     {

@@ -13,7 +13,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class SeoUrlTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_seo_urls';
+    public const ENTITY_NAME = 'seo_urls';
 
     public function getEntityClass(): string
     {

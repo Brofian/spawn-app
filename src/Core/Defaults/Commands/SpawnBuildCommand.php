@@ -4,23 +4,23 @@ namespace SpawnCore\Defaults\Commands;
 
 
 use Doctrine\DBAL\Exception;
-use SpawnCore\Defaults\Database\ModuleTable\ModuleRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Entity\TableDefinition\InvalidForeignKeyConstraintException;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;
 use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class SpawnBuildCommand extends AbstractCommand  {
 
     protected DatabaseHelper $databaseHelper;
-    protected ModuleRepository $moduleRepository;
+    protected TableRepository $moduleRepository;
 
     public function __construct(
         DatabaseHelper $databaseHelper,
-        ModuleRepository $moduleRepository
+        TableRepository $moduleRepository
     )
     {
         $this->databaseHelper = $databaseHelper;

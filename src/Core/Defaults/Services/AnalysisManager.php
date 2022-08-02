@@ -11,16 +11,17 @@ use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
+use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\EventSystem\Events\RequestRoutedEvent;
 use SpawnCore\System\EventSystem\EventSubscriberInterface;
 
 class AnalysisManager implements EventSubscriberInterface {
 
-    protected AnalysisRepository $analysisRepository;
+    protected TableRepository $analysisRepository;
     protected ConfigurationManager $configManager;
 
     public function __construct(
-        AnalysisRepository $analysisRepository,
+        TableRepository $analysisRepository,
         ConfigurationManager $configManager
     )   {
         $this->analysisRepository = $analysisRepository;

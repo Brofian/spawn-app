@@ -34,5 +34,10 @@
         <tag>backend.controller</tag>
     </service>
 
+    <service id="system.backend.api" class="SpawnBackend\Controller\Backend\ApiController">
+        <argument type='service' value="system.kernel.request"/>
+        <tag>backend.controller</tag>
+    </service>
+
 </services>
 

@@ -16,19 +16,20 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 
 class SnippetSystem {
 
     public const SNIPPET_FILE_REGEX = '/^.*\.json$/m';
 
-    protected SnippetRepository $snippetRepository;
-    protected LanguageRepository $languageRepository;
+    protected TableRepository $snippetRepository;
+    protected TableRepository $languageRepository;
     protected ?array $availableLanguages = null;
 
 
     public function __construct(
-        SnippetRepository $snippetRepository,
-        LanguageRepository $languageRepository
+        TableRepository $snippetRepository,
+        TableRepository $languageRepository
     )
     {
         $this->snippetRepository = $snippetRepository;

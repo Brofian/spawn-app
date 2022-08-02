@@ -11,7 +11,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class ModuleTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_modules';
+    public const ENTITY_NAME = 'modules';
 
     public function getEntityClass(): string
     {

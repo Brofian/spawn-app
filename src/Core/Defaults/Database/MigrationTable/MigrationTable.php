@@ -11,7 +11,7 @@ use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 
 class MigrationTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_migrations';
+    public const ENTITY_NAME = 'migrations';
 
     public function getEntityClass(): string
     {

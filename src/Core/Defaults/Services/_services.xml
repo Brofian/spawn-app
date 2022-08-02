@@ -17,13 +17,13 @@
     </service>
 
     <service id="system.service.snippet_system" class="SpawnCore\Defaults\Services\SnippetSystem" static="true">
-        <argument type='service' value="snippet.repository"/>
+        <argument type='service' value="snippets.repository"/>
         <argument type='service' value="language.repository"/>
         <tag>service</tag>
     </service>
 
     <service id="system.service.snippet_manager" class="SpawnCore\Defaults\Services\SnippetManager" static="true">
-        <argument type='service' value="snippet.repository"/>
+        <argument type='service' value="snippets.repository"/>
         <argument type='service' value="language.repository"/>
         <tag>service</tag>
     </service>

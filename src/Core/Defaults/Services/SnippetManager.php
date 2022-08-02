@@ -13,11 +13,12 @@ use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
 use SpawnCore\System\Database\Criteria\Filters\InvalidFilterValueException;
 use SpawnCore\System\Database\Criteria\Filters\LikeFilter;
 use SpawnCore\System\Database\Entity\RepositoryException;
+use SpawnCore\System\Database\Entity\TableRepository;
 
 class SnippetManager {
 
-    protected SnippetRepository $snippetRepository;
-    protected LanguageRepository $languageRepository;
+    protected TableRepository $snippetRepository;
+    protected TableRepository $languageRepository;
     protected array $availableLanguages = [];
     protected array $languageFallbacks = [];
 
@@ -30,8 +31,8 @@ class SnippetManager {
      * @throws RepositoryException
      */
     public function __construct(
-        SnippetRepository $snippetRepository,
-        LanguageRepository $languageRepository
+        TableRepository $snippetRepository,
+        TableRepository $languageRepository
     )
     {
         $this->snippetRepository = $snippetRepository;

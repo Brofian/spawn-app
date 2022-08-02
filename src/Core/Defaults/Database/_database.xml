@@ -7,102 +7,44 @@
         <tag>database.table</tag>
     </service>
 
-    <service id="configuration.repository" class="SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository" static="true">
-        <argument type="service" value="system.database.table.configuration" />
-        <tag>base.service.static</tag>
-    </service>
-
-
     <!-- Cronjobs -->
     <service id="system.database.table.crons" class="SpawnCore\Defaults\Database\CronTable\CronTable" static="true">
         <tag>database.table</tag>
     </service>
-
-    <service id="crons.repository" class="SpawnCore\Defaults\Database\CronTable\CronRepository" static="true">
-        <argument type="service" value="system.database.table.crons" />
-        <tag>base.service.static</tag>
-    </service>
-
 
     <!-- Language -->
     <service id="system.database.table.language" class="SpawnCore\Defaults\Database\LanguageTable\LanguageTable" static="true">
         <tag>database.table</tag>
     </service>
 
-    <service id="language.repository" class="SpawnCore\Defaults\Database\LanguageTable\LanguageRepository" static="true">
-        <argument type="service" value="system.database.table.language" />
-        <tag>base.service.static</tag>
-    </service>
-
-
     <!-- Migrations -->
     <service id="system.database.table.migrations" class="SpawnCore\Defaults\Database\MigrationTable\MigrationTable" static="true">
         <tag>database.table</tag>
     </service>
-
-    <service id="migrations.repository" class="SpawnCore\Defaults\Database\MigrationTable\MigrationRepository" static="true">
-        <argument type="service" value="system.database.table.migrations" />
-        <tag>base.service.static</tag>
-    </service>
-
 
     <!-- Modules -->
     <service id="system.database.table.modules" class="SpawnCore\Defaults\Database\ModuleTable\ModuleTable" static="true">
         <tag>database.table</tag>
     </service>
 
-    <service id="modules.repository" class="SpawnCore\Defaults\Database\ModuleTable\ModuleRepository" static="true">
-        <argument type="service" value="system.database.table.modules" />
-        <tag>base.service.static</tag>
-    </service>
-
-
     <!-- Seo Urls -->
     <service id="system.database.table.seo_urls" class="SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlTable" static="true">
         <tag>database.table</tag>
     </service>
-
-    <service id="seo_urls.repository" class="SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository" static="true">
-        <argument type="service" value="system.database.table.seo_urls" />
-        <tag>base.service.static</tag>
-    </service>
-
-
 
     <!-- Snippet -->
     <service id="system.database.table.snippet" class="SpawnCore\Defaults\Database\SnippetTable\SnippetTable" static="true">
         <tag>database.table</tag>
     </service>
 
-    <service id="snippet.repository" class="SpawnCore\Defaults\Database\SnippetTable\SnippetRepository" static="true">
-        <argument type="service" value="system.database.table.snippet" />
-        <tag>base.service.static</tag>
-    </service>
-
-
-
     <!-- Analysis -->
     <service id="system.database.table.analysis" class="SpawnCore\Defaults\Database\AnalysisTable\AnalysisTable" static="true">
         <tag>database.table</tag>
     </service>
 
-    <service id="analysis.repository" class="SpawnCore\Defaults\Database\AnalysisTable\AnalysisRepository" static="true">
-        <argument type="service" value="system.database.table.analysis" />
-        <tag>base.service.static</tag>
-    </service>
-
-
-
     <!-- User -->
     <service id="system.database.table.user" class="SpawnCore\Defaults\Database\UserTable\UserTable" static="true">
         <tag>database.table</tag>
     </service>
-
-    <service id="user.repository" class="SpawnCore\Defaults\Database\UserTable\UserRepository" static="true">
-        <argument type="service" value="system.database.table.user" />
-        <tag>base.service.static</tag>
-    </service>
-
-
 
 </services>

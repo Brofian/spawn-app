@@ -18,7 +18,7 @@ use spawnWebsite\Database\UserTodoTable\UserTodoTable;
 
 class UserTable extends AbstractTable {
 
-    public const ENTITY_NAME = 'spawn_user';
+    public const ENTITY_NAME = 'user';
 
     public function getEntityClass(): string
     {

@@ -45,17 +45,17 @@ class ModuleEntityDefinition extends Entity {
         return ModuleRepository::class;
     }
 
-    public static function getEntityFromArray(array $values): self
+    public static function getEntityFromArray(array $values): static
     {
-        $values['createdAt'] = self::getDateTimeFromVariable($values['createdAt']??null);
-        $values['updatedAt'] = self::getDateTimeFromVariable($values['updatedAt']??null);
+        $values['createdAt'] = static::getDateTimeFromVariable($values['createdAt']??null);
+        $values['updatedAt'] = static::getDateTimeFromVariable($values['updatedAt']??null);
 
         return new static(
             $values['slug'],
             $values['path'],
-            (bool)$values['active'],
+            (bool)($values['active'] ?? false),
             $values['information'],
-            $values['resourceConfig'],
+            $values['resourceConfig'] ?? '[]',
             $values['id'],
             $values['createdAt'],
             $values['updatedAt']

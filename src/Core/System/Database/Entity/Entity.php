@@ -44,6 +44,10 @@ abstract class Entity extends Mutable
             return $array;
         }
 
+        if($array === null) {
+            return [];
+        }
+
         try {
             return json_decode($array, true, 512, JSON_THROW_ON_ERROR);
         } catch (Exception $e) {
