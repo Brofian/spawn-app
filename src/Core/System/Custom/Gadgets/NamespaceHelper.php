@@ -44,6 +44,7 @@ class NamespaceHelper {
             while($hasChanged);
 
             $slugs = array_unique($slugs);
+            $slugs = array_reverse($slugs);
         }
     }
 

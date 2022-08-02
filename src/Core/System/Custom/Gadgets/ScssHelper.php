@@ -43,11 +43,14 @@ class ScssHelper
         $namespaces = NamespaceHelper::getNamespacesFromModuleCollection($moduleCollection);
 
         foreach($namespaces as $namespace => $moduleList) {
+            $this->setBaseVariable($namespace."CachePath", '/cache/'.ModuleNamespacer::hashNamespace($namespace));
+        }
+
+        foreach($namespaces as $namespace => $moduleList) {
             if($selectedNamespace && $selectedNamespace !== $namespace) {
                 continue;
             }
 
-            $this->setBaseVariable("asset-path", '/cache/'.ModuleNamespacer::hashNamespace($namespace));
             $baseFile = $this->baseFolder . '/' . $namespace . '_index.scss';
 
             if(file_exists($baseFile)) {
@@ -58,7 +61,6 @@ class ScssHelper
                 $targetFolder = $this->cacheFilePath . '/' . $hashedNamespace . '/css';
 
                 //create output file
-                /** @var FileEditor $fileWriter */
                 $fileWriter = new FileEditor();
                 $fileWriter::createFolder($targetFolder);
                 $fileWriter::createFile($targetFolder.'/all.css', $css);
@@ -68,7 +70,6 @@ class ScssHelper
             }
 
         }
-
     }
 
     public function compile(string $baseFile, bool $compressed = false): string
