@@ -22,7 +22,7 @@ class IconFilterExtension extends FilterExtension
      */
     protected function getFilterFunction(): callable
     {
-        return static function ($icon, $namespace = 'SpawnBackend', $additionalClasses = '') {
+        return static function ($icon, $namespace = 'SpawnCommon', $additionalClasses = '') {
 
             $iconPath = ROOT . '/public/cache/' . ModuleNamespacer::hashNamespace($namespace) . '/assets/icons/' . $icon . '.svg';
 

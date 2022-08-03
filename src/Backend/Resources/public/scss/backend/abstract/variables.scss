@@ -1,5 +1,5 @@
 $asset-path: $SpawnBackendCachePath;
-$icon-path: $asset-path + '/icons';
+$icon-path: $SpawnCommonCachePath + '/icons';
 
 $default-font-size: 16px;
 $default-font-weight: 400;
