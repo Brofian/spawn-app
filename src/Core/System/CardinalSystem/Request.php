@@ -275,6 +275,15 @@ class Request extends Mutable
         return $this;
     }
 
+    public function getRequestMethod(): string {
+        return $this->requestMethod;
+    }
 
+    public function getPayloadData(): AssociativeCollection {
+        return match (strtolower($this->getRequestMethod())) {
+            'get' => $this->getGet(),
+            default => $this->getPost(),
+        };
+    }
 
 }

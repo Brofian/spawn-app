@@ -5,11 +5,13 @@ namespace SpawnBackend\Controller\Backend;
 use SpawnBackend\Exceptions\InvalidEntityNameException;
 use SpawnCore\Defaults\Services\ApiResponseBag;
 use SpawnCore\System\CardinalSystem\Request;
+use SpawnCore\System\Custom\Collection\AssociativeCollection;
 use SpawnCore\System\Custom\FoundationStorage\AbstractBackendController;
 use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\CacheControlState;
 use SpawnCore\System\Custom\Response\JsonResponse;
 use SpawnCore\System\Custom\Response\TwigResponse;
+use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\Entity;
 use SpawnCore\System\Database\Entity\TableRepository;
 
@@ -58,7 +60,7 @@ class ApiController extends AbstractBackendController {
     }
 
     /**
-     * @route /backend/api/v1/{entityName}/
+     * @route /backend/api/v1/{}/
      * @name "app.backend.api.v1"
      * @requires admin
      * @locked
@@ -75,17 +77,23 @@ class ApiController extends AbstractBackendController {
                 throw new InvalidEntityNameException($entityName);
             }
 
-            $apiData = $this->request->getPost()->getArray();
+            $apiData = $this->request->getPayloadData();
             if(!$apiData) {
                 throw new \RuntimeException('Missing or invalid api body');
             }
 
-            /** @var Entity $repositoryEntityClass */
-            $repositoryEntityClass = $repository->getEntityClass();
-
-            foreach($apiData as $apiEntityData) {
-                $entity = $repositoryEntityClass::getEntityFromArray($apiEntityData);
-                $repository->upsert($entity);
+            switch ($this->request->getRequestMethod()) {
+                case "GET":
+                    $apiBag->addData('apiResult', $this->apiSearchAction($repository, $apiData));
+                    break;
+                case "POST":
+                    $apiBag->addData('apiResult',$this->apiUpsertAction($repository, $apiData));
+                    break;
+                case "DELETE":
+                    $apiBag->addData('apiResult',$this->apiDeleteAction($repository, $apiData));
+                    break;
+                default:
+                    $apiBag->addError('Unknown request method');
             }
         }
         catch (\Throwable $throwable) {
@@ -93,5 +101,43 @@ class ApiController extends AbstractBackendController {
         }
 
         return new JsonResponse($apiBag->getResponseData(), CacheControlState::BASE_NOCACHE());
+    }
+
+    protected function apiUpsertAction(TableRepository $repository, AssociativeCollection $payload): array {
+        /** @var Entity $repositoryEntityClass */
+        $repositoryEntityClass = $repository->getEntityClass();
+
+        $attemptedUpsertCount = 0;
+        $successFullUpsertCount = 0;
+        foreach($payload as $apiEntityData) {
+            $attemptedUpsertCount++;
+            $entity = $repositoryEntityClass::getEntityFromArray($apiEntityData);
+            if($repository->upsert($entity)) {
+                $successFullUpsertCount++;
+            }
+        }
+
+        return [
+            'attempted' => $attemptedUpsertCount,
+            'successful' => $successFullUpsertCount,
+            'hasFailed' => ($attemptedUpsertCount !== $successFullUpsertCount)
+        ];
+    }
+
+    protected function apiDeleteAction(TableRepository $repository, AssociativeCollection $payload): array {
+        return [];
+    }
+
+    protected function apiSearchAction(TableRepository $repository, AssociativeCollection $payload): array {
+
+        $criteria = new Criteria();
+        // todo adjust criteria by payload
+        $limit = $payload->get('limit', 10000);
+
+        $entities = $repository->search($criteria, $limit);
+
+        return array_map(static function(Entity $entity) {
+            return $entity->toArray();
+        }, $entities->getArray());
     }
 }

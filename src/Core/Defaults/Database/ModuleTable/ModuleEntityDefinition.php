@@ -68,6 +68,7 @@ class ModuleEntityDefinition extends Entity {
             'id' => $this->getId(),
             'slug' => $this->getSlug(),
             'path' => $this->getPath(),
+            'active' => $this->isActive(),
             'information' => json_encode($this->getInformations(), JSON_THROW_ON_ERROR),
             'resourceConfig' => json_encode($this->getResourceConfig(), JSON_THROW_ON_ERROR),
             'createdAt' => $this->getCreatedAt(),
