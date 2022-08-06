@@ -56,7 +56,7 @@ class TwigHelper
 
         $loader = new FilesystemLoader($this->templateDirs);
         $twig = new Environment($loader, [
-            'debug' => (MODE === "dev"),
+            'debug' => $this->isDevEnvironment,
             'cache' => self::CACHE_FOLDER_PATH,
         ]); //<- Twig environment
 
@@ -100,7 +100,6 @@ class TwigHelper
      */
     public function renderFile(string $filePath): string
     {
-
         try {
             return $this->render($filePath, $this->context->getArray());
         } catch (Exception $loaderError) {
@@ -114,15 +113,17 @@ class TwigHelper
 
     public function render(string $file, ?array $data = null): string
     {
-
         if ($data === null) {
             $data = $this->context->getArray();
+        }
+        else {
+            $data = array_merge_recursive($data, $this->context->getArray());
         }
 
         try {
             return $this->twig->render($file, $data);
         } catch (Exception $e) {
-            if (MODE === 'dev') {
+            if ($this->isDevEnvironment) {
                 return $e->getMessage();
             }
             return (string)(new TwigRenderException($file))->getMessage();

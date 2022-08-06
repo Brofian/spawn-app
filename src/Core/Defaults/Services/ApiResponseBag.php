@@ -25,7 +25,7 @@ class ApiResponseBag {
     }
 
     public function addError(string $error, bool $isSecure = false): void {
-        $this->errors[] = ($isSecure || MODE === 'dev') ? $error : 'Something went wrong!';
+        $this->errors[] = ($isSecure || MODE !== 'pub') ? $error : 'Something went wrong!';
     }
 
     public function getErrors(): array {

@@ -13,8 +13,6 @@ abstract class Entity extends Mutable
 {
     use EntityPayloadTrait;
 
-    abstract public function getRepositoryClass(): string;
-
     abstract public function toArray(): array;
 
     abstract public static function getEntityFromArray(array $values): Entity;

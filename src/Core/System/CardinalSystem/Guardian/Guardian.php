@@ -33,7 +33,7 @@ class Guardian {
     }
 
     public function getHandleResponse(): string {
-        if(MODE === 'dev') {
+        if(MODE !== 'pub') {
             return $this->createPrivateResponse($this->exception);
         }
 

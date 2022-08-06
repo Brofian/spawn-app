@@ -52,7 +52,7 @@ class Logger
         $string .= PHP_EOL;
 
         $log = self::logdir . self::errorlog;
-        file_put_contents($log, $string, FILE_APPEND);
+        FileEditor::append($log, $string);
     }
 
 

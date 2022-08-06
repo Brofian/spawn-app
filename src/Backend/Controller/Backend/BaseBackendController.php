@@ -44,8 +44,8 @@ class BaseBackendController extends AbstractBackendController {
         $migrationRepository = $this->container->getServiceInstance('migrations.repository');
         $migrationCollection = $migrationRepository->search(new Criteria());
 
-
         $this->twig->assign('content_file', 'backend/contents/home/content.html.twig');
+
         return new TwigResponse('backend/index.html.twig');
     }
 }

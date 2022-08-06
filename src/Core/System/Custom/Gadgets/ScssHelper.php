@@ -91,17 +91,16 @@ class ScssHelper
             $css = $scss->compileString('
               ' . $baseVariables . '
               @import "' . basename($baseFile) . '";
-            ');
+            ')->getCss();
         } catch (SassException $e) {
             $css = "";
 
-            if (MODE === 'dev') {
+            if (MODE !== 'pub') {
                 Debugger::ddump($e);
             }
         }
 
-
-        return $css->getCss();
+        return $css;
     }
 
     private function registerFunctions(Compiler $scss): void

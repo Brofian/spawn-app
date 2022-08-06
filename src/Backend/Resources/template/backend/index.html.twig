@@ -22,7 +22,9 @@
 
             {% block content %}
                 <div id="backend_content">
-                    {% include content_file %}
+                    {% if content_file %}
+                        {% include content_file %}
+                    {% endif %}
                 </div>
             {% endblock %}
 

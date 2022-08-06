@@ -28,7 +28,7 @@ class Debugger
     }
 
     /**
-     * the format for dumping an variable
+     * the format for dumping a variable
      * @param $var
      * @param $backtrace
      */

@@ -49,6 +49,9 @@ class Service extends Mutable
         if ($serviceArray["abstract"]) {
             $service->setAbstract($serviceArray["abstract"]);
         }
+        if ($serviceArray["static"]) {
+            $service->setStatic($serviceArray["static"]);
+        }
         if ($serviceArray["decorates"]) {
             $service->setDecorates($serviceArray["decorates"]);
         }
@@ -92,7 +95,6 @@ class Service extends Mutable
         if ($this->isStatic()) {
             $this->instance = $myClassInstance;
         }
-
 
         return $myClassInstance;
     }
@@ -274,6 +276,7 @@ class Service extends Mutable
         $serviceString .= "\"id\"=>\"$this->id\",";
         $serviceString .= "\"class\"=>\"$this->class\",";
         $serviceString .= "\"abstract\"=>" . ($this->abstract ? "true" : "false") . ",";
+        $serviceString .= "\"static\"=>" . ($this->static ? "true" : "false") . ",";
         $serviceString .= "\"decorates\"=>\"$this->decorates\",";
         $serviceString .= "\"parent\"=>\"$this->parent\",";
         $hasTags = !empty($this->tags);

@@ -13,6 +13,10 @@ abstract class AbstractResponse
     }
 
     public function getCacheStatus(): CacheControlState {
+        if(MODE !== 'pub') {
+            return CacheControlState::BASE_NOCACHE();
+        }
+
         return $this->cacheControlState;
     }
 
