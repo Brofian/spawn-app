@@ -3,9 +3,7 @@
 namespace SpawnCore\Defaults\Services;
 
 use SpawnCore\Defaults\Database\LanguageTable\LanguageEntity;
-use SpawnCore\Defaults\Database\LanguageTable\LanguageRepository;
 use SpawnCore\Defaults\Database\SnippetTable\SnippetEntity;
-use SpawnCore\Defaults\Database\SnippetTable\SnippetRepository;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;

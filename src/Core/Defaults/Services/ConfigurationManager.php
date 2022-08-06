@@ -3,7 +3,6 @@
 namespace SpawnCore\Defaults\Services;
 
 use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationEntity;
-use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\EntityCollection;

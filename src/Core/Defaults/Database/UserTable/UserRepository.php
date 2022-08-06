@@ -6,7 +6,6 @@ use DateTime;
 use Exception;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Entity\Entity;
-use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableRepository;
 
 class UserRepository extends TableRepository {

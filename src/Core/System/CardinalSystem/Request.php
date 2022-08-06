@@ -7,7 +7,6 @@ namespace SpawnCore\System\CardinalSystem;
  */
 
 
-use Doctrine\DBAL\Exception;
 use JsonException;
 use SpawnBackend\Controller\Backend\AdminLoginController;
 use SpawnBackend\Database\AdministratorTable\AdministratorEntity;

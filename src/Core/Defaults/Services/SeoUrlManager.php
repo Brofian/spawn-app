@@ -4,9 +4,7 @@ namespace SpawnCore\Defaults\Services;
 
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
-use http\Exception\RuntimeException;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
-use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlTable;
 use SpawnCore\System\Custom\Gadgets\ClassInspector;
 use SpawnCore\System\Custom\Gadgets\MethodInspector;

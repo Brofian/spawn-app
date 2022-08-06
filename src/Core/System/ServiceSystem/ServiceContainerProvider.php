@@ -2,7 +2,6 @@
 
 namespace SpawnCore\System\ServiceSystem;
 
-use Doctrine\DBAL\Exception;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleLoader;
 use SpawnCore\System\Custom\Gadgets\CookieHelper;
 use SpawnCore\System\Custom\Gadgets\FileEditor;
@@ -10,10 +9,7 @@ use SpawnCore\System\Custom\Gadgets\Logger;
 use SpawnCore\System\Custom\Gadgets\SessionHelper;
 use SpawnCore\System\Custom\Gadgets\StringConverter;
 use SpawnCore\System\Custom\Gadgets\XMLReader;
-use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
-use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\EntityCollection;
-use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\Database\Entity\TableRepository;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;
 use SpawnCore\System\Database\Helpers\DatabaseHelper;

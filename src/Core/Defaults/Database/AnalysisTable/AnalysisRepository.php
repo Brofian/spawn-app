@@ -5,9 +5,7 @@ use DateTime;
 use Exception;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Entity\Entity;
-use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableRepository;
-use SpawnCore\System\Database\Helpers\DatabaseConnection;
 
 class AnalysisRepository extends TableRepository {
 

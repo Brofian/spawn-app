@@ -3,7 +3,6 @@
 namespace SpawnCore\Defaults\Database\UserTable;
 
 
-use Cassandra\Date;
 use DateTime;
 use SpawnCore\System\Database\Entity\Entity;
 use SpawnCore\System\Database\Entity\EntityTraits\EntityCreatedAtTrait;

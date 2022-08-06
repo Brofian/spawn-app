@@ -3,9 +3,7 @@ namespace SpawnBackend\Database\Migrations;
 
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationEntity;
-use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository;
 use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
-use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractMigration;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;

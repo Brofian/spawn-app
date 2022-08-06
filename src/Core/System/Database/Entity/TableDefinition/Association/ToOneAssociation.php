@@ -6,10 +6,7 @@ use SpawnCore\System\Custom\Gadgets\Slugifier;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\EqualsFilter;
-use SpawnCore\System\Database\Entity\Entity;
 use SpawnCore\System\Database\Entity\EntityCollection;
-use SpawnCore\System\Database\Entity\TableRepository;
-use SpawnCore\System\ServiceSystem\ServiceContainerProvider;
 
 class ToOneAssociation extends AbstractAssociation {
 

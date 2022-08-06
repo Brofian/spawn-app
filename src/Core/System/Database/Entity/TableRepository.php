@@ -10,7 +10,6 @@ use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
 use SpawnCore\System\Custom\Throwables\WrongEntityForRepositoryException;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
-use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\DateTimeColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\JsonColumn;
 use SpawnCore\System\Database\Entity\TableDefinition\DefaultColumns\UuidColumn;
 use SpawnCore\System\Database\Helpers\DatabaseConnection;

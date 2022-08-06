@@ -3,10 +3,7 @@
 namespace SpawnCore\Defaults\Services;
 
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
-use SpawnBackend\Controller\Backend\SystemConfigController;
 use SpawnCore\Defaults\Database\AnalysisTable\AnalysisEntity;
-use SpawnCore\Defaults\Database\AnalysisTable\AnalysisRepository;
-use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlEntity;
 use SpawnCore\System\Custom\Gadgets\UUID;
 use SpawnCore\System\Database\Criteria\Criteria;
 use SpawnCore\System\Database\Criteria\Filters\AndFilter;

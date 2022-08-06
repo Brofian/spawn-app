@@ -12,7 +12,6 @@ use SpawnCore\System\Custom\Gadgets\SessionHelper;
 use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\CacheControlState;
 use SpawnCore\System\Custom\Response\JsonResponse;
-use SpawnCore\System\Custom\Throwables\AbstractException;
 
 class UserApiController extends AbstractController {
 

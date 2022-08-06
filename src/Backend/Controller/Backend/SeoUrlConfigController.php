@@ -10,7 +10,6 @@ use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\JsonResponse;
 use SpawnCore\System\Custom\Response\TwigResponse;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
-use SpawnCore\System\Database\Criteria\Filters\InvalidFilterValueException;
 use SpawnCore\System\Database\Entity\RepositoryException;
 
 class SeoUrlConfigController extends AbstractBackendController {

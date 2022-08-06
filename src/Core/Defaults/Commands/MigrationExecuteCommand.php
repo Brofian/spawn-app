@@ -5,7 +5,6 @@ namespace SpawnCore\Defaults\Commands;
 use bin\spawn\IO;
 use Doctrine\DBAL\Exception;
 use SpawnCore\Defaults\Database\MigrationTable\MigrationEntity;
-use SpawnCore\Defaults\Database\MigrationTable\MigrationRepository;
 use SpawnCore\System\Custom\FoundationStorage\AbstractCommand;
 use SpawnCore\System\Custom\FoundationStorage\AbstractMigration;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;

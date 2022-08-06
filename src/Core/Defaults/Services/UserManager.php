@@ -2,9 +2,7 @@
 
 namespace SpawnCore\Defaults\Services;
 
-use SpawnCore\Defaults\Database\SeoUrlTable\SeoUrlTable;
 use SpawnCore\Defaults\Database\UserTable\UserEntity;
-use SpawnCore\Defaults\Database\UserTable\UserRepository;
 use SpawnCore\Defaults\Database\UserTable\UserTable;
 use SpawnCore\System\CardinalSystem\Request;
 use SpawnCore\System\Custom\Gadgets\SessionHelper;

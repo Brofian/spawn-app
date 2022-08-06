@@ -2,7 +2,6 @@
 
 namespace SpawnCore\Defaults\Database\UserTable;
 
-use SpawnCore\Defaults\Database\LanguageTable\LanguageRepository;
 use SpawnCore\Defaults\Database\LanguageTable\LanguageTable;
 use SpawnCore\System\Database\Entity\TableDefinition\AbstractTable;
 use SpawnCore\System\Database\Entity\TableDefinition\Association\ToManyAssociation;

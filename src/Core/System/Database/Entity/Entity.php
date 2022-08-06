@@ -6,7 +6,6 @@ namespace SpawnCore\System\Database\Entity;
 use DateTime;
 use Exception;
 use SpawnCore\System\Custom\FoundationStorage\Mutable;
-use SpawnCore\System\Database\Entity\EntityTraits\EntityIDTrait;
 use SpawnCore\System\Database\Entity\EntityTraits\EntityPayloadTrait;
 
 abstract class Entity extends Mutable

@@ -4,7 +4,6 @@ namespace SpawnBackend\Controller\Backend;
 
 use SpawnCore\Defaults\Services\UserManager;
 use SpawnCore\System\CardinalSystem\Request;
-use SpawnCore\System\CardinalSystem\Response;
 use SpawnCore\System\Custom\FoundationStorage\AbstractBackendController;
 use SpawnCore\System\Custom\Response\AbstractResponse;
 use SpawnCore\System\Custom\Response\TwigResponse;

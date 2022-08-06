@@ -15,7 +15,6 @@ use SpawnCore\System\Custom\Gadgets\NamespaceHelper;
 use SpawnCore\System\Custom\Gadgets\ResourceCollector;
 use SpawnCore\System\Custom\Gadgets\ScssHelper;
 use SpawnCore\System\Custom\Throwables\DatabaseConnectionException;
-use SpawnCore\System\Custom\Throwables\SubscribeToNotAnEventException;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SpawnCore\System\Database\Entity\RepositoryException;
 use SpawnCore\System\EventSystem\EventEmitter;

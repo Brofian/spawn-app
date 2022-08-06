@@ -6,7 +6,6 @@ use bin\spawn\IO;
 use Exception;
 use SpawnCore\Defaults\Commands\ListModulesCommand;
 use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationEntity;
-use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
 use SpawnCore\Defaults\Exceptions\MissingRequiredConfigurationFieldException;
 use SpawnCore\System\Custom\Gadgets\UUID;
