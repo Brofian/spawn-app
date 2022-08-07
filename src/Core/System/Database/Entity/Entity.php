@@ -36,7 +36,6 @@ abstract class Entity extends Mutable
 
     protected static function getArrayFromVariable($array): array
     {
-
         if (is_array($array)) {
             return $array;
         }
@@ -52,5 +51,13 @@ abstract class Entity extends Mutable
         }
     }
 
+    public function applyValues(array $values): void {
+        foreach($values as $name => $value) {
+            $methodName = 'set'.ucfirst($name);
+            if(method_exists($this, $methodName)) {
+                $this->{$methodName}($value);
+            }
+        }
+    }
 
 }

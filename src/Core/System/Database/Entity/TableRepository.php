@@ -260,7 +260,7 @@ class TableRepository
                     $updateValues[$tableColumn->getName()] = $updateValues[$tableColumn->getName()] ? UUID::hexToBytes($updateValues[$tableColumn->getName()]): null;
                 }
                 elseif($tableColumn instanceof JsonColumn) {
-                    $updateValues[$tableColumn->getName()] = $updateValues[$tableColumn->getName()] ? json_encode($updateValues[$tableColumn->getName()], JSON_THROW_ON_ERROR): null;
+                    $updateValues[$tableColumn->getName()] = $updateValues[$tableColumn->getName()] ? json_encode($updateValues[$tableColumn->getName()], JSON_THROW_ON_ERROR) : '{}';
                 }
             }
         }
