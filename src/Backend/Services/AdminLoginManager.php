@@ -96,7 +96,7 @@ class AdminLoginManager implements EventSubscriberInterface
         try {
             $loginHash = UUID::randomHex();
             $admin->setLoginHash($loginHash);
-            $admin->setLoginExpiration((new DateTime())->modify('+1 day'));
+            $admin->setLoginExpiration((new DateTime())->modify('+7 days'));
             $this->administratorRepository->upsert($admin);
             $this->sessionHelper->set('admin-login-hash', $loginHash);
             $this->sessionHelper->set('admin-login-username', $username);

@@ -53,6 +53,23 @@ abstract class Entity extends Mutable
 
     public function applyValues(array $values): void {
         foreach($values as $name => $value) {
+            $type = get_debug_type($this->$name);
+
+            switch ($type) {
+                case "int":
+                    $value = (int)$value;
+                    break;
+                case "bool":
+                    $value = (bool)$value;
+                    break;
+                case "float":
+                    $value = (float)$value;
+                    break;
+                case DateTime::class:
+                    $value = new DateTime($value);
+                    break;
+            }
+
             $methodName = 'set'.ucfirst($name);
             if(method_exists($this, $methodName)) {
                 $this->{$methodName}($value);

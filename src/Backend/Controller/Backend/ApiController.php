@@ -86,18 +86,18 @@ class ApiController extends AbstractBackendController {
                 throw new \RuntimeException('Missing or invalid api body');
             }
 
-            switch ($this->request->getRequestMethod()) {
-                case "GET":
+            switch ($this->request->getPost()->get('action')) {
+                case "search":
                     $apiBag->addData('apiResult', $this->apiSearchAction($repository, $apiData));
                     break;
-                case "POST":
+                case "upsert":
                     $apiBag->addData('apiResult',$this->apiUpsertAction($repository, $apiData));
                     break;
-                case "DELETE":
+                case "delete":
                     $apiBag->addData('apiResult',$this->apiDeleteAction($repository, $apiData));
                     break;
                 default:
-                    $apiBag->addError('Unknown request method');
+                    $apiBag->addError('Unknown request action');
             }
         }
         catch (\Throwable $throwable) {
@@ -113,11 +113,11 @@ class ApiController extends AbstractBackendController {
 
         $attemptedUpsertCount = 0;
         $successFullUpsertCount = 0;
-        foreach($payload as $apiEntityData) {
+        foreach($payload->get('data') as $apiEntityData) {
             $attemptedUpsertCount++;
 
             // todo: this if should not be necessary, but with the current state of the repositories (using entity instead of arrays), it is
-            if(isset($apiEntityData['id'])) {
+            if(isset($apiEntityData['id']) && $apiEntityData['id']) {
                 $criteria = new Criteria();
                 $criteria->addFilter(new EqualsFilter('id', UUID::hexToBytes($apiEntityData['id'])));
 

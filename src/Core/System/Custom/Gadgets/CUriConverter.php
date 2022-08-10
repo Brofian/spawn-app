@@ -33,7 +33,6 @@ class CUriConverter
      */
     public static function cUriToRegex(string $uri)
     {
-
         $uri = "/" . trim($uri, "/ \n");
         $uri = str_replace('/', "\/", $uri);
         $uri = str_replace('{}', "([^\/]*)", $uri);
