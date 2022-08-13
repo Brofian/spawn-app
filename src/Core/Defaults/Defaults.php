@@ -6,5 +6,6 @@ class Defaults {
 
     public const DATE_TIME_STORAGE_FORMAT = 'Y-m-d h:i:s';
 
+    public const BACKEND_NAMESPACE = 'SpawnBackend';
 
 }

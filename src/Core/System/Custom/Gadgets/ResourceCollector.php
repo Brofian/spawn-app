@@ -5,6 +5,7 @@ namespace SpawnCore\System\Custom\Gadgets;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SpawnCore\Defaults\Database\ModuleTable\ModuleEntity;
+use SpawnCore\Defaults\Defaults;
 use SpawnCore\System\CardinalSystem\ModuleNetwork\ModuleNamespacer;
 use SpawnCore\System\Database\Entity\EntityCollection;
 use SplFileInfo;
@@ -42,11 +43,26 @@ class ResourceCollector
             $jsIndexFile = '';
 
             foreach($moduleSlugs as $slug) {
+                // import backend specific files from other namespaces
                 if(file_exists(self::RESOURCE_CACHE_PATH . '/scss/'.$slug.'/base.scss')) {
                     $scssIndexFile .= '@import "'.$slug .'/base.scss";'. PHP_EOL;
                 }
                 if(file_exists(self::RESOURCE_CACHE_PATH . '/js/'.$slug.'/main.js')) {
                     $jsIndexFile .= 'import "./'.$slug.'/main.js";' . PHP_EOL;
+                }
+            }
+
+            if($namespace === Defaults::BACKEND_NAMESPACE) {
+                // import backend specific files from every namespace
+
+                /** @var ModuleEntity $module */
+                foreach($moduleCollection as $module) {
+                    if(file_exists(self::RESOURCE_CACHE_PATH . '/scss/'.$module->getSlug().'/backend/base.scss')) {
+                        $scssIndexFile .= '@import "'.$module->getSlug() .'/backend/base.scss";'. PHP_EOL;
+                    }
+                    if(file_exists(self::RESOURCE_CACHE_PATH . '/js/'.$module->getSlug().'/backend/main.js')) {
+                        $jsIndexFile .= 'import "./'.$module->getSlug().'/backend/main.js";' . PHP_EOL;
+                    }
                 }
             }
 

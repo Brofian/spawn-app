@@ -4,11 +4,14 @@ import EventManager from "EventManager";
 
 export default class CustomSelect extends Plugin {
 
+    static options = {
+        'changeEventName': 'customSelectChanged'
+    }
+
     init() {
         //init variables
         this.getOptions();
         this.getCurrentValue();
-
         this.initElement();
 
         document.addEventListener('click', this.onClickPage.bind(this));
@@ -17,14 +20,14 @@ export default class CustomSelect extends Plugin {
 
     getOptions() {
         let optionElements = this._element.querySelectorAll('option');
-        this.options = [];
+        this.optionList = [];
         for(let optionEl of optionElements) {
             let value = optionEl.value;
             if(!value) {
                 value = optionEl.innerText;
             }
 
-            this.options.push({
+            this.optionList.push({
                 'value': value,
                 'label': optionEl.innerText,
                 'selected': !!optionEl.selected,
@@ -37,9 +40,9 @@ export default class CustomSelect extends Plugin {
         this.currentValue = '';
         this.currentLabel = '';
 
-        if(this.options) {
+        if(this.optionList) {
             let isFirst = true;
-            for(let option of this.options) {
+            for(let option of this.optionList) {
                 if(isFirst || option.selected) {
                     isFirst = false;
                     this.currentValue = option.value;
@@ -75,7 +78,6 @@ export default class CustomSelect extends Plugin {
         this.refreshOptionElements();
         newSelectElement.appendChild(this.optionsContainer);
 
-
         this._element.parentElement.replaceChild(newSelectElement, this._element);
         this._element = newSelectElement;
     }
@@ -83,7 +85,6 @@ export default class CustomSelect extends Plugin {
     getInputName() {
         return this._element.name;
     }
-
 
     beforeOptionRefresh() {
         this.optionsContainer.textContent = '';
@@ -95,7 +96,7 @@ export default class CustomSelect extends Plugin {
     refreshOptionElements() {
         this.beforeOptionRefresh();
 
-        for(let option of this.options) {
+        for(let option of this.optionList) {
             let optionEl = document.createElement('span');
             optionEl.classList.add('js-entity-select-option');
             optionEl.innerText = option.label;
@@ -143,7 +144,13 @@ export default class CustomSelect extends Plugin {
         let label = target.innerText;
         let value = target.dataset.jsEntitySelectOptionValue;
 
+        this._element.classList.remove('opened');
         this.setNewValue(value, label);
+        EventManager.publish(this.options.changeEventName, {
+            element: this._element,
+            value: value,
+            label: label
+        });
     }
 
 
