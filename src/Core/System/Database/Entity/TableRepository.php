@@ -268,7 +268,7 @@ class TableRepository
         return $updateValues;
     }
 
-    protected function adjustEntityAfterSuccessfulUpdate(Entity &$entity, array $updatedValues): void {
+    protected function adjustEntityAfterSuccessfulUpdate(Entity $entity, array $updatedValues): void {
         $entity = $entity::getEntityFromArray(array_merge($entity->toArray(), $updatedValues));
     }
 

@@ -135,6 +135,7 @@ class ModuleLoader
         ];
 
         $data = $this->getModuleDataFromXML($absolutePath . self::REL_XML_PATH);
+
         $moduleData['information'] = json_encode($data['information'], JSON_THROW_ON_ERROR);
         $moduleData['resourceConfig'] = json_encode($data['config'], JSON_THROW_ON_ERROR);
 

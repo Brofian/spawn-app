@@ -6,6 +6,7 @@
         <namespace>SpawnBackend</namespace>
         <path>/src/Backend/Resources</path>
         <weight>1</weight>
+        <using>SpawnCommon</using>
     </resources>
 
     <info>

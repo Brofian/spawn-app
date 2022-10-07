@@ -42,7 +42,7 @@ export default class CustomSelect extends Plugin {
 
         if(this.optionList) {
             let isFirst = true;
-            for(let option of this.optionList) {
+            for(let option of (this.optionList??[])) {
                 if(isFirst || option.selected) {
                     isFirst = false;
                     this.currentValue = option.value;

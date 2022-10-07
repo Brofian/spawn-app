@@ -125,7 +125,14 @@ class ConfigurationEntityDefinition extends Entity
         }
         elseif(is_string($definition)) {
             try {
-                $this->definition = json_decode($definition, true, 999, JSON_THROW_ON_ERROR);
+                $def = json_decode($definition, true, 999, JSON_THROW_ON_ERROR);
+
+                if(is_string($def)) {
+                    $def = json_decode($def, true, 999, JSON_THROW_ON_ERROR);
+                }
+
+                $this->definition = $def;
+
             }
             catch (Exception $e) {}
         }

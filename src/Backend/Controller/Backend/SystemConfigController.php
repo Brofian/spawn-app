@@ -3,7 +3,6 @@ namespace SpawnBackend\Controller\Backend;
 
 use Exception;
 use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationEntity;
-use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationRepository;
 use SpawnCore\Defaults\Database\ConfigurationTable\ConfigurationTable;
 use SpawnCore\System\CardinalSystem\Request;
 use SpawnCore\System\Custom\FoundationStorage\AbstractBackendController;
@@ -26,12 +25,12 @@ use Throwable;
 
 class SystemConfigController extends AbstractBackendController {
 
-    protected ConfigurationRepository $configurationRepository;
+    protected TableRepository $configurationRepository;
     protected Request $request;
 
 
     public function __construct(
-        ConfigurationRepository $configurationRepository,
+        TableRepository $configurationRepository,
         Request $request
     )
     {

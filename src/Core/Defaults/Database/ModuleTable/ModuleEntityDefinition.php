@@ -131,9 +131,14 @@ class ModuleEntityDefinition extends Entity {
             $this->information = $information;
         }
         else {
-            $this->information = json_decode($information, true, 512, JSON_THROW_ON_ERROR);
-        }
+            $inf = json_decode($information, true, 512, JSON_THROW_ON_ERROR);
 
+            if(is_string($inf)) {
+                $inf = json_decode($inf, true, 512, JSON_THROW_ON_ERROR);
+            }
+
+            $this->information = $inf;
+        }
 
         return $this;
     }
@@ -152,7 +157,13 @@ class ModuleEntityDefinition extends Entity {
             $this->resourceConfig = $resourceConfig;
         }
         else {
-            $this->resourceConfig = json_decode($resourceConfig, true, 512, JSON_THROW_ON_ERROR);
+            $conf = json_decode($resourceConfig, true, 512, JSON_THROW_ON_ERROR);
+
+            if(is_string($conf)) {
+                $conf = json_decode($conf, true, 512, JSON_THROW_ON_ERROR);
+            }
+
+            $this->resourceConfig = $conf;
         }
 
         return $this;
